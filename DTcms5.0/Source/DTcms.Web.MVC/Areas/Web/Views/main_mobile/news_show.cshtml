@@ -1,0 +1,87 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/_LayoutShow.cshtml";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   Article_ShowController c = ViewBag.This as Article_ShowController;
+   string category_title = bc.get_category_title(m.category_id, "新闻资讯");
+   ViewBag.Title = m.title + " - " + category_title +" - " + site.name;
+   string channel = "news";
+   
+   DataTable categoryList1 = bc.get_category_child_list(channel, 0);//资讯类别
+   DataTable redNewsList = bc.get_article_list(channel, m.category_id, 5, "is_red=1 and id<>" + m.id);//推荐资讯
+   DataTable hotNewsList = bc.get_article_list(channel, 0, 10, "status=0", "click desc,id desc");//人气排行
+   DataTable relNewsList = bc.get_article_list(channel, m.category_id, 4, "is_red=1 and img_url<>'' and id<>" + m.id);//相关推荐
+}
+
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-header="main_header" data-footer="main_footer">
+      
+      <!--新闻详细-->
+      <div class="meta">
+        <h1 class="meta-tit">@m.title</h1>
+        <p class="meta-info">
+          <span class="time">@m.add_time</span>
+          <span class="view"><script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_article_click&id=@m.id&click=1"></script>次浏览</span>
+          分类：@category_title
+        </p>
+      </div>
+      
+      <div class="entry">
+        @Html.Raw(m.content)
+      </div>
+      <!--/新闻详细-->
+      
+      <!--相关资讯-->
+      <div class="section">
+        <h1>相关资讯</h1>
+      </div>
+      <div>
+        <ul class="list listview">
+          @foreach(DataRow dr in relNewsList.Rows){
+          <li>
+            <a href="@bc.linkurl("news_show",dr["id"])" data-ignore="true">
+              <i class="date">@(((DateTime)dr["add_time"]).ToString("MM-dd"))</i>
+              <span class="text">@dr["title"]</span>
+            </a>
+          </li>
+          }
+          @if(relNewsList.Rows.Count == 0){
+          <p class="nodata">同类下暂无推荐的资讯...</p>
+          }
+        </ul>
+      </div>
+      <!--/相关资讯-->
+      
+      <!--评论-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_comment_box.cshtml")
+      <!--/评论-->
+      
+      <!--版权信息-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_copyright.cshtml")
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--页面头部-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_header.cshtml")
+    <!--/页面头部-->
+    
+    <!--底部导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_footer.cshtml")
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_nav.cshtml")
+    <!--/左侧导航-->
+      
+  </div>
+</div>

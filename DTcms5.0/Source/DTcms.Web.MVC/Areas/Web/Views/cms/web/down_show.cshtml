@@ -1,0 +1,77 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_LayoutShow.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   Article_ShowController c = ViewBag.This as Article_ShowController;
+   string category_title = bc.get_category_title(m.category_id, "资源下载");
+   ViewBag.Title = m.title + " - " + category_title +" - " + site.name;
+   DataTable list = null;
+   string channel = site.build_path + "_help";
+}
+@section HeaderContent{
+   <link href="~/templates/@ViewBag.TemplateSkin/web/css/lightbox.css" rel="stylesheet" />
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/lightbox.min.js"></script>
+   <script src="~/Scripts/jquery/jquery.pagination.js"></script>
+   <script src="~/Scripts/Validform_v5.3.2_min.js"></script>
+
+}
+<div class="wrapper">
+    <div class="section">
+        <!--所在位置-->
+        <div class="navi-box">
+            <a href="@bc.linkurl("index")">首页</a> &gt;
+            <a href="@bc.linkurl("help")">帮助中心</a>
+        </div>
+        <!--/所在位置-->
+        
+        <!--页面左边-->
+        <div class="left-25">
+            <div class="left-wrap">
+                <div class="sidebar-nav">
+                    <ul>
+                       @{
+                          DataTable listCategory = bc.get_category_child_list(channel, 0);
+                          foreach(DataRow cdr in listCategory.Rows){
+                           <li>
+                               <h2>
+                                   <i class="fa fa-file-text-o"></i>
+                                   <span>@cdr["title"]</span>
+                               </h2>
+                               <div class="list">
+                                 @{
+                                 DataTable listArticle = bc.get_article_list(channel, 10, "category_id=" + (int)cdr["id"]);
+                                 foreach (DataRow dr in listArticle.Rows) {
+                                    <p><a href="@bc.linkurl("help_show", dr["id"])">@dr["title"]</a></p>
+                                 }
+                                 }
+                               </div>
+                           </li>                             
+                          }
+                       }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--/页面左边-->
+        
+        <!--页面右边-->
+        <div class="left-75">
+            <div class="left-wrap">
+                
+                <h4 class="sub-tit">@m.title</h4>
+                <div class="entry">
+                @Html.Raw(m.content)
+                </div><!-- end entry -->
+            </div>
+        </div>
+        <!--/页面右边-->
+    </div>
+</div>

@@ -1,0 +1,8 @@
+﻿@{
+    ViewBag.Title = "SetUserPermission";
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid? userId = Request["userId"].ObjToGuidNull();}
+@Html.Raw(frameFactory.GetSetUserPermissionHTML(userId))

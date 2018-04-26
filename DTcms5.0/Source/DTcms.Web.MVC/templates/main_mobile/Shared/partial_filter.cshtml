@@ -1,0 +1,82 @@
+﻿@using System;
+@using System.Data;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.BLL;
+@{
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   article_category bll_category = new article_category();
+
+   BaseController controller = ViewBag.This as BaseController;
+   //判断是否是Search控制器所加载
+   bool isSearch = false;
+   if(controller != null){
+      isSearch = controller.GetType().Name.IndexOf("Search") >= 0;
+   }
+   string channel = ViewBag.Channel as string; //文章通道名称
+   string controller_category = ViewBag.ControllerCategory as string; //控制器类别(news,goods,video,photo)
+   int category_id = int.Parse(ViewBag.CategoryId as string);
+   int p_category_id = bll_category.GetParentId(category_id);
+
+}
+
+<!-- 筛选 -->
+@if (!isSearch) {
+channel = site.build_path + "_" + controller_category;
+DataTable list =  bc.get_category_child_list(channel, 0);
+<!-- 通道页面(非搜索页面) -->
+<div class="shaixuan_box">
+   <div class="shaixuan_title"><h1>类别筛选</h1></div>
+   @foreach (DataRow dr in list.Rows) {
+   <div class="shaixuan_mall">
+      <a href="@bc.linkurl(controller_category + "_list", dr["id"])" class="@((p_category_id == 0 && category_id == Convert.ToInt32(dr["id"])) || p_category_id == Convert.ToInt32(dr["id"]) ? "current" : "") waves-effect waves-button">@dr["title"]</a>
+   </div>
+   <div class="shaixuan_item">
+      @{
+      DataTable categoryList = bc.get_category_child_list(channel, Convert.ToInt32(dr["id"]));
+      foreach (DataRow cdr in categoryList.Rows) {
+          <a href="@bc.linkurl(controller_category + "_list", cdr["id"])" class="@(category_id == Convert.ToInt32(cdr["id"]) ? "current" : "") waves-effect waves-button">@cdr["title"]</a>
+      }
+      }
+      <a href="@bc.linkurl(controller_category)" class="@(p_category_id == 0 && category_id == Convert.ToInt32(dr["id"]) ? "current" : "") waves-effect waves-button">全部</a>
+   </div>
+   }
+   <div class="shaixuan_title"><p><a href="javascript:void(0);" class="shaixuan_close waves-effect waves-button">关闭</a></p></div>
+</div>
+}
+else {
+<!-- 搜索页面 -->
+<div class="shaixuan_box">
+   <div class="shaixuan_title"><h1>类别筛选</h1></div>
+   <div class="shaixuan_mall">
+      <span><label style="display:none"></label><a href="javascript:;" class="@(channel == "" ? "current" : "") waves-effect waves-button">全部</a></span>
+      <span><label style="display:none">@(site.build_path)_goods</label><a href="javascript:;" class="@(channel.IndexOf("goods") >= 0 ? "current" : "") waves-effect waves-button">商城</a></span>
+      <span><label style="display:none">@(site.build_path)_video</label><a href="javascript:;" class="@(channel.IndexOf("video") >= 0 ? "current" : "") waves-effect waves-button">视频</a></span>
+      <span><label style="display:none">@(site.build_path)_photo</label><a href="javascript:;" class="@(channel.IndexOf("photo") >= 0 ? "current" : "") waves-effect waves-button">图片</a></span>
+      <span><label style="display:none">@(site.build_path)_news</label><a href="javascript:;" class="@(channel.IndexOf("news") >= 0 ? "current" : "") waves-effect waves-button">资讯</a></span>
+   </div>
+   <div class="shaixuan_title"><p><a href="javascript:void(0);" class="shaixuan_close">关闭</a></p></div>
+</div>   
+}
+<!-- /筛选 -->
+
+<script>
+   $(document).ready(function () {
+      $(".shaixuan").click(function (event) {
+         event.stopPropagation();
+         $(".shaixuan_box").show();
+         $(".shaixuan_box").animate({ right: '100%' });
+         $("body,html").css("overflow", "hidden");
+         $(".shaixuan_box").css("overflow", "auto");
+         $('body').bind("touchmove", function (e) {
+            e.preventDefault();
+         });
+      });
+      $(".shaixuan_box a").click(function (event) {
+         $("body,html").css("overflow", "auto");
+         $(".shaixuan_box").animate({ right: '-100%' });
+         $(".shaixuan_box").hide(5);
+         $("body").unbind("touchmove");
+      });
+   });
+</script>

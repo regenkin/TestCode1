@@ -1,0 +1,7 @@
+﻿@{
+    ViewBag.Title = string.Format("{0}－用户登录", Kinfar.Frame.Common.WebConfigHelper.GetCurrWebName());
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();}
+@Html.Raw(frameFactory.GetLoginHTML())

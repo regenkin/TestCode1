@@ -1,0 +1,32 @@
+﻿@using Kinfar.Frame.Common.HttpHelper;
+@{
+    string cookieTheme = HttpCookieHelper.GetCookie("theme");
+    string themeName = string.IsNullOrWhiteSpace(cookieTheme) ? "default" : cookieTheme;
+}
+<link class="easyuiTheme" type="text/css" rel="Stylesheet" href="@Url.Content("~/Scripts/jquery-easyui/themes/" + themeName + "/easyui.css")" />
+<link type="text/css" rel="Stylesheet" href="@Url.Content("~/Scripts/jquery-easyui/themes/icon.css")" />
+<link type="text/css" rel="Stylesheet" href="@Url.Content("~/Scripts/jquery-easyui/themes/color.css")" />
+<link type="text/css" rel="Stylesheet" href="@Url.Content("~/Scripts/jquery-plug/jquery.autocomplete.css")" />
+<link type="text/css" rel="Stylesheet" href="@Url.Content("~/Css/global.css")" />
+<link type="text/css" rel="Stylesheet" href="@Url.Content("~/Css/icon.css")" />
+<link type="text/css" rel="Stylesheet" href="@Url.Content("~/Css/font-awesome/css/font-awesome.min.css")" />
+<style type="text/css">
+    .datagrid-cell {
+        line-height: 27px;
+        font-size: 14px;
+    }
+
+    .panel-header {
+        height: 22px;
+    }
+
+    .panel-title {
+        height: 22px;
+        line-height: 22px;
+        font-size: 14px;
+    }
+
+    lable, span, font, td, .tabs-title, .l-btn-text, .menu-text, .tree-title, .combobox-item, .textbox .textbox-text, .datagrid-header .datagrid-cell span, .panel-body {
+        font-size: 14px;
+    }
+</style>

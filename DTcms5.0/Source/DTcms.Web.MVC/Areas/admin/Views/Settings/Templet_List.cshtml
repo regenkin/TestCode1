@@ -1,0 +1,133 @@
+﻿@using System.Data;
+@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+    ViewBag.Title = "站点模板管理";
+    List<SelectListItem> siteListItems = ViewData["siteListItems"] as List<SelectListItem>;
+    DataTable list = ViewData["list"] as DataTable;
+}
+@section HeaderContent{
+   <script>
+      $(function () {
+         //只能选中一项
+         $(".checkall input").click(function () {
+            $(".checkall input").prop("checked", false);
+            $(this).prop("checked", true);
+         });
+      });
+
+      function submitManage() {
+         //管理模板检测
+         if ($(".checkall input:checked").size() < 1) {
+            top.dialog({
+               title: '提示',
+               content: '对不起，请选中您要管理的模板！',
+               okValue: '确定',
+               ok: function () { }
+            }).showModal();
+            return;
+         }
+         var $row = $("#ltable tr:gt(0)");
+         var name = "";
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               name = $(item).find("td:eq(0)").find("label:eq(0)").text();
+            }
+         });
+         document.location.href = "../Templet_File_List/index?skin=" + name;
+      }
+
+      function selectChanged() {
+         var text = $("#ddlSitePath").val();
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var name = $(item).find("td:eq(0)").find("label:eq(0)").text();
+               var obj = { skinName: name };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitBuild?sitePath=" + text,
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("error");
+            }
+         });
+      }
+   </script>
+}
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>界面管理</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>模板管理</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="javascript:;" onclick="submitManage();"><i class="iconfont icon-catalog"></i><span>管理</span></a></li>
+        </ul>
+        <div class="menu-list">
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlSitePath", new SelectList(siteListItems, "Value", "Text", ""), new { onchange = "selectChanged();" })
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+    <tr>
+      <th width="8%">选择</th>
+      <th align="left" width="20%">模板名称</th>
+      <th width="13%">作者</th>
+      <th width="16%">创建日期</th>
+      <th width="12%">版本号</th>
+      <th align="left">适用版本</th>
+      <th width="10%">操作</th>
+    </tr>
+   @foreach(DataRow dr in list.Rows){
+       <tr>
+         <td align="center">
+           <span class="checkall" style="vertical-align:middle">
+              <input type="checkbox" />
+           </span>
+           <label style="display:none">@dr["skinname"]</label>
+         </td>
+         <td>@dr["name"] (@dr["skinname"])</td>
+         <td align="center">@dr["author"]</td>
+         <td align="center">@dr["createdate"]</td>
+         <td align="center">@dr["version"]</td>
+         <td>@dr["fordntver"]</td>
+         <td align="center"><a href="../templet_file_list/index?skin=@dr["skinname"]">管理</a></td>
+       </tr>
+   }
+   @if (list.Rows.Count == 0) {
+      <tr><td align="center" colspan="7">暂无记录</td></tr>
+   }
+  </table>
+</div>
+<!--/列表-->
+
+</form>

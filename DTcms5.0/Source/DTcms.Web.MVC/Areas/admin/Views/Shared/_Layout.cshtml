@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>@ViewBag.Title</title>
+   <link href="~/Scripts/artdialog/ui-dialog.css" rel="stylesheet" />
+   <link href="~/Areas/admin/Content/icon/iconfont.css" rel="stylesheet" />
+   <link href="~/Areas/admin/Content/default/style.css" rel="stylesheet" />
+   <script src="~/Scripts/jquery/jquery-1.11.2.min.js"></script>
+   <script src="~/Scripts/Validform_v5.3.2_min.js"></script>
+   <script src="~/Scripts/jquery/jquery.nicescroll.js"></script>
+   <script src="~/Scripts/artdialog/dialog-plus-min.js"></script>
+   <script src="~/Areas/admin/Scripts/layindex.js"></script>
+   <script src="~/Areas/admin/Scripts/common.js"></script>
+   @RenderSection("HeaderContent",false)
+</head>
+<body>
+   <header>
+   </header>
+   @RenderBody()
+   <footer>
+   </footer>
+   @RenderSection("Scripts", required: false)
+</body>
+</html>

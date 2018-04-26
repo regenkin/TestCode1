@@ -1,0 +1,129 @@
+﻿@using DTcms.Common;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+    ViewBag.Title = "Group_Edit";
+    DTcms.Model.user_groups m = ViewData["model"] as DTcms.Model.user_groups;
+}
+@section HeaderContent{
+   <script>
+    $(function () {
+        //初始化表单验证
+        $("#form1").initValidform();
+    });
+   </script>
+}
+<form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id">
+<!--导航栏-->
+<div class="location">
+  <a href="../group_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../group_list/index"><span>会员组别</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>编辑组别</span>
+  <div class="clipboard">
+     <span><label id="clipMess"></label></span>
+     <a href="javascript:;" class="copy" onclick="copy();"><i class="iconfont icon-copy"></i><span>复制</span></a>
+     <a href="javascript:;" class="paste disable" onclick="paste();"><i class="iconfont icon-log"></i><span>粘贴</span></a>
+  </div>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">基本信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>组别名称：</dt>
+    <dd>
+      @Html.Hidden("action", ViewBag.Action as string)
+      @Html.Hidden("id", ViewBag.Id as string)
+      @Html.TextBox("txtTitle", m.title, new { @class="input normal", datatype="*1-100", sucmsg=" ", minlength="2", MaxLength="100"})
+      <span class="Validform_checktip">*</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>是否隐藏：</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+        @Html.CheckBox("rblIsLock", m.is_lock == 1)
+      </div>
+      <span class="Validform_checktip">*隐藏后，用户将无法升级或显示该组别。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>注册默认会员组：</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+        @Html.CheckBox("rblIsDefault", m.is_default == 1)
+      </div>
+      <span class="Validform_checktip">*用户注册成功后自动默认为该会员组，如果存在多条，则以等级值最小的为准。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>参与自动升级：</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+        @Html.CheckBox("rblIsUpgrade", m.is_upgrade == 1)
+      </div>
+      <span class="Validform_checktip">*如果是否，在满足升级条件下系统则不会自动升级为该会员组。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>等级值：</dt>
+    <dd>
+      @Html.TextBox("txtGrade", m.grade, new { @class="input small", datatype="n", sucmsg=" "})
+      <span class="Validform_checktip">*升级顺序，取值范围1-100，等级值越大，会员等级越高。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>升级所需积分：</dt>
+    <dd>
+      @Html.TextBox("txtUpgradeExp", m.upgrade_exp, new { @class="input small", datatype=@"/^-?\d+$/", sucmsg=" "})
+      <span class="Validform_checktip">*自动升级所需要的积分。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>初始金额：</dt>
+    <dd>
+      @Html.TextBox("txtAmount", m.amount, new { @class="input small", datatype=@"/^-?(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/", sucmsg=" "})
+      <span class="Validform_checktip">*自动到该会员组赠送的金额，负数则扣减。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>初始积分：</dt>
+    <dd>
+      @Html.TextBox("txtPoint", m.point, new { @class="input small", datatype=@"/^-?\d+$/", sucmsg=" "})
+      <span class="Validform_checktip">*自动到该会员组赠送的积分，负数则扣减。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>购物折扣：</dt>
+    <dd>
+      @Html.TextBox("txtDiscount", m.discount, new { @class="input small", datatype="n", sucmsg=" "})
+      <span class="Validform_checktip">*购物享受的折扣，取值范围：1-100。</span>
+    </dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript: history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+
+</form>

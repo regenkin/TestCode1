@@ -1,0 +1,224 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/_LayoutUser.cshtml";
+   DTcms.Model.channel_site site = ViewData["site"] as DTcms.Model.channel_site;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   UserCenterController c = ViewBag.This as UserCenterController;
+   ViewBag.Title = "会员中心 - " + site.name;
+   string action = ViewBag.Action as string;
+   DTcms.Model.users m = ViewData["model"] as DTcms.Model.users;
+   DTcms.Model.user_groups groupModel = ViewData["groupModel"] as DTcms.Model.user_groups;
+}
+@section HeaderContent{
+   @switch (action) {
+      case "password":
+         <link rel="stylesheet" href="@(config.webpath)Content/validate.css" />
+         <script type="text/javascript" src="@(config.webpath)scripts/jquery/jquery.form.min.js"></script>
+         <script type="text/javascript" src="@(config.webpath)scripts/Validform_v5.3.2_min.js"></script>
+         <script>
+            $(function(){
+               //初始化表单
+               AjaxInitForm('#pwdForm', '#btnSubmit', 1);
+            });
+          </script>
+         break;
+      case "avatar":
+         <link rel="stylesheet" href="@(config.webpath)Content/jquery.jcrop.css" type="text/css" />
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/webuploader/webuploader.min.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/jquery/jquery.jcrop.min.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)templates/@ViewBag.Templateskin/web/js/avatar.js"></script>
+         <script>
+            $(function () {
+               initWebUploader('@config.webpath');
+	         });
+	     </script>         
+         break;
+      case "proinfo":
+         <link rel="stylesheet" href="@config.webpath)Content/validate.css" />
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/jquery/jquery.form.min.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/Validform_v5.3.2_min.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/PCASClass.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/datepicker/WdatePicker.js"></script>
+         <script>
+            $(function () {
+               //初始化表单
+               AjaxInitForm('#infoForm', '#btnSubmit', 1);
+               //初始化地区
+               var mypcas = new PCAS("txtProvince,所属省份", "txtCity,所属城市", "txtArea,所属地区");
+               var areaArr = ("@m.area").split(",");
+			   if (areaArr.length == 3) {
+			      mypcas.SetValue(areaArr[0], areaArr[1], areaArr[2]);
+			   }
+	       });
+	     </script>         
+         break;
+   }
+}
+<!-- 会员中心 -->
+@if(action == "index"){
+<div class="user_top w">
+   <div class="user_logo">
+      <div class="img">
+         @if (m.avatar != "") {
+            <img src="@m.avatar" />
+         }
+         else {
+            <img src="@(config.webpath)templates/@ViewBag.Templateskin/mobile/images/user-avatar.png" alt="求真像">
+         }
+      </div>
+   </div>
+   <div class="user_info">
+      <div class="user_name">@m.user_name</div>
+      <div class="user_dengji">会员等级：@groupModel.title</div>
+   </div>
+</div>
+<div class="my_money w">
+   <span>账户余额：</span><i>￥@m.amount 元</i>
+   <div class="tixian_btn"><a href="@bc.linkurl("useramount", "recharge")">我要充值</a></div>
+</div>
+<div class="my_money w">
+   <span>我的积分：</span><i style="color: #00bb9c;">￥@m.point 分</i>
+   <div class="tixian_btn"><a href="@bc.linkurl("userpoint", "convert")" style=" background-color:#00bb9c">积分兑换</a></div>
+</div>
+<div class="my_money w">
+   <span>未完成订单：</span><i>@bc.get_user_order_count("status<3 and user_id=" + @m.id) 个</i>
+</div>
+<div class="my_money w">
+   <span>未读消息：</span><i>@bc.get_user_message_count("type<3 and is_read=0 and accept_user_name='" + @m.user_name + "'") 条</i>
+</div>
+<div class="qiandaojilu w">
+   <div class="qiandao_top">
+      <em style="color: red; font-weight: bold;">登录统计：</em><a href="javascript:;" class="myqiandao"></a>
+      <div class="qiandao_num"><span class="color_red"></span></div>
+   </div>
+   <ul class="qiandao_list">
+      <li>本次登录IP：<div class="qiandao_time">@c.curr_login_ip</div>
+      </li>
+      <li>上次登录IP：<div class="qiandao_time">@c.pre_login_ip</div>
+      </li>
+      <li>注册时间：<div class="qiandao_time">@m.reg_time.ToString("yyyy-MM-dd HH:mm")</div>
+      </li>
+      <li>上次登录时间：<div class="qiandao_time">@(DateTime.Parse(c.pre_login_time).ToString("yyyy-MM-dd HH:mm"))</div>
+      </li>
+   </ul>
+</div>
+}
+<!-- /会员中心 -->
+
+<!-- 修改密码 -->
+@if (action == "password") {
+   <div class="w main">
+      <form id="pwdForm" name="pwdForm" url="@(config.webpath)tools/submit_ajax.ashx?action=user_password_edit">
+         <div class="item item-password">
+            <input id="txtOldPassword" class="txt-input txt-password ciphertext" type="password" placeholder="请输入当前登录密码" name="txtOldPassword" style="display: inline;">
+            <input id="ptext" class="txt-input txt-password plaintext" type="text" placeholder="请输入当前登录密码" style="display: none;" name="ptext">
+            <b class="tp-btn btn-off"></b>
+         </div>
+         <div class="item item-password">
+            <input id="txtPassword" class="txt-input txt-password_PwdTwo ciphertext_PwdTwo" type="password" placeholder="请输入新登录密码" name="txtPassword" style="display: inline;">
+            <input id="ptext_PwdTwo" class="txt-input txt-password_PwdTwo plaintext_PwdTwo" type="text" placeholder="请输入新登录密码" style="display: none;" name="ptext_PwdTwo">
+            <b class="tp-btn_PwdTwo btn-off_PwdTwo"></b>
+         </div>
+         <div class="item item-password">
+            <input id="txtPassword1" class="txt-input txt-password_PwdThree ciphertext_PwdThree" type="password" placeholder="请再次输入新密码" name="txtPassword1" style="display: inline;">
+            <input id="ptext_PwdThree" class="txt-input txt-password_PwdThree plaintext_PwdThree" type="text" placeholder="请再次输入新密码" style="display: none;" name="ptext_PwdThree">
+            <b class="tp-btn_PwdThree btn-off_PwdThree"></b>
+         </div>
+         <div class="ui-btn-wrap" style="padding: 0px 0px;">
+            <input name="btnSubmit" type="submit" id="btnSubmit" value="确认修改" class="ui-btn-lg ui-btn-primary">
+         </div>
+      </form>
+   </div>
+}
+<!-- /修改密码 -->
+
+<!-- 修改资料 -->
+@if (action == "proinfo") {
+<div class="w main">
+   <form id="infoForm" name="infoForm" url="@(config.webpath)tools/submit_ajax.ashx?action=user_info_edit">
+      <div class="item item-username">
+         用户名: @m.user_name
+      </div>
+      <div class="item item-username">
+         <input id="" name="" type="text" class="txt-input txt-username" placeholder="请输入昵称" value="@m.nick_name"/>
+      </div>
+      <div class="item item-username">
+         <label class="radio"><input name="rblSex" type="radio" value="男" @(m.sex == "男" ? "checked=checked" : "") />男</label> 
+         <label class="radio"><input name="rblSex" type="radio" value="女" @(m.sex == "女" ? "checked=checked" : "") />女</label>
+         <label class="radio"><input name="rblSex" type="radio" value="保密" datatype="*" sucmsg=" " @(m.sex == "保密" ? "checked=checked" : "") />保密</label>
+      </div>
+      <div class="item item-username">
+         <input id="txtBrithday" name="txtBrithday" type="text" class="txt-input txt-username" placeholder="请输入出生日期" value="@(m.birthday == null ? "" : ((DateTime)m.birthday).ToString("yyyy-MM-dd"))" />
+      </div>
+      <div class="item item-username">
+         <input id="txtEmail" name="txtEmail" type="text" class="txt-input txt-username" placeholder="请输入邮箱" value="@m.email" />
+      </div>
+      <div class="item item-username">
+         <input id="txtMobile" name="txtMobile" type="text" class="txt-input txt-username" placeholder="请输入手机号" value="@m.mobile" />
+      </div>
+      <div class="item item-username">
+         <input id="txtTelphone" name="txtTelphone" type="text" class="txt-input txt-username" placeholder="请输入固定电话号" value="@m.telphone" />
+      </div>
+      <div class="item item-username">
+         <select id="txtProvince" name="txtProvince" class="select"></select>
+         <select id="txtCity" name="txtCity" class="select"></select>
+         <select id="txtArea" name="txtArea" class="select"></select>
+      </div>
+      <div class="item item-username">
+         <input id="txtAddress" name="txtAddress" type="text" class="txt-input txt-username" placeholder="请输入详细地址" value="@m.address" />
+      </div>
+      <div class="item item-username">
+         <input id="txtQQ" name="txtQQ" type="text" class="txt-input txt-username" placeholder="请输入QQ号码" value="@m.qq" />
+      </div>
+      <div class="item item-username">
+         <input id="txtMsn" name="txtMsn" type="text" class="txt-input txt-username" placeholder="请输入MSN号码" value="@m.msn" />
+      </div>
+      <div class="ui-btn-wrap" style="padding: 0px 0px;">
+         <input name="btnSubmit" type="submit" id="btnSubmit" value="确认修改" class="ui-btn-lg ui-btn-primary">
+      </div>
+   </form>
+</div>
+}
+<!-- /修改资料 -->
+
+<!-- 设置头像 -->
+@if(action == "avatar"){
+<div class="w main">
+<div class="user_top w">
+   <div id="upload-box" class="ui-btn-lg ui-btn-primary"></div>
+   <div class="user_logo">
+      <div class="img">
+         @if (m.avatar != "") {
+            <img src="@m.avatar" />
+         }
+         else {
+            <img src="@(config.webpath)templates/@ViewBag.Templateskin/mobile/images/user-avatar.png" alt="求真像">
+         }
+      </div>
+   </div>
+   <div class="user_info">
+      <div class="user_name">@m.user_name</div>
+      <div class="user_dengji">会员等级：@groupModel.title</div>
+   </div>
+</div>
+<form id="uploadForm" name="uploadForm" url="@(config.webpath)tools/submit_ajax.ashx?action=user_avatar_crop">
+   <input id="hideFileName" name="hideFileName" type="hidden" />
+   <input id="hideX1" name="hideX1" type="hidden" value="0" />
+   <input id="hideY1" name="hideY1" type="hidden" value="0" />
+   <input id="hideWidth" name="hideWidth" type="hidden" value="0" />
+   <input id="hideHeight" name="hideHeight" type="hidden" value="0" />
+</form>
+</div>
+}
+<!-- /设置头像 -->
+
+<!-- 邀请码 -->
+@if (action == "invite") {
+   <div>未编写此功能</div>
+}
+<!-- /邀请码 -->

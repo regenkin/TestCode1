@@ -1,0 +1,120 @@
+﻿@using DTcms.Common;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "编辑公众账户";
+   DTcms.Model.weixin_account m = ViewData["model"] as DTcms.Model.weixin_account;
+}
+
+@section HeaderContent{
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+      });
+   </script>
+}
+
+<form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id">
+<!--导航栏-->
+<div class="location">
+  <a href="../account_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>应用管理</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>微信管理</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>编辑公众账户</span>
+  <div class="clipboard">
+     <span><label id="clipMess"></label></span>
+     <a href="javascript:;" class="copy" onclick="copy();"><i class="iconfont icon-copy"></i><span>复制</span></a>
+     <a href="javascript:;" class="paste disable" onclick="paste();"><i class="iconfont icon-log"></i><span>粘贴</span></a>
+  </div>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">公众账户信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>公众号名称</dt>
+    <dd>
+      @Html.TextBox("txtName", m.name, new { @class="input normal", datatype="s2-100", sucmsg=" "})
+      <span class="Validform_checktip">*公众平台账号名称。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>公众号原始ID</dt>
+    <dd>
+      @Html.TextBox("txtOriginalId", m.originalid, new { @class="input normal", datatype="s1-50", sucmsg=" "})
+      <span class="Validform_checktip">*公众平台账号原始ID。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>公众平台微信号</dt>
+    <dd>
+      @Html.TextBox("txtWxCode", m.wxcode, new { @class="input normal", datatype="s1-50", sucmsg=" "})
+      <span class="Validform_checktip">*公众平台微信号。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>ToKen</dt>
+    <dd>
+      @Html.TextBox("txtToken", m.token, new { @class="input normal",  datatype="*", sucmsg=" "})
+      <span class="Validform_checktip">*ToKen值必须与公众平台对应。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>AppId</dt>
+    <dd>
+      @Html.TextBox("txtAppId", m.appid, new { @class="input normal",  datatype="*", sucmsg=" "})
+      <span class="Validform_checktip">*非必填，仅用于高级接口。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>AppSecret</dt>
+    <dd>
+      @Html.TextBox("txtAppSecret", m.appsecret, new { @class="input normal",  datatype="*", sucmsg=" "})
+      <span class="Validform_checktip">*非必填，仅用于高级接口。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>内容推送</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+         <span>@Html.CheckBox("cbIsPush", m.is_push == 1)</span>
+      </div>
+      <span class="Validform_checktip">*网站内容推送至微信(备用)</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>排序数字</dt>
+    <dd>
+      @Html.TextBox("txtSortId", m.sort_id, new { @class="input small", datatype="n", sucmsg=" "})
+      <span class="Validform_checktip">*数字，越小越向前</span>
+    </dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript: history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+
+</form>

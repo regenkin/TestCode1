@@ -1,0 +1,212 @@
+﻿@using DTcms.Common;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "会员参数设置";
+   DTcms.Model.userconfig m = ViewData["model"] as DTcms.Model.userconfig;
+}
+@section HeaderContent{
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+      });
+   </script>
+}
+@using(Html.BeginForm("SubmitSave", "User_Config", FormMethod.Post, new { id="form1"})){
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>会员设置</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>参数设置</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">基本参数设置</a></li>
+        <li><a href="javascript:;">用户积分策略</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--用户参数设置-->
+<div class="tab-content">
+  <dl>
+    <dt>新用户注册设置</dt>
+    <dd>
+      <div class="rule-multi-radio">
+         <span>
+            @Html.RadioButton("regstatus", 0, m.regstatus == 0, new { id="regstatus_0"})<label for="regstatus_0">关闭注册</label>
+            @Html.RadioButton("regstatus", 1, m.regstatus == 1, new { id="regstatus_1"})<label for="regstatus_1">开放注册</label>
+            @Html.RadioButton("regstatus", 2, m.regstatus == 2, new { id="regstatus_2"})<label for="regstatus_2">手机注册</label>
+            @Html.RadioButton("regstatus", 3, m.regstatus == 3, new { id="regstatus_3"})<label for="regstatus_3">邮箱注册</label>
+            @Html.RadioButton("regstatus", 4, m.regstatus == 4, new { id="regstatus_4"})<label for="regstatus_4">邀请码</label>
+         </span>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>新用户注册审核</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+         <span>
+            @Html.CheckBox("regverify", m.regverify == 1)
+         </span>
+      </div>
+      <span class="Validform_checktip">*是否需要人工审核通过后才能登录</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>欢迎短消息类型</dt>
+    <dd>
+      <div class="rule-multi-radio">
+         <span>
+            @Html.RadioButton("regmsgstatus", 0, m.regmsgstatus == 0, new { id="regmsgstatus_0"})<label for="regmsgstatus_0">不发送</label>
+            @Html.RadioButton("regmsgstatus", 0, m.regmsgstatus == 1, new { id="regmsgstatus_1"})<label for="regmsgstatus_1">站内消息</label>
+            @Html.RadioButton("regmsgstatus", 0, m.regmsgstatus == 2, new { id="regmsgstatus_2"})<label for="regmsgstatus_2">发送邮件</label>
+            @Html.RadioButton("regmsgstatus", 0, m.regmsgstatus == 3, new { id="regmsgstatus_3"})<label for="regmsgstatus_3">手机短信</label>
+         </span>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>欢迎短消息内容</dt>
+    <dd>
+      @Html.TextArea("regmsgtxt", m.regmsgtxt, new { @class="input"})
+      <span class="Validform_checktip">支持HTML</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>用户名保留关健字</dt>
+    <dd>
+      @Html.TextBox("regkeywords", m.regkeywords, new { @class="input normal"})
+      <span class="Validform_checktip">*以英文逗号“,”分隔开</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>IP注册间隔限制</dt>
+    <dd>
+      @Html.TextBox("regctrl", m.regctrl, new { @class="input small", datatype="n", sucmsg=" "}) 小时
+      <span class="Validform_checktip">*同一IP的注册间隔，0为不限制</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>手机验证码有效期</dt>
+    <dd>
+      @Html.TextBox("regsmsexpired", m.regsmsexpired, new { @class="input small", datatype="n", sucmsg=" "}) 分钟
+      <span class="Validform_checktip">*新用户手机验证码有效期，整数须大于0</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>邮件验证有效期</dt>
+    <dd>
+      @Html.TextBox("regemailexpired", m.regemailexpired, new { @class="input small", datatype="n", sncmsg=" "}) 天
+      <span class="Validform_checktip">*新用户注册链接及验证邮件有效期，整数须大于0</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>允许手机登录</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+         @Html.CheckBox("mobilelogin", m.mobilelogin == 1)
+      </div>
+      <span class="Validform_checktip">*允许手机号码做为登录用户名</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>允许邮箱登录</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+         @Html.CheckBox("emaillogin", m.emaillogin == 1)
+      </div>
+      <span class="Validform_checktip">*允许邮箱登录时不能开启同邮箱注册多个用户</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>开启注册协议</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+         @Html.CheckBox("regrules", m.regrules == 1)
+      </div>
+      <span class="Validform_checktip">*开启后，用户必须同意才能注册</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>注册协议内容</dt>
+    <dd>
+      @Html.TextArea("regrulestxt", m.regrulestxt, new {@class="input"})
+      <span class="Validform_checktip">支持HTML</span>
+    </dd>
+  </dl>
+</div>
+<!--/用户参数设置-->
+
+<!--用户积分策略-->
+<div class="tab-content" style="display:none">
+  <dl>
+    <dt>邀请码使用期限</dt>
+    <dd>
+      @Html.TextBox("invitecodeexpired", m.invitecodeexpired, new { @class="input small", datatype="n", sucmsg=" "}) 天
+      <span class="Validform_checktip">*邀请码有效天数，不可为0</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>邀请码可使用次数</dt>
+    <dd>
+      @Html.TextBox("invitecodecount", m.invitecodecount, new { @class="input small", datatype="n", sucmsg=" "}) 次
+      <span class="Validform_checktip">*邀请码使用次数，0为不限制</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>每天申请邀请码数量</dt>
+    <dd>
+      @Html.TextBox("invitecodenum", m.invitecodenum, new { @class="input small", datatype="n", sucmsg=" "}) 个
+      <span class="Validform_checktip">*每天可申请邀请码数量，0为不限制</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>现金/积分兑换比例</dt>
+    <dd>
+      @Html.TextBox("pointcashrate", m.pointcashrate, new { @class="input small", datatype="n", sucmsg=" "}) 个
+      <span class="Validform_checktip">*1元等于多少个积分，0为禁用兑换功能</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>邀请注册获得积分</dt>
+    <dd>
+      @Html.TextBox("pointinvitenum", m.pointinvitenum, new { @class="input small", datatype="n", sucmsg=" "}) 分
+      <span class="Validform_checktip">*邀请一个注册成功用户所获得的积分</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>每天登录获得积分</dt>
+    <dd>
+
+      @Html.TextBox("pointloginnum", m.pointloginnum, new { @class="input small", datatype="n", sucmsg=" "}) 分
+      <span class="Validform_checktip">*会员每天登录获得的积分，一天只赠送一次</span>
+    </dd>
+  </dl>
+</div>
+<!--/用户积分策略-->
+
+<!--内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript: history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+}
+

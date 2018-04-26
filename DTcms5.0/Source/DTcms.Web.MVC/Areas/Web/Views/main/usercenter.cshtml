@@ -1,0 +1,402 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+  DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+  DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+  Layout = "~/Areas/Web/Views/" + site.build_path + "/Shared/_LayoutShow.cshtml";
+  BaseController bc = ViewBag.BasePage as BaseController;
+  UserCenterController c = ViewBag.This as UserCenterController;
+  ViewBag.Title = "会员中心 - " + site.name;
+  string action = ViewBag.Action as string;
+  DTcms.Model.users userModel = ViewData["model"] as DTcms.Model.users;
+  DTcms.Model.user_groups groupModel = ViewData["groupModel"] as DTcms.Model.user_groups;
+}
+@section HeaderContent{
+   @switch (action) {
+     case "password":
+         <script type="text/javascript" src="@(config.webpath)scripts/jquery/jquery.form.min.js"></script>
+         <script>
+            $(function(){
+               //初始化表单
+               AjaxInitForm('#pwdForm', '#btnSubmit', 1);
+            });
+          </script>
+       break;
+     case "avatar":
+         <link rel="stylesheet" href="@(config.webpath)Content/jquery.jcrop.css" type="text/css" />
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/webuploader/webuploader.min.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/jquery/jquery.jcrop.min.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)templates/@ViewBag.Templateskin/js/avatar.js"></script>
+         <script>
+            $(function () {
+               initWebUploader('@config.webpath');
+	         });
+	     </script>         
+       break;
+     case "proinfo":
+         <link rel="stylesheet" href="@config.webpath)Content/validate.css" />
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/jquery/jquery.form.min.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/Validform_v5.3.2_min.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/PCASClass.js"></script>
+         <script type="text/javascript" charset="utf-8" src="@(config.webpath)scripts/datepicker/WdatePicker.js"></script>
+         <script>
+            $(function () {
+               //初始化表单
+               AjaxInitForm('#infoForm', '#btnSubmit', 1);
+               //初始化地区
+               var mypcas = new PCAS("txtProvince,所属省份", "txtCity,所属城市", "txtArea,所属地区");
+               var areaArr = ("@userModel.area").split(",");
+			   if (areaArr.length == 3) {
+			      mypcas.SetValue(areaArr[0], areaArr[1], areaArr[2]);
+			   }
+	       });
+	     </script>         
+       break;
+   }
+}
+
+<!--当前位置-->
+<div class="section">
+  <div class="location">
+    <span>当前位置：</span>
+    <a href="@bc.linkurl("index")">首页</a> &gt;
+        <a href="@bc.linkurl("usercenter", "index")">会员中心</a>
+  </div>
+</div>
+<!--/当前位置-->
+
+<div class="section clearfix">
+  <!--左侧导航-->
+  @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_ucenter_nav.cshtml")
+  <!--/左侧导航-->
+
+  <!--右侧内容-->
+  <div class="right-auto">
+    <div class="bg-wrap" style="min-height: 765px;">
+      @if (action == "index") {
+        <!--会员中心-->
+        <div class="sub-tit">
+          <a class="add" href="javascript:history.go(-1);"><i class="iconfont icon-reply"></i>返回</a>
+          <ul>
+            <li class="selected">
+              <a href="javascript:;">个人中心</a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="center-head clearfix">
+          <div class="img-box">
+            @if (userModel.avatar != "") {
+              <img src="@userModel.avatar" />
+            }
+            else {
+              <i class="iconfont icon-user-full"></i>
+            }
+          </div>
+          <div class="list-box">
+            <h3>欢迎您~ @userModel.user_name</h3>
+            <ul>
+              <li>组别：@groupModel.title</li>
+              <li>账户余额：￥@userModel.amount</li>
+              <li>
+                <p><a href="#">消费记录</a></p>
+              </li>
+              <li>账户成长值：@userModel.exp</li>
+              <li>账户积分：@userModel.point</li>
+              <li>
+                <p><a class="link-btn" href="@bc.linkurl("useramount", "recharge")">立即充值</a></p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="center-info clearfix">
+          <ul>
+            <li>本次登录IP：@c.curr_login_ip</li>
+            <li>上次登录IP：@c.pre_login_ip</li>
+            <li>注册时间：@userModel.reg_time</li>
+            <li>上次登录时间：@c.pre_login_time</li>
+          </ul>
+        </div>
+            
+        <div class="center-tit">
+          <span><a href="@bc.linkurl("userorder", "list")">更多..</a></span>
+          <h3><i class="iconfont icon-order"></i>我的订单</h3>
+        </div>
+        <div class="center-info clearfix">
+          <ul>
+            <li>已完成订单：@bc.get_user_order_count("status=3 and user_id=" + userModel.id)个</li>
+            <li>待完成订单：@bc.get_user_order_count("status<3 and user_id=" + userModel.id)个</li>
+          </ul>
+        </div>
+        <div class="center-tit">
+          <span><a href="@bc.linkurl("usermessage", "accept")">更多..</a></span>
+          <h3><i class="iconfont icon-comment"></i>站内消息</h3>
+        </div>
+            
+        <div class="table-wrap">
+          <table width="100%" class="mtable" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+              @{DataTable messageList = bc.get_user_message_list(10, "accept_user_name='" + userModel.user_name + "' and (type=1 or type=2)");}
+              @foreach (DataRow dr in messageList.Rows) {
+                <tr>
+                  <td><a href="@bc.linkurl("usermessage_show", dr["id"])">@dr["title"]</a> (发件人：@dr["post_user_name"])</td>
+                  <td width="80">@(dr["is_read"].ToString() == "1" ? "已读" : "未读")</td>
+                  <td width="150">@dr["post_time"]</td>
+                </tr>
+              }
+              @if (messageList.Rows.Count == 0) {
+                <tr>
+                  <td align="center">暂无短消息...</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        
+        <!--/会员中心-->
+      }
+
+      @if (action == "password") {
+        <!--修改密码-->
+        <div class="sub-tit">
+          <a class="add" href="@bc.linkurl("usercenter", "index")"><i class="iconfont icon-reply"></i>返回</a>
+          <ul>
+            <li class="selected">
+              <a href="javascript:;">修改密码</a>
+            </li>
+          </ul>
+        </div>
+        
+        <form name="pwdForm" id="pwdForm" url="@(config.webpath)tools/submit_ajax.ashx?action=user_password_edit">
+          <div class="form-box">
+            <dl class="form-group">
+              <dt>用户名：</dt>
+              <dd>@userModel.user_name</dd>
+            </dl>
+            <dl class="form-group">
+              <dt>旧密码：</dt>
+              <dd>
+                <input name="txtOldPassword" id="txtOldPassword" type="password" class="input txt" datatype="*6-20" nullmsg="请输入旧密码" errormsg="密码范围在6-20位之间" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl class="form-group">
+              <dt>新密码：</dt>
+              <dd>
+                <input name="txtPassword" id="txtPassword" type="password" class="input txt" datatype="*6-20" nullmsg="请输入新密码" errormsg="密码范围在6-20位之间" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl class="form-group">
+              <dt>确认新密码：</dt>
+              <dd>
+                <input name="txtPassword1" id="txtPassword1" type="password" class="input txt" datatype="*" recheck="txtPassword" nullmsg="请再输入一次新密码" errormsg="两次输入的密码不一致" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl class="form-group">
+              <dt></dt>
+              <dd>
+                <input name="btnSubmit" id="btnSubmit" type="submit" class="btn btn-success" value="确认修改" />
+              </dd>
+            </dl>
+          </div>
+        </form>
+        <!--/修改密码-->
+      }
+
+      @if (action == "proinfo") {
+        <!--修改资料-->
+        <div class="sub-tit">
+          <a class="add" href="@bc.linkurl("usercenter", "index")"><i class="iconfont icon-reply"></i>返回</a>
+          <ul>
+            <li class="selected">
+              <a href="javascript:;">账户资料</a>
+            </li>
+          </ul>
+        </div>
+        <form name="infoForm" id="infoForm" url="@(config.webpath)tools/submit_ajax.ashx?action=user_info_edit">
+          <div class="form-box">
+            <dl class="form-group">
+              <dt>用户名：</dt>
+              <dd>@userModel.user_name</dd>
+            </dl>
+            <dl class="form-group">
+              <dt>昵称：</dt>
+              <dd>
+                <input name="txtNickName" id="txtNickName" type="text" class="input txt" value="@userModel.nick_name" datatype="*" sucmsg=" " /></dd>
+            </dl>
+            <dl class="form-group">
+              <dt>性别：</dt>
+              <dd>
+                <label class="radio">
+                  <input name="rblSex" type="radio" value="男" checked="@(userModel.sex == "男" ? "checked" : "")" />男</label>
+                <label class="radio">
+                  <input name="rblSex" type="radio" value="女" checked="@(userModel.sex == "女" ? "checked" : "")"/>女</label>
+                <label class="radio">
+                  <input name="rblSex" type="radio" value="保密" datatype="*" sucmsg=" " checked="@(userModel.sex == "保密" ? "checked" : "")"/>保密</label>
+              </dd>
+            </dl>
+            <dl class="form-group">
+              <dt>生日：</dt>
+              <dd>
+                <input name="txtBirthday" id="txtBirthday" type="text" class="input txt" maxlength="30" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'});" value="@(userModel.birthday != null ? ((DateTime)userModel.birthday).ToString("yyyy-MM-dd") : "")" />
+              </dd>
+            </dl>
+            <dl class="form-group">
+              <dt>邮箱：</dt>
+              <dd>
+                <input name="txtEmail" id="txtEmail" type="text" class="input txt" value="@userModel.email" datatype="e" sucmsg=" " /></dd>
+            </dl>
+            <dl class="form-group">
+              <dt>手机：</dt>
+              <dd>
+                <input name="txtMobile" id="txtMobile" type="text" class="input txt" value="@userModel.mobile" datatype="m" sucmsg=" " /></dd>
+            </dl>
+            <dl class="form-group">
+              <dt>电话：</dt>
+              <dd>
+                <input name="txtTelphone" id="txtTelphone" type="text" class="input txt" maxlength="30" value="@userModel.telphone" /></dd>
+            </dl>
+            <dl class="form-group">
+              <dt>所属地区：</dt>
+              <dd>
+                <select id="txtProvince" name="txtProvince" class="select"></select>
+                <select id="txtCity" name="txtCity" class="select"></select>
+                <select id="txtArea" name="txtArea" class="select" datatype="*" sucmsg=" "></select>
+              </dd>
+            </dl>
+            <dl class="form-group">
+              <dt>详细地址：</dt>
+              <dd>
+                <input name="txtAddress" id="txtAddress" type="text" class="input wide" maxlength="250" value="@userModel.address" /></dd>
+            </dl>
+            <dl class="form-group">
+              <dt>在线QQ：</dt>
+              <dd>
+                <input name="txtQQ" id="txtQQ" type="text" class="input txt" maxlength="20" value="@userModel.qq" /></dd>
+            </dl>
+            <dl class="form-group">
+              <dt>MSN账户：</dt>
+              <dd>
+                <input name="txtMsn" id="txtMsn" type="text" class="input txt" maxlength="20" value="@userModel.msn" /></dd>
+            </dl>
+            <dl class="form-group">
+              <dd>
+                <input name="btnSubmit" id="btnSubmit" type="submit" class="submit" value="确认修改" /></dd>
+            </dl>
+          </div>
+        </form>
+        <!--/修改资料-->
+      }
+
+      @if (action == "avatar") {
+        <!--设置头像-->
+        <div class="sub-tit">
+          <a class="add" href="@bc.linkurl("usercenter", "index")"><i class="iconfont icon-reply"></i>返回</a>
+          <ul>
+            <li class="selected">
+              <a href="javascript:;">设置头像</a>
+            </li>
+          </ul>
+        </div>        
+        <div class="form-box">
+          <p><strong>设置我的新头像</strong></p>
+          <p>如果您还没有设置自己的头像，系统会显示为默认头像，您需要自己上传一张新照片来作为自己的个人头像。</p>
+          <p>上传成功后，请裁剪合适的头像确认保存后才能生效。</p>
+
+          <div id="upload-box" class="upload-box"></div>
+
+          <div class="cropper-wrap">
+            <div class="cropper-box">
+              <img id="target" src="@(config.webpath)templates/@site.templet_path/images/avatar-bg.png" width="350" height="350" />
+            </div>
+            <div class="cropper-view">
+              <div class="img-box">
+                @if (userModel.avatar != "") {
+                  <img id="preview" src="@userModel.avatar" />
+                }
+                else {
+                  <img id="preview" src="@(config.webpath)templates/@site.templet_path/images/user-avatar.png" />
+                }
+                <span>头像预览</span>
+              </div>
+              <div class="btn-box">
+                <p><strong>头像预览区</strong></p>
+                <p>
+                  <input name="btnSubmit" type="button" class="btn" value="确定保存" onclick="CropSubmit(this);" /></p>
+                <p class="tip">提示：生成头像大小180*180相素上传图片后，左侧选取图片合适大小，点击下面的保存按钮。</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <form id="uploadForm" name="uploadForm" url="@(config.webpath)tools/submit_ajax.ashx?action=user_avatar_crop">
+          <input id="hideFileName" name="hideFileName" type="hidden" />
+          <input id="hideX1" name="hideX1" type="hidden" value="0" />
+          <input id="hideY1" name="hideY1" type="hidden" value="0" />
+          <input id="hideWidth" name="hideWidth" type="hidden" value="0" />
+          <input id="hideHeight" name="hideHeight" type="hidden" value="0" />
+        </form>
+        <!--/设置头像-->
+      }
+
+      @if (action == "invite") {
+        <!--邀请码-->
+        <div class="sub-tit">
+          <a class="add" href="javascript:;" onclick="clickSubmit('@(config.webpath)tools/submit_ajax.ashx?action=user_invite_code');">
+            <i class="fa fa-reply"></i>申请邀请码
+          </a>
+          <ul>
+            <li class="selected">
+              <a href="javascript:;">我的邀请码</a>
+            </li>
+          </ul>
+        </div>
+                
+
+        <div class="table-wrap">
+          <div class="msg-box">
+            <i class="iconfont icon-tip"></i>
+            <p>说明：您购买的邀请码会在失效之后由系统定时清理，不会长期驻留在列表中</p>
+          </div>
+
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ftable">
+            <tr>
+              <th align="left">邀请码</th>
+              <th width="150">申请时间</th>
+              <th width="150">过期时间</th>
+              <th width="80">已使用次数</th>
+              <th width="80">状态</th>
+            </tr>
+            @{ DataTable list = bc.get_user_invite_list(0, "user_name='" + userModel.user_name + "'");}
+            @foreach (DataRow dr in list.Rows) {
+              <tr>
+                <td>
+                  @dr["str_code"] &nbsp; 
+                  <a href="javascript:;" onclick="copyText('邀请码：@dr["str_code"]');">[复制]</a>
+                </td>
+                <td align="center">@dr["add_time"]</td>
+                <td align="center">
+                  @dr["eff_time"]
+                </td>
+                <td align="center">@dr["count"]</td>
+                <td align="center">
+                  @(c.get_invite_status(dr["str_code"].ToString()) ? "有效" : "已失效")
+                </td>
+              </tr>
+            }
+
+            @if (list.Rows.Count == 0) {
+              <tr>
+                <td colspan="8" align="center">暂无邀请码...</td>
+              </tr>
+            }
+          </table>
+        </div>
+        <!--/邀请码-->
+      }
+    </div>
+  </div>
+  <!--/右侧内容-->
+</div>

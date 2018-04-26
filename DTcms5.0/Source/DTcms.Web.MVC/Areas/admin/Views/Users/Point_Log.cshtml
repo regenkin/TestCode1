@@ -1,0 +1,125 @@
+﻿@using System.Data;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+    ViewBag.Title = "Point_Log";
+    DataTable list = ViewData["list"] as DataTable;
+}
+@section HeaderContent{
+   <script>
+      //查询数据
+      function search() {
+         var text = $("#txtKeywords").val();
+         var pageCount = $("#txtPageNum").val();
+         document.location = "index?keywords=" + text + "&pageNum=" + pageCount;
+      }
+
+      //删除数据
+      function __doPostBack() {
+         var text = $("#txtKeywords").val();
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:gt(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitDelete?keywords=" + text,
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("error");
+            }
+         });
+      }
+   </script>
+}
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../user_list/index"><span>会员管理</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>积分记录</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a><a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a href="javascript:;" onclick="ExePostBack('btnDelete');"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+        </ul>
+      </div>
+      <div class="r-list">
+        <input type="text" class="keyword" value="@ViewBag.Keywords" />
+        <a href="javascript:scerch();" id="lbtnSearch" class="btn-search"><i class="iconfont icon-search"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+  <tr>
+    <th width="8%">选择</th>
+    <th align="left" width="15%">用户名</th>
+    <th align="left" width="10%">积分</th>
+    <th align="left">备注</th>
+    <th align="left" width="16%">时间</th>
+  </tr>
+@foreach(DataRow dr in list.Rows){
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;">
+         <input type="checkbox" />
+      </span>
+      <label style="display:none">@dr["id"]</label>
+    </td>
+    <td>@dr["user_name"]</td>
+    <td>
+       @if (Convert.ToDecimal(dr["value"]) > 0) {
+          @:@dr["value"].ToString()
+       }
+       else {
+          @:@dr["value"].ToString()
+       }
+    </td>
+    <td>@dr["remark"]</td>
+    <td>@string.Format("{0:g}", dr["add_time"])</td>
+  </tr>
+}
+@if (list.Rows.Count == 0) {
+   <tr><td align="center" colspan="5">暂无记录</td></tr>
+}
+</table>
+</div>
+<!--/列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span>
+     <input type="txtPageNum" class="pagenum" onkeydown="return checkNumber(event);" onchange="search();" value="@ViewBag.PageNum" />
+     <span>条/页</span>
+  </div>
+  <div class="default">@Html.Raw(ViewBag.PageContent)</div>
+</div>
+<!--/内容底部-->
+
+</form>

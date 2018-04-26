@@ -1,0 +1,27 @@
+﻿@using Kinfar.Frame.UIOperate;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Html.Partial("~/Views/Shared/BaseStyles.cshtml")
+    @RenderSection("styles", required: false)
+    @Html.Partial("~/Views/Shared/BaseScripts.cshtml")
+    @if (UIOperate.IsEnableIM()) //启用IM
+    { 
+        <script language="javascript" type="text/javascript">
+            document.writeln('<script type="text/javascript" src="/IM/embed.js.aspx?' + (new Date()).getTime() + '"><' + '/script>');
+            window.onload = function () {
+                StartService();
+            }
+        </script>
+    }
+</head>
+<body class="easyui-layout">
+    @RenderBody()
+    @RenderSection("scripts", required: false)
+</body>
+</html>

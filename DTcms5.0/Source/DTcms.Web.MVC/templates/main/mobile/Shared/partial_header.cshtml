@@ -1,0 +1,58 @@
+﻿@using System.Data;
+@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.channel_site site = ViewData["site"] as DTcms.Model.channel_site;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+   string channel = ViewBag.Channel as string;
+   string controller_category = ViewBag.ControllerCategory as string;
+}
+<script>
+   $(document).ready(function () {
+      var channel = "@channel";
+         $("#bl_submit").click(function () {
+            var title = $.trim($("#bl_title").val());
+            if (title == '') {
+               layer.tips('请输入您想要查找的信息！', '#bl_title', { tips: 1 });
+               return false;
+            } else {
+               document.location = "@bc.linkurl("search")" + "?channel=" + channel + "&keyword=" + encodeURI(title);
+            }
+         });
+      });
+</script>
+<!-- 标题栏 -->
+<div class="header">
+   <a class="new-a-back waves-effect waves-button" href="javascript:history.back();"><span><img src="@(config.webpath)templates/@ViewBag.TemplateSkin/mobile/images/iconfont-fanhui.png"></span></a>
+   <h2>@ViewBag.Title</h2>
+   <p class="nav_more nav_ico header_right" id="nav_new_more" data-icon="1"></p>
+   <div class="header_right toolbar shaixuan"><img src="@(config.webpath)templates/@ViewBag.TemplateSkin/mobile/images/iconfont-shaixuan.png"></div>
+</div>
+<!-- /标题栏 -->
+
+<!-- 搜索栏 -->
+<div class="search w">
+   <input name="" id="bl_title" type="text" class="search_input" placeholder="请输入您想要查找的信息" value="@ViewBag.Keyword" />
+   <input name="" id="bl_submit" type="button" class="search_submit" value="搜索" />
+</div>
+<!-- /搜索栏 -->
+
+<!-- 导航菜单 -->
+<div class="ui-tab">
+	<ul class="ui-tab-nav">
+      @if (string.IsNullOrEmpty(ViewBag.Keyword as string)) {
+      <li class="@(controller_category == "goods" ? "current" : "")"><a href="@bc.linkurl("goods")" class="waves-effect waves-button">商城</a></li>
+      <li class="@(controller_category == "video" ? "current" : "")"><a href="@bc.linkurl("video")" class="waves-effect waves-button">视频</a></li>
+      <li class="@(controller_category == "photo" ? "current" : "")"><a href="@bc.linkurl("photo")" class="waves-effect waves-button">图片</a></li>
+      <li class="@(controller_category == "news" ? "current" : "")"><a href="@bc.linkurl("news")" class="waves-effect waves-button">资讯</a></li>
+      }
+      else {
+      <li class="@(controller_category == "goods" ? "current" : "")"><a href="@bc.linkurl("goods")" class="waves-effect waves-button">商城</a></li>
+      <li class="@(controller_category == "video" ? "current" : "")"><a href="@bc.linkurl("video")" class="waves-effect waves-button">视频</a></li>
+      <li class="@(controller_category == "photo" ? "current" : "")"><a href="@bc.linkurl("photo")" class="waves-effect waves-button">图片</a></li>
+      <li class="@(controller_category == "news" ? "current" : "")"><a href="@bc.linkurl("news")" class="waves-effect waves-button">资讯</a></li>         
+      }
+   </ul>
+</div>
+<!-- /导航菜单 -->

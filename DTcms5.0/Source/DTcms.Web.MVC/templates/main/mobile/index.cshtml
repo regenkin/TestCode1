@@ -1,0 +1,169 @@
+﻿@using System.Data;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/_LayoutBase.cshtml";
+   DTcms.Model.channel_site site = ViewData["site"] as DTcms.Model.channel_site;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = site.seo_title;
+}
+@section HeaderContent{
+<script src="~/templates/@ViewBag.TemplateSkin/mobile/js/owl.carousel.min.js"></script>
+<link href="~/templates/@ViewBag.TemplateSkin/mobile/css/owl.theme.css" rel="stylesheet" />
+<link href="~/templates/@ViewBag.TemplateSkin/mobile/css/owl.transitions.css" rel="stylesheet" />
+<link href="~/templates/@ViewBag.TemplateSkin/mobile/css/owl.carousel.css" rel="stylesheet" />
+<script>
+   $(function () {
+
+      //设置幻灯片
+      $("#owl").owlCarousel({
+         items: true,
+         autoPlay: true,
+         autoHeight: true
+      });
+   });
+
+   $(document).ready(function () {
+      $(".m_nav a").click(function () {
+         var index = layer.open({
+            type: 1,
+            title: false,
+            closeBtn: false,
+            shadeClose: false,
+            offset: '25%',
+            content: "<div class='no_login_show'><h1>亲！您还没登录" + @site.name + "哦！</h1><a href='@bc.linkurl("login")'>马上登录</a><a href='@bc.linkurl("register")'>免费注册</a><a href='#'>先购物，再返利</a><a href='javascript:layer.closeAll();'>取消</a></div>"
+         });
+      });
+   });
+</script>
+}
+<div class="mobile">
+	<div class="header">
+    	<div class="m_logo"><a href="@bc.linkurl("index")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/logo.png"></a></div>
+      <div class="m_search"><a href="@bc.linkurl("search")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_05.png" width="40"></a></div>
+   </div>
+	<div class="top w">
+   	<div class="m_banner" id="owl" style="display:none">
+         @foreach (DataRow dr in bc.get_article_list("goods", 0, 8, "status=0 and is_slide=1").Rows) {
+            <a class="item waves-effect waves-button" href="@bc.linkurl("goods_show", dr["id"])"><img src="@dr["img_url"]" /></a>
+         }
+      </div>
+      <div class="m_nav">
+         <a href="@bc.linkurl("news")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_10.png"><span>资讯</span></a>
+         <a href="@bc.linkurl("goods")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_12.png"><span>商城</span></a>
+         <a href="@bc.linkurl("video")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_14.png"><span>视频</span></a>
+         <a href="@bc.linkurl("photo")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_16.png"><span>图片</span></a>
+         <a href="@bc.linkurl("cart")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_22.png"><span>购物车</span></a>
+         <a href="@bc.linkurl("userpoint", "index")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_24.png"><span>我的积分</span></a>
+         <a href="@bc.linkurl("userorder","list")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_26.png"><span>订单管理</span></a>
+         <a href="@bc.linkurl("usercenter", "index")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_27.png"><span>会员中心</span></a>
+      </div>
+  </div>
+  <!-- 商城 -->
+  <div class="m_mall w">
+  	<div class="mall_title">
+        <span><a href="@bc.linkurl("goods")" class="waves-effect waves-button">购物商城</a></span>
+        <!-- 类别 -->
+        <p>
+        @{
+           int gccount = 0;
+           foreach(DataRow dr in bc.get_category_child_list("goods", 0).Rows){
+              gccount++;
+              <i class="@(gccount == 1 ? "arrow" : "line")"></i>
+              <a href="@bc.linkurl("goods_list", dr["id"])">@dr["title"]</a>
+           }
+        }
+        <!-- /类别 -->
+        </p>
+        <em><a href="@bc.linkurl("goods")" class="waves-effect waves-button">更多</a></em>
+  	</div>
+    <div class="mall_list">
+       @foreach (DataRow dr in bc.get_article_list("goods", 0, 8, "status=0 and is_red=1").Rows) {
+          <a href="@bc.linkurl("goods_show", dr["id"])" class="mall waves-effect waves-button">
+             <div class="mall_logo"><img src="@dr["img_url"]" /></div>
+             <span>@dr["title"]<i></i></span>
+          </a>
+       }
+    </div>
+  </div>
+  <!-- /商城 -->
+
+<!-- 新闻资讯 -->
+  <div class="m_mall w">
+  	<div class="mall_title">
+        <span><a href="@bc.linkurl("news")" class="waves-effect waves-button">新闻资讯</a></span>
+        <!-- 类别 -->
+        <p>
+        @{
+           gccount = 0;
+           foreach(DataRow dr in bc.get_category_child_list("news", 0).Rows){
+              gccount++;
+              <i class="@(gccount == 1 ? "arrow" : "line")"></i>
+              <a href="@bc.linkurl("news_list", dr["id"])" class="waves-effect waves-button">@dr["title"]</a>
+           }
+        }
+        <!-- /类别 -->
+        </p>
+        <em><a href="@bc.linkurl("news")">更多</a></em>
+  	</div>
+    <div class="mall_list">
+       @foreach (DataRow dr in bc.get_article_list("news", 0, 8, "status=0").Rows) {
+          <a href="@bc.linkurl("news_show", dr["id"])" class="mall waves-effect waves-button"><div class="mall_logo"><img src="@dr["img_url"]" /></div><span>@dr["title"]<i></i></span></a>
+       }
+    </div>
+  </div>
+<!-- /新闻资讯 -->
+
+<!-- 视频专区 -->
+  <div class="m_mall w">
+  	<div class="mall_title">
+        <span><a href="@bc.linkurl("video")" class="waves-effect waves-button">视频分享</a></span>
+        <!-- 类别 -->
+        <p>
+        @{
+           gccount = 0;
+           foreach(DataRow dr in bc.get_category_child_list("video", 0).Rows){
+              gccount++;
+              <i class="@(gccount == 1 ? "arrow" : "line")"></i>
+              <a href="@bc.linkurl("video_list", dr["id"])" class="waves-effect waves-button">@dr["title"]</a>
+           }
+        }
+        <!-- /类别 -->
+        </p>
+        <em><a href="@bc.linkurl("video")">更多</a></em>
+  	</div>
+    <div class="mall_list">
+       @foreach (DataRow dr in bc.get_article_list("video", 0, 8, "status=0 and is_red=1").Rows) {
+          <a href="@bc.linkurl("video_show", dr["id"])" class="mall waves-effect waves-button"><div class="mall_logo"><img src="@dr["img_url"]" /></div><span>@dr["title"]<i></i></span></a>
+       }
+    </div>
+  </div>
+<!-- /视频专区 -->
+
+<!-- 图片分享 -->
+  <div class="m_mall w">
+  	<div class="mall_title">
+        <span><a href="@bc.linkurl("photo")" class="waves-effect waves-button">图片分享</a></span>
+        <!-- 类别 -->
+        <p>
+        @{
+           gccount = 0;
+           foreach(DataRow dr in bc.get_category_child_list("photo", 0).Rows){
+              gccount++;
+              <i class="@(gccount == 1 ? "arrow" : "line")"></i>
+              <a href="@bc.linkurl("photo_list", dr["id"])" class="waves-effect waves-button">@dr["title"]</a>
+           }
+        }
+        <!-- /类别 -->
+        </p>
+        <em><a href="@bc.linkurl("photo")">更多</a></em>
+  	</div>
+    <div class="mall_list">
+       @foreach (DataRow dr in bc.get_article_list("photo", 0, 8, "status=0 and is_red=1").Rows) {
+          <a href="@bc.linkurl("photo_show", dr["id"])" class="mall waves-effect waves-button"><div class="mall_logo"><img src="@dr["img_url"]" /></div><span>@dr["title"]<i></i></span></a>
+       }
+    </div>
+  </div>
+<!-- /图片分享 -->
+</div>

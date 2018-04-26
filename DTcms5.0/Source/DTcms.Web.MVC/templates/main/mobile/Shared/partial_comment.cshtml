@@ -1,0 +1,48 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.channel_site site = ViewData["site"] as DTcms.Model.channel_site;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   int comment_count=bc.get_comment_count(m.id, "is_lock=0");<!--取得评论总数-->
+}
+<script type="text/javascript">
+$(function(){
+   //初始化评论列表
+   pageInitComment(0);
+   //初始化发表评论表单
+   AjaxInitForm('#comment_form', '#btnSubmit', 1, '', ajaxCallBack);
+});
+
+function ajaxCallBack(){
+   var pageIndex = Math.floor($("#comment_list li").length / 10);
+   $("#comment_list li").remove();
+   pageInitComment(pageIndex);
+}
+
+//初始化评论列表
+function pageInitComment(pageIndex){
+   AjaxPageList('#comment_list',pageIndex, 10, @comment_count, '@(config.webpath)tools/submit_ajax.ashx?action=comment_list&article_id=@m.id', '@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/user-avatar.png');
+}
+</script>
+
+<form id="comment_form" name="comment_form" url="@(config.webpath)tools/submit_ajax.ashx?action=comment_add&view=mobile&article_id=@m.id">
+<div class="bl_pinlun w" id="bl_pinlun">
+  	<input id="txtContent" name="txtContent" type="text" placeholder="我来评论一句！" class="pinlun_input">
+   <input id="btnSubmit" name="submit" type="submit" class="pinlun_submit" value="发表评论">
+</div>
+</form>
+<div class="bl_comment w">
+  	<h1>商品评论（<span class="niu_pin">@comment_count</span>）</h1>
+   <div class="comment_list">
+      <ul id="comment_list"></ul>
+      @if(comment_count == 0){
+      <ul id="pinlun">
+         <li>
+            <p style="text-align: center"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/no_niupin.png" style="height: 120px"></p>
+         </li>
+      </ul>
+      }
+   </div>
+</div>

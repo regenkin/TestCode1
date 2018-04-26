@@ -1,0 +1,6 @@
+﻿@{
+    ViewBag.Title = "IconSelect";
+}
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();}
+@Html.Raw(frameFactory.GetIconSelectHTML())

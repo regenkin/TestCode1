@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "EditField";
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid moduleId = UIOperate.GetModuleIdByRequest(Request);
+   string fieldName = Request["fieldName"].ObjToStr();
+   Guid recordId = Request["recordId"].ObjToGuid();}
+@Html.Raw(frameFactory.GetEditFieldHTML(moduleId, fieldName, recordId))

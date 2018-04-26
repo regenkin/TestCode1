@@ -1,0 +1,234 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_LayoutEdit.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   Article_ShowController c = ViewBag.This as Article_ShowController;
+   string category_title = bc.get_category_title(m.category_id, "购物商城");
+   string category_nav = bc.get_category_menu("goods_list", m.category_id);
+   ViewBag.Title = m.title + " - " + category_title + " - " + site.name;
+   DataTable list = null;
+   string channel = "household_goods";
+}
+@section HeaderContent{
+   <script>
+      $(function () {
+         //TAB切换
+         tabs('#goodsTabs', 'click');
+         //智能浮动层
+         $("#tabHead").smartFloat();
+      });
+   </script>
+}
+
+<div id="main">
+   <div class="rightContent">
+      <div id="pipContainer" class="pipContainer">
+         <div id="breadCrumbs"><a href="@bc.linkurl("index")">首页</a>@Html.Raw(category_nav)</div>
+         <div class="clear"></div>
+         <div id="leftMainContainer">
+            <!--商品图片-->
+            <div class="goods-pic">
+              <!--幻灯片-->
+              <div class="pic-box">
+                <div class="pic-preview">
+                  <span class="jqzoom">
+                    <img />
+                  </span>
+                </div>
+                <!--缩略图-->
+                <div class="pic-scroll">
+                  <a class="prev">&lt;</a>
+                  <a class="next">&gt;</a>
+                  <div class="items">
+                    <ul>
+                      @if(m.albums!=null){
+                         foreach(DTcms.Model.article_albums modelt in m.albums){
+                         <li><img bimg="@modelt.original_path" src="@modelt.thumb_path" onmousemove="preview(this);" /></li>
+                         }
+                      }
+                    </ul>
+                  </div>
+                </div>
+                <!--缩略图-->
+              </div>
+              <!--/幻灯片-->
+            </div>
+            <!--/商品图片-->
+            <div class="clear"></div>
+            <div class="shareOuterContainer shareContainerBorder">
+               @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_share_js.cshtml")
+               <div class="clear"></div>
+            </div>
+         </div>
+
+         <div id="rightNavContainer" class="addList goods-spec">
+            <div id="rightNavInfoDiv" class="rightInfoDiv">
+               <div id="newicon" class="overlapNewimg" style="display: none"></div>
+               <div id="productInfoWrapper1" class="">
+                  <div id="productInfoWrapper2" class="">
+                     <h1>
+                        <span class="productName">@m.title</span><br />
+                        <span class="productType">@m.fields["sub_title"]</span>
+                     </h1>
+                     <div id="priceContainer" class="priceContainer">
+                        <div id="prodPrice" class="piecesHidden">
+                           <span id="price1" class="packagePrice" style="width: 219px;">¥&nbsp;@m.fields["sell_price"]</span>
+                           <span id="storeformatpieces" class="productunit" style="display: none;"></span>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="clear"></div>
+               <div class="itemNumber">
+                  <div id="articleNoDiv" class="floatLeft">产品货号 ：&nbsp;</div>
+                  <div id="itemNumber" class="floatLeft">@m.fields["goods_no"]</div>
+                  <div class="clear"></div>
+               </div>
+               <div id="subdiv" class="subdivpad">
+                  <div id="subDivDropDown1" class="prodDropdown">
+                     <label class="subHeadlines" style="" id="subDivDropDownLbl1" for="drop尺寸">尺寸</label>
+                     <select class="dropdown " name="attributeValuesSelect" title="尺寸">
+                        <option value="3250843;3250819" selected="">150x200 厘米</option>
+                        <option value="3150899;3151200">180x200 厘米</option>
+                     </select>
+                  </div>
+                  <div id="subDivDropDown2" class="prodDropdown">
+                     <label class="subHeadlines" for="goods_color">颜色</label>
+                     <select class="dropdown " id="goods_color" title="颜色">
+                     @{
+                        string[] attrVal = m.fields["color"].Split(',');
+                        List<DTcms.Model.article_attribute_field> attrList = new DTcms.BLL.article_attribute_field().GetModelList(m.channel_id, "name='color'");
+                        if(attrList != null){
+                           string[] attrs = attrList[0].item_option.ToString().Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                           for(int i=0; i< attrs.Length; i++){
+                              string[] kv = attrs[i].Split('|');
+                              if(kv.Length == 2){
+                                 if(attrVal.Contains(kv[1])){
+                                    <option value="@kv[1]">@kv[0]</option>
+                                 }
+                              }
+                           }
+                        }
+                     }
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="clear"></div>
+            <div class="rightNavSubContainer marginForCartConatiner spec-box">
+              <div class="stock-box">
+                <input id="commodityArticleId" type="hidden" value="@m.id" />
+                <input id="commodityGoodsId" type="hidden" value="0" />
+                <input id="commoditySelectNum" type="text" maxlength="9" value="1" maxValue="@m.fields["stock_quantity"]" onkeydown="return checkNumber(event);">
+                <a class="add" onclick="addCartNum(1);">+</a>
+                <a class="remove" onclick="addCartNum(-1);">-</a>
+              </div>
+              <span class="stock-txt">
+                库存<em id="commodityStockNum">@m.fields["stock_quantity"]</em>件
+              </span>
+               <button class="orangeBtn" onclick="cartAdd(this,'@(config.webpath)',0,'@bc.linkurl("cart")');">保存至购物清单</button>
+               <div class="clear"></div>
+            </div>
+            <div id="salesArg" class="salesArguments">@m.seo_description</div>
+         </div>
+         <div class="clear"></div>
+      </div>
+      <div id="productInfo1" class="productInfo">	
+			<div id="tabContainer" class="tabContainer1">
+					<ul class="floatLeft">
+						<li id="prodInfoTab" class="activeTab">
+							<div class="leftActiveTab">&nbsp;</div>
+							<div class="midActiveTab">产品信息</div>
+							<div class="rightActiveTab">&nbsp;</div>
+							<div class="floatLeft divider">&nbsp;</div>
+						</li>
+					</ul>
+				<div class="tabFillSpace">&nbsp;</div>
+				<div class="clear"></div>
+			</div>	
+	      <div id="leftNavBottom" style="display: block;">
+        <div class="clear"></div>
+			<div id="productInfoContainer" class="productInfoContainer">
+			   <div id="cartInfo">
+			      <div class="BorderImg"><img src="@m.img_url" style="width:11.44em; height:11.44em;" alt="@m.fields["sub_title"]"></div>
+			      <div id="clearInfo" class="cartInfoDiv">
+			         <div id="cartInfotd">
+			            <div class="priceFamilyHead">@m.title</div>			
+			            <div class="prodInfoRow">@category_title</div>
+			            <div class="priceFamilyTextDollar">¥&nbsp;@m.fields["sell_price"]</div>
+			         </div>
+			      </div>
+			      <div class="clear"></div>
+			   </div>
+			   <!--  -->
+            <div class="productInformation prodInfoSub" style="margin-top:0 ! important;">
+			      <div class="productsubheadline">安装后尺寸</div>
+			      <div class="texts">@m.fields["size"]</div>	
+	         </div>
+            <!--  -->			
+            <div class="productInformation prodInfoSub keyFeaturesMargin">
+			      <div class="productsubheadline">重要特征</div>
+			      <div class="texts keyFeaturesmargin">
+                  <div style="padding-bottom : 10px">@m.seo_description</div>
+			      </div>
+			   </div>
+
+			   <div class="productInformation prodInfoSub">
+			   <div class="productsubheadline">设计师</div>
+				   <div class="texts">@m.fields["author"]</div>
+				   <div class="texts"></div>
+			   </div>			
+			</div>	
+			<div class="productInfoContainer productInformationContainerBox">	
+            <div class=" prodInfoDis prodInfoSub">
+               <div class="productsubheadline">产品描述</div>
+               <div class="texts">@Html.Raw(m.content)</div>
+            </div>
+			   <div class="productInformation prodInfoSub" style="display:none;">
+			      <div class="productsubheadline">产品描述</div>
+			      <div class="texts">@Html.Raw(m.content)</div>
+			   </div>
+			</div>
+			<div class="clear"></div>
+			</div>						
+         <div id="moreProdModule" class="bottomRightContainer" style="display: block;">
+	         <div id="similarSolution" class="moreProduct">
+		         <div class="moreHead">更多 @category_title</div>
+		         <div id="simsContainer">
+                  @{
+                     //获取关联商品
+                     DataTable linkList = bc.get_article_list(channel, m.category_id, 20, "status=0");
+                     for(int i=0; i < linkList.Rows.Count; i+=5){
+                        <div>
+                           @for (int j = 0; j < 5; j++) {
+                              if (linkList.Rows.Count == (i + j)) {
+                                 break;
+                              }
+                              if ((int)linkList.Rows[i + j]["id"] == m.id) {
+                                 continue;
+                              }
+                              <div class="borderMar">
+                                 <a href="@bc.linkurl("goods_show", linkList.Rows[i+j]["id"])">
+                                    <img class="tNail" src="@linkList.Rows[i+j]["img_url"]" />
+                                 </a>
+                              </div>
+                           }
+                        </div>
+                     }
+                  }
+		         </div>
+		         <div class="clear"></div>
+		         <div class="gotoMore"><a href="@bc.linkurl("goods_list", m.category_id)">访问 @category_title </a></div>
+	         </div>
+         </div>
+   	</div>
+      <div class="clear"></div>
+   </div>
+</div>

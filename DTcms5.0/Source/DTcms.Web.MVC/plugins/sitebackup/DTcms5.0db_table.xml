@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tables>
+  <!--1.站点 必顺放第一个-->
+  <table name="kfcms_sites"/>
+  <!--2.频道属性扩展字段-->
+   <table name="kfcms_article_attribute_field" UniqueField="name"/>
+  <!--3.tags标签-->
+   <table name="kfcms_article_tags" UniqueField="title"/>
+  <!--4.频道-->
+   <table name="kfcms_site_channel" UniqueField="name">
+      <foreigh key="site_id" primary_table="kfcms_sites" primary_key="id" />
+   </table>
+  <!--5.频道包含字段-->
+   <table name="kfcms_site_channel_field" UniqueField="channel_id,field_id">
+      <foreigh key="channel_id" primary_table="kfcms_site_channel" primary_key="id" />
+      <foreigh key="field_id" primary_table="kfcms_article_attribute_field" primary_key="id" />
+   </table>
+  <!--6.站点oauth协议-->
+   <table name="kfcms_site_oauth" UniqueField="title">
+      <foreigh key="site_id" primary_table="kfcms_sites" primary_key="id" />
+   </table>
+  <!--7.支付平台-->
+   <table name="kfcms_site_payment" UniqueField="title">
+      <foreigh key="site_id" primary_table="kfcms_sites" primary_key="id" />
+   </table>
+  <!--8.栏目-->
+  <table name="kfcms_article_category" UniqueField="channel_id,title">
+    <foreigh key="site_id" primary_table="kfcms_sites" primary_key="id" />
+  </table>
+  <!--9.品牌-->
+  <table name="kfcms_article_brand" UniqueField="channel_id,title">
+    <foreigh key="channel_id" primary_table="kfcms_site_channel" primary_key="id" />
+  </table>
+  <!--10.栏目品牌-->
+   <table name="kfcms_article_category_brand" UniqueField="category_id,channel_id">
+      <foreigh key="category_id" primary_table="kfcms_article_category" primary_key="id" />
+      <foreigh key="brand_id" primary_table="kfcms_article_brand" primary_key="id" />
+   </table>
+  <!--11.规格多用于商城的商品规格-->
+  <table name="kfcms_article_spec" ParentField="parent_id" UniqueField="channel_id,title">
+    <foreigh key="channel_id" primary_table="kfcms_site_channel" primary_key="id" />
+  </table>
+  <!--12.栏目规格-->
+  <table name="kfcms_article_category_spec" UniqueField="category_id,spec_id">
+    <foreigh key="category_id" primary_table="kfcms_article_category" primary_key="id" />
+    <foreigh key="spec_id" primary_table="kfcms_article_spec" primary_key="id" />
+  </table>
+  <!--13.文章内容建一下新的频道会产生一个新的表-->
+  <table name="{kfcms_article}" UniqueField="channel_id,title">
+    <foreigh key="site_id" primary_table="kfcms_sites" primary_key="id" />
+    <foreigh key="channel_id" primary_table="kfcms_site_channel" primary_key="id" />
+    <foreigh key="category_id" primary_table="kfcms_article_category" primary_key="id" />
+    <foreigh key="brand_id" primary_table="kfcms_article_brand" primary_key="id" />
+  </table>
+  <!--14.商品-->
+  <table name="kfcms_article_goods" UniqueField="goods_no">
+    <foreigh key="channel_id" primary_table="kfcms_site_channel" primary_key="id" />
+    <foreigh key="article_id" primary_table="{kfcms_article}" primary_key="id" />
+  </table>
+  <!--15.商品规格-->
+  <table name="kfcms_article_goods_spec" UniqueField="channel_id,article_id,spec_id">
+    <foreigh key="channel_id" primary_table="kfcms_site_channel" primary_key="id" />
+    <foreigh key="article_id" primary_table="{kfcms_article}" primary_key="id" where_field="0"/>
+    <foreigh key="spec_id" primary_table="kfcms_article_spec" primary_key="id" />
+    <foreigh key="parent_id" primary_table="kfcms_article_spec" primary_key="id" where_field="0"/>
+  </table>
+  <!--16.文章tags关联-->
+  <table name="kfcms_article_tags_relation" UniqueField="channel_id,article_id,tag_id">
+    <foreigh key="channel_id" primary_table="kfcms_site_channel" primary_key="id" />
+    <foreigh key="article_id" primary_table="{kfcms_article}" primary_key="id" where_field="0"/>
+    <foreigh key="tag_id" primary_table="kfcms_article_tags" primary_key="id" />
+  </table>
+  <!--17.文章图片-->
+  <table name="kfcms_article_albums" UniqueField="channel_id,article_id,thumb_path">
+    <foreigh key="channel_id" primary_table="kfcms_site_channel" primary_key="id" />
+    <foreigh key="article_id" primary_table="{kfcms_article}" primary_key="id" where_field="0"/>
+  </table>
+  <!--18.文章附件-->
+  <table name="kfcms_article_attach" UniqueField="channel_id,article_id,file_name">
+    <foreigh key="channel_id" primary_table="kfcms_site_channel" primary_key="id" />
+    <foreigh key="article_id" primary_table="{kfcms_article}" primary_key="id" where_field="0"/>
+  </table>
+  <!--19.评论 kfcms_article_comment-->
+  <!--20.外链接内链接 kfcms_article_link-->
+  <!--21.快递模板-->
+  <!--<table name="kfcms_express" UniqueField="express_code"/>-->
+  <!--22.留言回复-->
+  <!--<table name="kfcms_feedback"/>-->
+  <!--23.友情链接-->
+  <!--<table name="kfcms_link"/>-->
+  <!--24.邮件模板-->
+  <!--<table name="kfcms_mail_template"/>-->
+  <!--25.短信模板-->
+  <!--<table name="kfcms_sms_template"/>-->
+</tables>

@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "GridSet";
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid moduleId = UIOperate.GetModuleIdByRequest(Request);}
+@Html.Raw(frameFactory.GetGridSetHTML(moduleId))
+

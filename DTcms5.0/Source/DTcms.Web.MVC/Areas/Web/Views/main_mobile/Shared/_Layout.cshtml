@@ -1,0 +1,38 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController c = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+}
+<!DOCTYPE html>
+<html>
+<head>
+   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+   <meta name="apple-mobile-web-app-capable" content="yes" />
+   <title>@ViewBag.Title</title>
+   <meta name="keywords" content="@site.seo_keyword" />
+   <meta name="discription" content="@site.seo_description" />
+   <link rel="stylesheet" type="text/css"  href="@(config.webpath)templates/@site.templet_path/jqmobi/css/icons.css" />
+   <link rel="stylesheet" type="text/css"  href="@(config.webpath)templates/@site.templet_path/jqmobi/css/af.ui.base.css" />
+   <link rel="stylesheet" type="text/css"  href="@(config.webpath)templates/@site.templet_path/css/style.css" />
+   <!--jqMobi主JS-->
+   <link href="~/templates/@site.templet_path/jqmobi/css/icons.css" rel="stylesheet" />
+   <link href="~/templates/@site.templet_path/jqmobi/css/af.ui.base.css" rel="stylesheet" />
+   <link href="~/templates/@site.templet_path/css/style.css" rel="stylesheet" />
+   <!--jqMobi主JS-->
+   <script src="~/Scripts/jquery/jquery-1.11.2.min.js"></script>
+   <script src="~/templates/@site.templet_path/jqmobi/jq.appframework.js"></script>
+   <script src="~/templates/@site.templet_path/jqmobi/ui/appframework.ui.js"></script>
+   <!--jqMobi插件-->
+   <script src="~/templates/@site.templet_path/jqmobi/plugins/jq.slidemenu.js"></script>
+   <script src="~/templates/@site.templet_path/js/base.js"></script>
+
+   @RenderSection("HeaderContent",false)
+</head>
+<body>
+   @RenderBody()
+   @RenderSection("Scripts", required: false)
+</body>
+</html>

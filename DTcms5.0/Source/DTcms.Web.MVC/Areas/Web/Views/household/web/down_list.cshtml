@@ -1,0 +1,73 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_Layout.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   Article_ListController bc = ViewBag.BasePage as Article_ListController;
+   DTcms.Model.article_category m = bc.model;
+   ViewBag.Title = m.title + " - " + site.name;
+   DataTable list = null;
+   string channel = "down";
+   int category_id = int.Parse(ViewBag.CategoryId as string);
+   int count = 0;
+   string category_nav = bc.get_category_menu("down_list", category_id);
+   int pagesize = 20;
+   int totalcount = 0;
+   string pagelist = string.Empty;
+   int page = int.Parse(ViewBag.Page as string);   
+}
+<div class="section clearfix">
+  <div class="ntitle">
+    <h2>
+      <a href="javascript:;">@m.title<em></em></a>
+    </h2>
+    <p>
+      <!--小类-->
+      @{ 
+      DataTable bcategoryList = bc.get_category_child_list(channel,category_id);
+      int cdrcount = 0;
+      foreach(DataRow cdr2 in bcategoryList.Rows){
+         if(cdrcount==1){
+         <a class="no-bg" href="@bc.linkurl("down_list",cdr2["id"])">@cdr2["title"]</a>
+         }else{
+         <a href="@bc.linkurl("down_list",cdr2["id"])">@cdr2["title"]</a>
+         }
+      }
+      }
+      <!--小类-->
+    </p>
+    <span>当前位置：<a href="@bc.linkurl("index")">首页</a> &gt; <a href="@bc.linkurl("down")">资源下载</a>@Html.Raw(category_nav)</span>
+  </div>
+  <div class="wrapper auto clearfix">
+    <ul class="img-list high ilist">
+      @{ 
+      DataTable downList = bc.get_article_list(channel, category_id, pagesize, page, "status=0", out totalcount, out pagelist, "down_list", category_id, "__id__");<!--取得一个分页DataTable-->
+      foreach(DataRow dr in downList.Rows){
+      <li>
+        <a title="@dr["title"]" href="@bc.linkurl("down_show",dr["id"])">
+          <div class="img-box">
+            <img src="@dr["img_url"]" />
+          </div>
+          <div class="info">
+            <h3>@dr["title"]</h3>
+            <span>
+              <i>浏览：@dr["click"]次</i>
+              <p>@DateTime.Parse(dr["add_time"].ToString()).ToString("yyyy-MM-dd")</p>
+            </span>
+          </div>
+        </a>
+      </li>
+      }
+      }
+    </ul>
+    <!--页码列表-->
+    <div class="page-box">
+      <div class="digg">@Html.Raw(pagelist)</div>
+    </div>
+    <!--/页码列表-->
+  </div>
+</div>

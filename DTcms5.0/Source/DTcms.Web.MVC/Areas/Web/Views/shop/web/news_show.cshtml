@@ -1,0 +1,152 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_LayoutShow.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   Article_ShowController c = ViewBag.This as Article_ShowController;
+   string category_title = bc.get_category_title(m.category_id, "新闻资讯");
+   ViewBag.Title = m.title + " - " + category_title +" - " + site.name;
+   DataTable list = null;
+   string channel = "news";
+}
+<div class="section clearfix">
+  <!--右边-->
+  <div class="list-right">
+    <div class="sidebar-box">
+      <div class="line30"></div>
+      <h3>资讯类别</h3>
+      <ul class="navbar">
+        @{ 
+        list = bc.get_category_child_list(channel, 0);
+        foreach(DataRow dr in list.Rows){
+        <li>
+          <h4><a href="@bc.linkurl("news_list",dr["id"])">@dr["title"]</a></h4>
+          <p>
+            @{ 
+            DataTable categoryList = bc.get_category_child_list(channel, Convert.ToInt32(dr["id"]));
+            foreach(DataRow cdr in categoryList.Rows){
+               <a href="@bc.linkurl("news_list",cdr["id"])" class="@(Convert.ToInt32(cdr["id"]) == m.category_id ? "selected" : "")">@cdr["title"]</a>
+            }
+            }
+          </p>
+        </li>
+        }
+        }
+      </ul>
+      <div class="line20"></div>
+      <h3>推荐资讯</h3>
+      <div class="focus-list">
+        <ul>
+          @{ 
+          DataTable redNews = bc.get_article_list(channel, 0, 4, "status=0 and is_red=1 and img_url<>''");
+          foreach(DataRow reddr in redNews.Rows){
+          <li>
+            <a title="@reddr["title"]" href="@bc.linkurl("news_show",reddr["id"])">
+              <b><img src="@reddr["img_url"]" /></b>
+              <span>@reddr["title"]</span>
+            </a>
+          </li>
+          }
+          }
+        </ul>
+      </div>
+      <div class="line10"></div>
+      <h3>人气排行</h3>
+      <ul class="rank-list">
+        @{ 
+        DataTable hotNews = bc.get_article_list(channel, 0, 10, "status=0", "click desc,id desc");
+        int hotcount = 0;
+        foreach(DataRow hotdr in hotNews.Rows) {
+           hotcount++;
+         <li class="@(hotcount == 1 ? "active" : "")">
+            <span>@DateTime.Parse(hotdr["add_time"].ToString()).ToString("MM-dd"))</span>
+            <i class="num">@hotcount</i><a href="@bc.linkurl("news_show", hotdr["id"])">@hotdr["title"]</a>
+         </li>
+        }
+        }
+      </ul>
+    </div>
+  </div>
+  <!--/右边-->
+  
+  <!--左边-->
+  <div class="list-auto">
+    
+    <div class="meta">
+      <h1>@m.title</h1>
+      <p class="meta-info">
+        <span class="time">@m.add_time</span>
+        <span class="comm"><script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_comment_count&id=@m.id"></script>人评论</span>
+        <span class="view"><script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_article_click&id=@m.id&click=1"></script>次浏览</span>
+        分类：@category_title
+      </p>
+    </div>
+    
+    <div class="entry">
+      @Html.Raw(m.content)
+    </div>
+    
+    <!--分享-->
+    @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_share_js.cshtml")
+    <!--/分享-->
+    <div class="line15"></div>
+    
+    <!--上下篇-->
+    <div class="next-prev-single">
+      <p class="prev">上一篇：@Html.Raw(c.get_prevandnext_article("news_show", -1, "没有了", 0))</p>
+	  <p class="next">下一篇：@Html.Raw(c.get_prevandnext_article("news_show", 1, "没有了", 0))</p>
+    </div>
+    <!--/上下篇-->
+    
+    <div class="line15"></div>
+    <!--相关推荐-->
+    <h2 class="base-tit">
+      <span>相关资讯</span>
+    </h2>
+    <div class="rel-list">
+      <ul>
+        @{ 
+        DataTable relNews = bc.get_article_list(channel, m.category_id, 4, "is_red=1 and img_url<>'' and id<>"+m.id);
+        foreach(DataRow reldr in relNews.Rows){
+        <li>
+          <div class="img-box">
+            <a title="@reldr["title"]" href="@bc.linkurl("news_show",reldr["id"])">
+              <img src="@reldr["img_url"]" />
+            </a>
+          </div>
+          <div class="info">
+            <h3><a title="@reldr["title"]" href="@bc.linkurl("news_show",reldr["id"])">@reldr["title"]</a></h3>
+            <p>@reldr["zhaiyao"]</p>
+            <span>@reldr["add_time"]</span>
+          </div>
+        </li>
+        }
+        }
+        @if(relNews.Rows.Count<1){
+        <div class="nodata">暂无相关的资讯...</div>
+        }
+      </ul>
+    </div>
+    <!--/相关推荐-->
+    <div class="clear"></div>
+    
+    <!--用户评论-->
+    @if(m.is_msg==1){
+    <h2 class="base-tit">
+      <i>共有<b><script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_comment_count&id=@m.id"></script></b>访客发表了评论</i>
+      <span>网友评论</span>
+    </h2>
+    @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_comment_box.cshtml")
+    }
+    <!--用户评论-->
+    
+  </div>
+  <!--/左边-->
+  
+</div>

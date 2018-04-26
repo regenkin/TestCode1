@@ -1,0 +1,372 @@
+﻿@using System.Data;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+  
+  DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+  DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+  Layout = "~/Areas/Web/Views/" + site.build_path + "/Shared/_Layout.cshtml";
+  BaseController bc = ViewBag.BasePage as BaseController;
+  ViewBag.Title = site.seo_title;
+
+  DataTable newsCList = bc.get_category_child_list("news", 0);//新闻资讯类别
+  DataTable focusNewsList = bc.get_article_list("news", 0, 8, "status=0 and is_slide=1 and img_url<>''");//焦点新闻
+  DataTable newsList = bc.get_article_list("news", 0, 9, "status=0");//新闻资讯
+  DataTable topNewsList = bc.get_article_list("news", 0, 2, "status=0 and is_top=1 and img_url<>''");//置顶新闻
+
+  DataTable goodsCList = bc.get_category_child_list("goods", 0);//商城类别
+  DataTable focusGoodsList = bc.get_article_list("goods", 0, 1, "status=0 and is_slide=1");//焦点商品
+  DataTable redGoodsList = bc.get_article_list("goods", 0, 6, "status=0 and is_red=1");//热点商品
+
+  DataTable videoCList = bc.get_category_child_list("video", 0);//视频类别
+  DataTable focusVideoList = bc.get_article_list("video", 0, 1, "status=0 and is_slide=1");//焦点视频
+  DataTable redVideoList = bc.get_article_list("video", 0, 6, "status=0 and is_red=1");//热点视频
+
+  DataTable photoCList = bc.get_category_child_list("photo", 0);//图片类别
+  DataTable focusPhotoList = bc.get_article_list("photo", 0, 1, "status=0 and is_slide=1");//焦点图片
+  DataTable redPhotoList = bc.get_article_list("photo", 0, 6, "status=0 and is_red=1");//热点图片
+
+  DataTable downCList = bc.get_category_child_list("down", 0);//资源类别
+  DataTable redDownList = bc.get_article_list("down", 0, 5, "status=0 and is_red=1");//热点资源
+}
+
+@section HeaderContent{
+  <script src="~/templates/@site.templet_path/js/jquery.flexslider-min.js"></script>
+  <script src="~/templates/@site.templet_path/js/jqslider.js"></script>
+}
+
+@section Scripts{
+  <script>
+    $(function () {
+      $("#slide-box").jqslider(); //初始化幻灯片
+      $("#focus-box").flexslider({
+        directionNav: false,
+        pauseOnAction: false
+      });
+    });
+  </script>
+}
+
+<!--Banner-->
+<div id="slide-box" class="slide-box">
+    <ul class="list-box">
+        <li><a href="javascript:;" target="_blank"><img src="~/templates/@site.templet_path/images/banner_1.png" /></a></li>
+        <li><a href="javascript:;" target="_blank"><img src="~/templates/@site.templet_path/images/banner_2.png" /></a></li>
+        <li><a href="javascript:;" target="_blank"><img src="~/templates/@site.templet_path/images/banner_3.png" /></a></li>
+    </ul>
+</div>
+<!--/Banner-->
+
+<!--新闻资讯-->
+<div class="section">
+  <div class="main-tit">
+    <h2>新闻资讯</h2>
+    <p>
+      <!--类别-->
+       @for (int i = 0; i < newsCList.Rows.Count; i++) {
+         DataRow cdr = newsCList.Rows[i];
+          <a href="@bc.linkurl("news_list", cdr["id"])">@cdr["title"]</a>
+       }
+      <a href="@bc.linkurl("news")">更多<i>+</i></a>
+      <!--/类别-->
+    </p>
+  </div>
+  <div class="wrapper clearfix">
+    <div class="wrap-box">
+      <div class="left-455" style="margin: 0; height: 341px;">
+        <div id="focus-box" class="focus-box">
+          <ul class="slides">
+            @foreach (DataRow dr in focusNewsList.Rows) {
+              <li>
+                <a title="@dr["title"]" href="@bc.linkurl("news_show", dr["id"])">
+                  <span class="note-bg"></span>
+                  <span class="note-txt">@dr["title"]</span>
+                  <img src="@dr["img_url"]" />
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+      <div class="left-455">
+      <ul class="side-txt-list">
+         @for (int i = 0; i < newsList.Rows.Count; i++) {
+           DataRow dr = newsList.Rows[i];
+            <li class="@(i == 0 ? "tit" : "")">
+               @if (i != 0) {
+               <span>@DateTime.Parse(dr["add_time"].ToString()).ToString("MM-dd")</span>
+               }
+               <a title="@dr["title"]" href="@bc.linkurl("news_show", dr["id"])">@dr["title"]</a>
+            </li>
+         }
+      </ul>
+    </div>
+      <div class="left-220">
+      <ul class="side-img-list">
+      @for (int i = 0; i < topNewsList.Rows.Count; i++) {
+        DataRow topdr = topNewsList.Rows[i];
+        <li>
+            <div class="img-box">
+                <label>@(i + 1)</label>
+                <img src="@topdr["img_url"]" />
+            </div>
+            <div class="txt-box">
+                <a href="@bc.linkurl("news_show", topdr["id"])">@topdr["title"]</a>
+                <span>@(((DateTime)topdr["add_time"]).ToString("yyyy-MM-dd"))</span>
+            </div>
+        </li>
+      }
+      </ul>
+    </div>
+    </div>
+  </div>
+</div>
+<!--/新闻资讯-->
+
+<!--购物商城-->
+<div class="section">
+  <div class="main-tit">
+    <h2>购物商城</h2>
+    <p>
+      <!--类别-->
+       @for (int i = 0; i < goodsCList.Rows.Count; i++) {
+         DataRow cdr = goodsCList.Rows[i];
+          <a href="@bc.linkurl("goods_list", cdr["id"])">@cdr["title"]</a>
+       }
+      <a href="@bc.linkurl("goods")">更多<i>+</i></a>
+      <!--/类别-->
+    </p>
+  </div>
+  <div class="wrapper clearfix">
+    <div class="wrap-box">
+      <ul class="img-list">
+        @foreach (DataRow dr in redGoodsList.Rows) {
+          <li>
+            <a title="@dr["title"]" href="@bc.linkurl("goods_show", dr["id"])">
+              <div class="img-box">
+                <img src="@dr["img_url"]" />
+              </div>
+              <div class="info">
+                <h3>@dr["title"]</h3>
+                <p>
+                  <strong>人气 @dr["click"]</strong>
+                  <span class="price">¥@dr["sell_price"]</span>
+                </p>
+              </div>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>
+<!--/购物商城-->
+
+<!--视频专区-->
+<div class="section">
+  <div class="main-tit">
+    <h2>视频专区</h2>
+    <p>
+      <!--类别-->
+       @for (int i = 0; i < videoCList.Rows.Count; i++) {
+         DataRow cdr = videoCList.Rows[i];
+          <a href="@bc.linkurl("video_list", cdr["id"])">@cdr["title"]</a>
+       }
+      <a href="@bc.linkurl("video")">更多<i>+</i></a>
+      <!--/类别-->
+    </p>
+  </div>
+  <div class="wrapper clearfix">
+    <div class="wrap-box">
+      <div class="left-455" style="margin: 0;">
+        <div class="side-img-box">
+          @foreach (DataRow dr in focusVideoList.Rows) {
+            <a title="@dr["title"]" href="@bc.linkurl("video_show", dr["id"])">
+              <em><i class="iconfont icon-play"></i></em>
+              <div class="abs-bg"></div>
+              <div class="info">
+                <h3>@dr["title"]</h3>
+                <p>@dr["sub_title"]</p>
+              </div>
+              <img src="@dr["img_url"]" />
+            </a>
+          }
+        </div>
+      </div>
+
+    <div class="left-690">
+      <ul class="img-list">
+      @foreach (DataRow dr in redVideoList.Rows) {
+        <li>
+          <a title="@dr["title"]" href="@bc.linkurl("video_show", dr["id"])">
+              <div class="img-box"><img src="@dr["img_url"]" /></div>
+              <em><i class="iconfont icon-play"></i></em>
+              <div class="abs-bg"></div>
+              <div class="remark">
+                  <h3>@dr["title"]</h3>
+                  <p>@dr["sub_title"]</p>
+              </div>
+          </a>
+        </li>
+      }
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+<!--/视频专区-->
+
+<!--图片分享-->
+<div class="section clearfix">
+  <div class="main-tit">
+    <h2>图片分享</h2>
+    <p>
+      <!--类别-->
+      @for (int i = 0; i < photoCList.Rows.Count; i++) {
+        DataRow cdr = photoCList.Rows[i];
+        <a href="@bc.linkurl("photo_list", cdr["id"])">@cdr["title"]</a>
+      }
+      <a href="@bc.linkurl("photo")">更多<i>+</i></a>
+      <!--/类别-->
+    </p>
+  </div>
+  <div class="wrapper clearfix">
+    <div class="wrap-box">
+      <div class="left-455" style="margin: 0;">
+        <div class="side-img-box">
+          @for (int i = 0; i < focusPhotoList.Rows.Count; i++) {
+            DataRow dr = redPhotoList.Rows[i];
+            <a title="@dr["title"]" href="@bc.linkurl("photo_show", dr["id"])">
+              <div class="abs-bg"></div>
+              <div class="info">
+                <h3>@dr["title"]</h3>
+                <p>@(((DateTime)dr["add_time"]).ToString("yyyy-MM-dd"))</p>
+              </div>
+              <img src="@dr["img_url"]" />
+            </a>
+          }
+        </div>
+      </div>
+      <div class="left-690">
+        <ul class="img-list">
+          @foreach (DataRow dr in redPhotoList.Rows) {
+            <li>
+              <a title="@dr["title"]" href="@bc.linkurl("photo_show", dr["id"])">
+                <div class="img-box">
+                  <img src="@dr["img_url"]" /></div>
+                <div class="abs-bg"></div>
+                <div class="remark">
+                  <h3>@dr["title"]</h3>
+                  <p>@(((DateTime)dr["add_time"]).ToString("yyyy-MM-dd"))</p>
+                </div>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/图片分享-->
+
+<!--资源下载-->
+<div class="section">
+  <div class="main-tit">
+    <h2>资源下载</h2>
+    <p>
+      <!--类别-->
+      @for (int i = 0; i < downCList.Rows.Count; i++) {
+        DataRow cdr = downCList.Rows[i];
+        <a href="@bc.linkurl("down_list", cdr["id"])">@cdr["title"]</a>
+      }
+      <!--/类别-->
+      <a href="@bc.linkurl("down")">更多<i>+</i></a>
+    </p>
+  </div>
+  <div class="wrapper clearfix">
+    <div class="wrap-box">
+      <ul class="img-list">
+        @foreach (DataRow dr in redDownList.Rows) {
+          <li>
+            <a title="@dr["title"]" href="@bc.linkurl("down_show", dr["id"])">
+              <div class="img-box">
+                <img src="@dr["img_url"]" /></div>
+              <div class="info">
+                <h3>@dr["title"]</h3>
+                <p>
+                  <strong>下载
+                    <script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_attach_count&channel_id=@dr["channel_id"]&id=@dr["id"]&view=count"></script>
+                  </strong>
+                  <span>@(((DateTime)dr["add_time"]).ToString("yyyy-MM-dd"))</span>
+                </p>
+              </div>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>
+<!--/资源下载-->
+
+<!--留言链接-->
+<div class="section">
+  <div class="wrapper clearfix">
+    <div class="left-690 side-link-wrap" style="margin: 0;">
+      <div class="main-tit">
+        <h2>友情链接</h2>
+        <p>
+          <a href="@bc.linkurl("link")">更多<i>+</i></a>
+        </p>
+      </div>
+      <div class="side-link clearfix">
+        <ul class="img">
+          @{
+                  
+            DataTable linkImg = bc.get_plugin_method("DTcms.Web.Plugin.Link", "link", "get_link_list", 6, "site_id=" + site.id + " and is_lock=0 and is_image=1 and is_red=1");
+            foreach (DataRow dr in linkImg.Rows) {
+            <li>
+              <a title="@dr["title"]" href="@dr["site_url"]" target="_blank">
+                <img src="@dr["img_url"]">
+              </a>
+            </li>
+            }
+          }
+        </ul>
+        <div class="txt">
+          @{
+            DataTable linkTxt = bc.get_plugin_method("DTcms.Web.Plugin.Link", "link", "get_link_list", 0, "site_id=" + site.id + " and is_lock=0 and is_image=0 and is_red=1");
+            foreach (DataRow dr in linkTxt.Rows) {
+            <a href="@dr["site_url"]}" target="_blank">@dr["title"]</a>
+            <strong>|</strong>
+            }
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="left-455">
+      <div class="main-tit">
+        <h2>留言反馈</h2>
+        <p>
+          <a href="@bc.linkurl("feedback")">更多<i>+</i></a>
+        </p>
+      </div>
+      <div class="side-book">
+        <ul>
+          @{
+                  
+            DataTable backList = bc.get_plugin_method("DTcms.Web.Plugin.Feedback", "feedback", "get_feedback_list", 4, "is_lock=0 and site_id=" + site.id);
+            foreach (DataRow dr in backList.Rows) {
+            <li>
+              <span>@(((DateTime)dr["add_time"]).ToString("yyyy-MM-dd"))</span>
+              <a href="@bc.linkurl("feedback")">@dr["title"]</a>
+            </li>
+            }
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!--留言链接-->

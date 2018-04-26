@@ -1,0 +1,68 @@
+﻿@using System.Data;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   BaseController bc = ViewBag.BasePage as BaseController;
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   Layout = "~/Areas/Web/Views/" + site.build_path + "/Shared/_LayoutShow.cshtml";
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   ViewBag.Title = "会员登录 - " + site.name;
+}
+
+@section HeaderContent{
+   <script src="~/templates/@site.templet_path/js/login-validate.js"></script>
+}
+
+<!--当前位置-->
+<div class="section">
+  <div class="location">
+    <span>当前位置：</span>
+    <a href="@bc.linkurl("index")">首页</a> &gt;
+        <a href="@bc.linkurl("login")">会员登录</a>
+  </div>
+</div>
+<!--/当前位置-->
+
+<!--导航推荐-->
+<div class="section">
+  <div class="wrapper">
+    <div class="bg-wrap">
+      <div class="nav-tit">
+        <a class="selected" href="javascript:;">账户登录</a>
+        <i>|</i>
+        <a href="@bc.linkurl("register")">免费注册</a>
+      </div>
+
+      <form id="loginform" name="loginform" class="login-box" url="@(config.webpath)tools/submit_ajax.ashx?action=user_login&site_id=@site.id">
+        <div class="input-box">
+          <input id="txtUserName" name="txtUserName" type="text" placeholder="用户名/手机/邮箱" maxlength="50" />
+        </div>
+        <div class="input-box">
+          <input id="txtPassword" name="txtPassword" type="password" placeholder="输入登录密码" maxlength="16" />
+        </div>
+        <div class="remember-box">
+          <input id="chkRemember" name="chkRemember" type="checkbox" />
+          <label for="chkRemember">记住登录状态</label>
+          <a class="linkABlue" href="@bc.linkurl("repassword")">忘记密码?</a>
+        </div>
+        <div class="btn-box">
+          <input id="btnSubmit" name="btnSubmit" type="submit" value="立即登录">
+        </div>
+        <div id="msgtips" class="tip-box"></div>
+        <div class="oatuh-box">
+          <h3>您还可以使用以下方式登录：</h3>
+          <p>
+            @{DataTable oauthList = bc.get_site_oauth_list(0, "site_id=" + site.id);}
+            @foreach (DataRow dr in oauthList.Rows) {
+              <a title="@dr["title"]" href="@(config.webpath)api/oauth/index.aspx?id=@dr["id"]">
+                <img src="@dr["img_url"]" />
+              </a>
+            }
+          </p>
+        </div>
+        <input id="turl" name="turl" type="hidden" value="@ViewBag.turl" /><!--记住上一页网址-->
+      </form>
+
+    </div>
+  </div>
+</div>

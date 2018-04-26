@@ -1,0 +1,164 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "编辑规格";
+   DTcms.Model.article_spec m = ViewData["model"] as DTcms.Model.article_spec;
+}
+
+@section Scripts{
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+         //添加按钮(点击绑定)
+         $("#itemAddButton").click(function () {
+            showSpecDialog();
+         });
+      });
+
+      //创建窗口
+      function showSpecDialog(obj) {
+         var objNum = arguments.length;
+         var d = top.dialog({
+            width: 500,
+            height: 180,
+            title: '商品规格',
+            url: '../dialog/dialog_spec/index',
+            onclose: function () {
+               var trHtml = this.returnValue;
+               if (trHtml.length > 0) {
+                  $("#item_box").append(trHtml);
+               }
+            }
+         }).showModal();
+         //检查是否修改状态
+         if (objNum == 1) {
+            d.data = obj;
+         }
+      }
+
+      //删除节点
+      function delItemTr(obj) {
+         $(obj).parent().parent().remove();
+      }
+   </script>
+}
+
+<form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id">
+<!--导航栏-->
+<div class="location">
+  <a href="../spec_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right""></i>
+  <a href="../spec_list/index?channel_id=@ViewBag.ChannelId"><span>规格管理</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>编辑规格</span>
+  <div class="clipboard">
+     <span><label id="clipMess"></label></span>
+     <a href="javascript:;" class="copy" onclick="copy();"><i class="iconfont icon-copy"></i><span>复制</span></a>
+     <a href="javascript:;" class="paste disable" onclick="paste();"><i class="iconfont icon-log"></i><span>粘贴</span></a>
+  </div>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">基本信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>规格名称</dt>
+    <dd>
+      @Html.TextBox("txtTitle", m.title, new { @class="input normal", datatype="s2-100", sucmsg=" " })
+      <span class="Validform_checktip">*规格的中文名称。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>备注说明</dt>
+    <dd>
+      @Html.TextArea("txtRemark", m.remark, new { @class="input", datatype="*0-255", sucmsg=" "})
+      <span class="Validform_checktip">非必填，最多255字符</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>排序数字</dt>
+    <dd>
+      @Html.TextArea("txtSortId", m.sort_id.ToString(), new { @class="input small", datatype="n", sucmsg=" "})
+      <span class="Validform_checktip">*数字，越小越向前</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>规格选项</dt>
+    <dd><a id="itemAddButton" class="icon-btn"><i class="iconfont icon-add"></i><span>添加选项</span></a></dd>
+  </dl>
+  <dl>
+    <dt></dt>
+    <dd>
+      <div class="table-container">
+        <table border="0" cellspacing="0" cellpadding="0" class="border-table">
+          <thead>
+              <tr>
+                <th width="12%">文字</th>
+                <th width="16%">图片</th>
+                <th width="12%">排序</th>
+                <th width="10%">操作</th>
+              </tr>
+            </thead>
+            <tbody id="item_box">
+             @if(m.values != null){
+              foreach(DTcms.Model.article_spec_value item in m.values){
+              <tr class="td_c">
+                <td>
+                  <input type="hidden" name="item_id" value="@item.id" />
+                  <input type="hidden" name="item_title" value="@item.title" />
+                  <span class="item_title">@item.title</span>
+                </td>
+                <td>
+                  <input type="hidden" name="item_imgurl" value="@item.img_url" />
+                  <span class="item_imgurl img-box">
+                     @if (item.img_url == "") {
+                        @:-
+                     }
+                     else {
+                        <img src="@item.img_url" />
+                     }
+                  </span>
+                </td>
+                <td>
+                  <input type="hidden" name="item_sortid" value="@item.sort_id" />
+                  <span class="item_sortid">@item.sort_id</span>
+                </td>
+                <td>
+                  <a title="编辑" class="img-btn" onclick="showSpecDialog(this);"><i class="iconfont icon-edit"></i></a>
+                  <a title="删除" class="img-btn" onclick="delItemTr(this);"><i class="iconfont icon-delete"></i></a>
+                </td>
+              </tr>
+             }
+             }
+            </tbody>
+        </table>
+      </div>
+    </dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript: history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+
+</form>

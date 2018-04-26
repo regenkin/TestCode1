@@ -1,0 +1,150 @@
+﻿@using DTcms.Common;
+@using DTcms.Model;
+@using System.Data;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+    ViewBag.Title = "Message_List";
+    List<SelectListItem> selectList = new List<SelectListItem>() {
+       new SelectListItem(){ Text="全部类型...", Value="0"},
+       new SelectListItem(){ Text="系统消息", Value="1"},
+       new SelectListItem(){ Text="收件箱", Value="2"},
+       new SelectListItem(){ Text="发件箱", Value="3"}
+    };
+    DataTable list = ViewData["list"] as DataTable;
+}
+@section HeaderContent{
+   <script>
+      //查询数据
+      function search() {
+         var text = $("#txtKeywords").val();
+         var pageCount = $("#txtPageNum").val();
+         var type_id = $("#ddlType").val();
+         document.location = "index?keywords=" + text + "&pageNum=" + pageCount + "&type_id=" + type_id;
+      }
+
+      //删除数据
+      function __doPostBack() {
+         var text = $("#txtKeywords").val();
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:gt(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitDelete?keywords=" + text,
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("error");
+            }
+         });
+      }
+   </script>
+}
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../user_list/index"><span>会员管理</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>站内短消息</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a><a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="../message_edit/index?action=@DTEnums.ActionEnum.Add"><i></i><span>发送消息</span></a></li>
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a href="javascript:;" onclick="ExePostBack('btnDelete');"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+        </ul>
+        <div class="menu-list">
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlType", new SelectList(selectList, "Value", "Text", ViewBag.type_id), new { onchange = "search();" })
+          </div>
+        </div>
+      </div>
+      <div class="r-list">
+        <input type="text" id="txtKeywords" class="keyword" value="@ViewBag.keywords" />
+        <a href="javascript:search();" class="btn-search"><i class="iconfont icon-search"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+  <tr>
+    <th width="8%">选择</th>
+    <th align="left" width="12%">类型</th>
+    <th align="left" width="15%">收件人</th>
+    <th align="left">标题</th>
+    <th align="left" width="12%">状态</th>
+    <th align="left" width="16%">发送时间</th>
+    <th width="10%">操作</th>
+  </tr>
+@foreach(DataRow dr in list.Rows){
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;">
+         <input type="checkbox" />
+      </span>
+      <label style="display:none">@dr["id"]</label>
+    </td>
+    <td>
+       @switch (Convert.ToInt32(dr["type"])) {
+          case 1:
+          @:系统消息
+             break;
+          case 2:
+          @:收件箱"
+             break;
+          case 3:
+          @:发件箱
+             break;
+       }
+    </td>
+    <td>@dr["accept_user_name"]</td>
+    <td>@dr["title"]</td>
+    <td>
+       @(Convert.ToInt32(dr["is_read"]) == 1 ? "已阅读" : "未阅读")
+    </td>
+    <td>@string.Format("{0:g}", dr["post_time"])</td>
+    <td align="center"><a href="../message_edit/index?action=@DTEnums.ActionEnum.View&id=@dr["id"]">查看</a>
+  </tr>
+}
+@if (list.Rows.Count == 0) {
+   <tr><td align="center" colspan="7">暂无记录</td></tr>
+}
+</table>
+</div>
+<!--/列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span>
+     <input type="text" class="pagenum" onkeydown="return checkNumber(event);" onchange="search();" value="@ViewBag.PageNum" />
+     <span>条/页</span>
+  </div>
+  <div  class="default">@Html.Raw(ViewBag.PageContent)</div>
+</div>
+<!--/内容底部-->
+</form>

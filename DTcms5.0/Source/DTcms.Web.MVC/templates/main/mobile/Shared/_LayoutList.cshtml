@@ -1,0 +1,76 @@
+﻿@using System.Data;
+@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.channel_site site = ViewData["site"] as DTcms.Model.channel_site;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+   string channel = ViewBag.Channel as string;
+   int category_id = int.Parse(ViewBag.CategoryId as string);
+   DTcms.Model.users userModel = bc.GetUserInfo();
+}
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="author" content="@site.domain" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+   <meta name="format-detection" content="telephone=no">
+   <meta name="apple-touch-fullscreen" content="yes">
+   <meta name="apple-mobile-web-app-capable" content="yes" >
+   <meta name="apple-mobile-web-app-status-bar-style" content="black" >
+   <title>@ViewBag.Title</title>
+   <meta name="keywords" content="@site.seo_keyword" />
+   <meta name="discription" content="@site.seo_description" />
+   <link href="~/Content/waves.css" rel="stylesheet" />
+   <link href="~/templates/@ViewBag.TemplateSkin/mobile/css/baoliao.css" rel="stylesheet" />
+   <link href="~/templates/@ViewBag.TemplateSkin/mobile/css/public.css" rel="stylesheet" />
+   <link href="~/templates/@ViewBag.TemplateSkin/mobile/css/index.css" rel="stylesheet" />
+   <script src="~/scripts/jquery/jquery-1.11.2.min.js"></script>
+   <script src="~/Scripts/waves.min.js"></script>
+   <script src="~/scripts/layer/layer.js"></script>
+   <script src="~/templates/@ViewBag.TemplateSkin/mobile/js/common.js"></script>
+   @RenderSection("HeaderContent",false)
+   <script>
+      $(window).load(function () {
+         $("#status").fadeOut();
+         $("#preloader").delay(350).fadeOut("slow");
+         //设置点击效果
+         Waves.displayEffect();
+      })
+   </script>
+</head>
+<body>
+<div class="mobile">
+   <div id="preloader">
+      <div id="status">
+      <p class="center-text"><span>拼命加载中···</span></p>
+      </div>
+   </div>
+   <header>
+   @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/partial_header.cshtml")
+   </header>
+
+   @RenderBody()
+
+   <!-- 筛选 -->
+   @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/partial_filter.cshtml")
+   <!-- /筛选 -->
+   <footer>
+   <div class="m_user w">
+      @if(userModel == null){
+      <a href="@bc.linkurl("login")">登录</a>
+      <a href="@bc.linkurl("register")">注册</a>
+      }
+      else{
+         <a href="@bc.linkurl("usercenter","index")">会员中心</a>
+         <a href="@bc.linkurl("usercenter","exit")">退出</a>
+      }
+      <a href="@bc.linkurl("index")">返回首页</a>
+   </div>
+   @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/partial_footer.cshtml")
+   </footer>
+   @RenderSection("Scripts", required: false)
+</div>
+</body>
+</html>

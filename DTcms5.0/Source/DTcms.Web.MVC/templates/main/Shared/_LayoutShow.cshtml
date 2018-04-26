@@ -1,0 +1,44 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController c = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+}
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>@ViewBag.Title</title>
+   <meta name="keywords" content="@site.seo_keyword" />
+   <meta name="discription" content="@site.seo_description" />
+   <link href="~/css/validate.css" rel="stylesheet" />
+   <link href="~/css/pagination.css" rel="stylesheet" />
+   <link href="~/Scripts/artdialog/ui-dialog.css" rel="stylesheet" />
+   <link href="~/templates/@ViewBag.TemplateSkin/css/style.css" rel="stylesheet" />
+   <script src="~/Scripts/jquery/jquery-1.11.2.min.js"></script>
+   <script src="~/Scripts/jquery/jquery.pagination.js"></script>
+   <script src="~/Scripts/artdialog/dialog-plus-min.js"></script>
+   <script src="~/Scripts/Validform_v5.3.2_min.js"></script>
+   <script src="~/templates/@ViewBag.TemplateSkin/js/common.js"></script>
+
+   @RenderSection("HeaderContent",false)
+   @RenderSection("Styles", false)
+   @RenderSection("Scripts", required: false)
+   <script>
+      $(function () {
+         @Html.Raw(ViewBag.ClientScript as string)
+      });
+   </script>
+</head>
+<body>
+   <header>
+   @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/partial_header.cshtml")
+   </header>
+   @RenderBody()
+   <footer>
+   @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/partial_footer.cshtml")
+   </footer>
+</body>
+</html>

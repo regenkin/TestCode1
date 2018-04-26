@@ -1,0 +1,161 @@
+﻿@using System.Data;
+@using DTcms.BLL;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   Layout = "";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["config"] as DTcms.Model.sysconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   Article_ListController c = ViewBag.This as Article_ListController;
+   int channelId = int.Parse(ViewBag.ChannelId as string);
+   int id = int.Parse(ViewBag.Id as string);
+   DataTable list = new DTcms.BLL.article_link().GetAricleList(channelId, id);
+   if(list == null){
+      list = new DataTable();
+   }
+}
+<!--列表-->
+@if(ViewBag.ProListView == "Txt"){
+  <!--文字列表-->
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+    <tr>
+      <th width="6%">选择</th>
+      <th align="left">标题</th>
+      <th align="left" width="12%">所属类别</th>
+      <th align="left" width="16%">发布时间</th>
+      <th align="left" width="65">排序</th>
+      <th align="left" width="120">属性</th>
+      <th width="10%">操作</th>
+    </tr>
+   @foreach(DataRow dr in list.Rows){
+    <tr id="row_@dr["link_id"]">
+      <td align="center">
+        <span class="checkall" style="vertical-align:middle"><input type="checkbox" /></span>
+        <label style="display:none">@dr["link_id"]</label>
+        <label style="display:none">@dr["channel_id"]</label>
+        <label style="display:none">@dr["id"]</label>
+      </td>
+      <td>@dr["title"]</td>
+      <td>@(new DTcms.BLL.article_category().GetTitle(Convert.ToInt32(dr["category_id"])))</td>
+      <td>@string.Format("{0:g}",dr["add_time"])</td>
+      <td>@dr["sort_id"]</td>
+      <td>
+        <div class="btn-tools">
+          @if(Convert.ToInt32(dr["is_msg"]) == 1){
+             <a href="javascript:;" class="msg selected" title="允许评论"><i class="iconfont icon-comment"></i></a>
+          }
+           else{
+             <a href="javascript:;" class="msg" title="禁止评论"><i class="iconfont icon-comment"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_top"]) == 1) {
+             <a href="javascript:;" class="top selected" title="已置顶"><i class="iconfont icon-top"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="top" title="未置顶"><i class="iconfont icon-top"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_red"]) == 1) {
+             <a href="javascript:;" class="red selected" title="允许推荐"><i class="iconfont icon-good"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="red" title="禁止推荐"><i class="iconfont icon-good"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_hot"]) == 1) {
+             <a href="javascript:;" class="hot selected" title="热门"><i class="iconfont icon-hot"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="hot" title="非热门"><i class="iconfont icon-hot"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_slide"]) == 1) {
+             <a href="javascript:;" class="pic selected" title="允许幻灯片"><i class="iconfont icon-pic"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="pic" title="禁止幻灯片"><i class="iconfont icon-pic"></i></a>
+          }
+        </div>
+      </td>
+      <td align="center">
+        <a href="javascript:delLinkArticle(@dr["link_id"]);">取消关联</a>
+      </td>
+    </tr>
+   }
+   @if (list.Rows.Count == 0) {
+      <tr><td align="center" colspan="7">暂无记录</td></tr>
+   }
+  </table>
+}<!-- end if -->
+  <!--/文字列表-->
+
+  <!--图片列表-->
+@if(ViewBag.ProListView == "Img"){
+  <div class="imglist">
+    <ul>
+    @foreach(DataRow dr in list.Rows){
+      <li id="row_@dr["link_id"]">
+        <div class="details @(dr["img_url"].ToString() == "" ? "nopic" : "")">
+          <div class="check">
+            <span class="checkall">
+               <input type="checkbox" />
+            </span>
+            <label style="display:none">@dr["link_id"]</label>
+            <label style="display:none">@dr["channel_id"]</label>
+            <label style="display:none">@dr["id"]</label>
+          </div>
+          @if (dr["img_url"].ToString() != "") {
+             <div class="pic"><img src="@dr["img_url"]" /></div><i class="absbg"></i>
+          }
+          <h1><span>@dr["title"]</span></h1>
+          <div class="remark">
+             @if (dr["zhaiyao"].ToString() == "") {
+                @:暂无内容摘要说明...
+             }
+            @Html.Raw(dr["zhaiyao"].ToString())
+          </div>
+          <div class="tools">
+          @if(Convert.ToInt32(dr["is_msg"]) == 1){
+             <a href="javascript:;" class="msg selected" title="允许评论"><i class="iconfont icon-comment"></i></a>
+          }
+           else{
+             <a href="javascript:;" class="msg" title="禁止评论"><i class="iconfont icon-comment"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_top"]) == 1) {
+             <a href="javascript:;" class="top selected" title="已置顶"><i class="iconfont icon-top"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="top" title="未置顶"><i class="iconfont icon-top"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_red"]) == 1) {
+             <a href="javascript:;" class="red selected" title="允许推荐"><i class="iconfont icon-good"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="red" title="禁止推荐"><i class="iconfont icon-good"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_hot"]) == 1) {
+             <a href="javascript:;" class="hot selected" title="热门"><i class="iconfont icon-hot"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="hot" title="非热门"><i class="iconfont icon-hot"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_slide"]) == 1) {
+             <a href="javascript:;" class="pic selected" title="允许幻灯片"><i class="iconfont icon-pic"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="pic" title="禁止幻灯片"><i class="iconfont icon-pic"></i></a>
+          }      
+          <input type="text" class="sort" value="@dr["sort_id"]" />
+          </div>
+          <div class="foot">
+            <p class="time">@string.Format("{0:yyyy-MM-dd HH:mm:ss}", dr["add_time"])</p>
+            <a href="javascript:delLinkArticle(@dr["link_id"]);" title="取消关联" class="del">取消关联</a>
+          </div>
+        </div>
+      </li>
+    }
+   @if (list.Rows.Count == 0) {
+      <div align="center" style="font-size:12px;line-height:30px;color:#666;">暂无记录</div>
+   }
+    </ul>
+  </div>
+}<!-- end if -->
+  <!--/图片列表-->
+<!--/列表-->

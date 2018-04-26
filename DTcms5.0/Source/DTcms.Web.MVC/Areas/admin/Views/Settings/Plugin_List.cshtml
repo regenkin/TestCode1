@@ -1,0 +1,145 @@
+﻿@using DTcms.Common;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+    ViewBag.Title = "Plugin_List";
+    List<DTcms.Model.plugin> list = ViewData["list"] as List<DTcms.Model.plugin>;
+}
+
+@section HeaderContent{
+   <script>
+      //保存数据
+      function submitInstall() {
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("label:eq(0)").text();
+               var sortId = $(item).find(".sort").val();
+               var obj = { id: id, sortId: sortId };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitInstall",
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("error");
+            }
+         });
+      }
+
+      function submitUninstall() {
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("label:eq(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitUninstall",
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("error");
+            }
+         });
+      }
+
+      //删除数据
+      function __doPostBack(objId) {
+         if (objId == "lbtnInstall") {
+            submitInstall();
+         }
+         if (objId == "lbtnUnInstall") {
+            submitUninstall();
+         }
+      }
+   </script>
+}
+
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>系统管理</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>插件设置</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a><a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a href="javascript:;" id="lbtnInstall" onclick="ExePostBack('lbtnInstall','已安装的插件不执行重复安装，是否继续？');"><i></i><span>安装</span></a></li>
+          <li><a href="javascript:;" onclick="ExePostBack('lbtnUnInstall','卸载插件不会删除插件目录，是否继续？');"><i></i><span>卸载</span></a></li>
+          <li><a href="javascript:;" class="folder" onclick="if(CheckPostBack('lbtnRemark')) remard();"><i></i><span>生成模板</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+    <tr>
+      <th width="8%">选择</th>
+      <th align="left" width="20%">插件名称</th>
+      <th align="left" width="12%">目录</th>
+      <th align="left" width="12%">作者</th>
+      <th align="left" width="10%">版本号</th>
+      <th align="left">备注</th>
+      <th width="10%">状态</th>
+    </tr>
+@foreach(DTcms.Model.plugin m in list){
+    <tr>
+      <td align="center">
+        <span class="checkall">
+           <input type="checkbox" />
+        </span>
+        <label style="display:none">@m.directory</label>
+      </td>
+      <td>@m.name</td>
+      <td>@m.directory</td>
+      <td>@m.author</td>
+      <td>@m.version</td>
+      <td>@m.description</td>
+      <td align="center">
+        @if (m.isload == 1) {
+           @:已安装
+        }
+        else {
+           @:未安装
+        }
+      </td>
+    </tr>
+}
+@if (list.Count == 0) {
+   <tr><td align="center" colspan="7">暂无记录</td></tr>
+}
+  </table>
+</div>
+<!--/列表-->
+
+</form>

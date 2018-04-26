@@ -1,0 +1,120 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_LayoutShow.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   Article_ShowController c = ViewBag.This as Article_ShowController;
+   string category_title = bc.get_category_title(m.category_id, "新闻资讯");
+   ViewBag.Title = m.title + " - " + category_title +" - " + site.name;
+   DataTable list = null;
+   string channel = "ePortal_news";
+   DTcms.BLL.article bll_article = new DTcms.BLL.article();
+   list = bc.get_article_list(channel, m.category_id, 1, string.Format("sort_id <= {0} and id <> {1}", m.sort_id, m.id), "sort_id desc");
+   if(list.Rows.Count == 0){
+      list = bc.get_article_list(channel, m.category_id, 1, string.Format("sort_id >= {0} and id <> {1}", m.sort_id, m.id), "sort_id");
+   }
+   DTcms.Model.article next_m = null;
+   if(list.Rows.Count > 0){
+      next_m = bll_article.GetModel((int)list.Rows[0]["id"]);
+   }
+}
+
+@section HeaderContent{
+   <script>
+      $(function () {
+         $(".n3 a").addClass("on");
+      });
+   </script>
+}
+
+<div id="content">
+   @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_header_subNav.cshtml")
+   @if (string.IsNullOrEmpty(m.img_url)) {
+      <div id="banner">
+         <div class="news"></div>
+      </div>
+   }
+   else {
+      <div style="width:1130px; margin: 0 auto;">
+         <img alt="" style="width:1130px;" src="@m.img_url" />
+      </div>
+   }
+   <div class="nav">
+      <div class="g-wrap">
+         <div class="crumbs">
+            <a href="@bc.linkurl("news_list", m.category_id)">新闻中心</a>
+            <a class="on">@category_title</a>
+         </div>
+         <div class="columns">
+         @{
+            DataTable categoryList = bc.get_category_list("ePortal_news", 0);
+            foreach(DataRow dr in categoryList.Rows){
+               <a href="@bc.linkurl("news_list", dr["id"])" class="@((int)dr["id"] == m.category_id ? "on" : "")">@dr["title"]<span></span></a>
+            }
+         }
+         </div>
+      </div>
+   </div>
+   <div>
+      <div id="main" class="clearfix g-wrap">
+         <div id="left">
+            <div class="news-editor">
+               <div class="date-block">
+                  <span class="day">@m.add_time.Day</span>
+                  @m.add_time.ToString("MMMM", new System.Globalization.CultureInfo("en-us")).Substring(0, 3)<br>
+                  @m.add_time.Year
+               </div>
+               <h1>@m.title</h1>
+               <h3>发布者:佳天国际&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;浏览次数:@m.click</h3>
+                <!--分享 -->
+                @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_share_js.cshtml")
+                <!--/分享-->
+                <!-- 文章内容-->
+                  @Html.Raw(m.content)
+                <!-- /文章内容 -->
+            </div>
+            <div class="relative-news">
+               <div class="main-news">
+                  @if (next_m != null) {
+                     <div class="date-block">
+                        <div class="day">@next_m.add_time.Day</div>
+                        @next_m.add_time.ToString("MMMM", new System.Globalization.CultureInfo("en-us")).Substring(0, 3)<br />
+                        @next_m.add_time.Year
+                     </div>
+                     <h1>@next_m.title</h1>
+                     <p>@next_m.zhaiyao</p>
+                     <a class="detail" href="@bc.linkurl("news_show", next_m.id)">详细信息&nbsp;&nbsp;&gt;</a>
+                  }
+               </div>
+               <div class="link-list">
+                  <h1>相关新闻</h1>
+                  @{
+                     DataTable relNews = bc.get_article_list(channel, m.category_id, 4, "id<>" + m.id);
+                     foreach(DataRow dr in relNews.Rows){
+                        <a href="@bc.linkurl("news_show", dr["id"])">@dr["title"]<span>@DateTime.Parse(dr["add_time"].ToString()).ToString("yyyy-MM-dd")</span></a>
+                     }
+                  }
+               </div>
+            </div>
+         </div>
+
+      <div id="right">
+         <a target="_blank" href="@bc.linkurl("news")">
+            <img width="300px" src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/news_right_01.jpg" alt="">
+         </a>
+         <a target="_blank" href="@bc.linkurl("news")">
+            <img width="300px" src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/news_right_02.jpg" alt="">
+         </a>
+         <a target="_blank" href="@bc.linkurl("news")">
+            <img width="300px" src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/news_right_03.png" alt="">
+         </a>
+      </div>
+      </div>
+   </div>
+</div>

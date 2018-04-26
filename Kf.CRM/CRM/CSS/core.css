@@ -1,0 +1,28 @@
+@CHARSET "UTF-8";
+html, body { width: 100%; height: 100%; overflow: hidden; }
+iframe { width: 100%; height: 100%; padding: 0; margin: 0; }
+img, body, html { border: 0; }
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, blockquote, th { margin: 0; padding: 0; }
+* { font-family: Verdana, Geneva, sans-serif; font-size: 12px; }
+img { vertical-align: middle; }
+
+
+/*下面是过滤组件用到的样式*/
+.filter-read-x { background: transparent url(../images/read-y.gif) no-repeat 2px 2px; width: 20px; }
+.filter-read-y { background: transparent url(../images/read-y.gif) no-repeat 2px 2px; width: 20px; }
+.filter-read-n { background: transparent url(../images/read-n.gif) no-repeat 2px 2px; width: 20px; }
+.filter-sett { background: transparent url(../Images/Icon/77.png) no-repeat 2px 2px; width: 20px; }
+.btn-all { background: transparent url(../images/search.gif) no-repeat 2px 2px; width: 20px; }
+.filter-out { background: transparent url(../Images/Icon/1.png) no-repeat 2px 2px; width: 20px; }
+.filter-mail { background: transparent url(../Images/Icon/47.png) no-repeat 2px 2px; width: 30px; padding-top: -5px; text-align: right; }
+.filter-serch { background: transparent url(../images/search.gif) no-repeat 2px 2px; width: 20px; }
+.filter-theme { background: transparent url(../Images/Icon/68.png) no-repeat 2px 2px; width: 20px; }
+.filter-person { background: transparent url(../Images/Icon/37.png) no-repeat 2px 2px; width: 20px; }
+.filter-home { background: transparent url(../Images/Icon/61.png) no-repeat 2px 2px; width: 20px; }
+.filter-help { background: transparent url(../Images/Icon/51.png) no-repeat 2px 2px; width: 20px; }
+
+.level1 { background: transparent url(../images/level1.gif) no-repeat 2px 2px; width: 20px; }
+.level2 { background: transparent url(../images/level2.gif) no-repeat 2px 2px; width: 20px; }
+.level3 { background: transparent url(../images/level3.gif) no-repeat 2px 2px; width: 20px; }
+.level4 { background: transparent url(../images/level4.gif) no-repeat 2px 2px; width: 20px; }
+.level5 { background: transparent url(../images/level5.gif) no-repeat 2px 2px; width: 20px; }

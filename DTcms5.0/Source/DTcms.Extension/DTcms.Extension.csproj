@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{47E5DD03-442F-4134-8F54-289DB2A0244B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DTcms.Extension</RootNamespace>
+    <AssemblyName>DTcms.Extension</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BLL\article_link.cs" />
+    <Compile Include="BLL\channel_site_extension.cs" />
+    <Compile Include="BLL\plugin_extension.cs" />
+    <Compile Include="BLL\sites_extension.cs" />
+    <Compile Include="Common\DTKeys_Extension.cs" />
+    <Compile Include="DAL\article_link.cs" />
+    <Compile Include="DAL\plugin_extension.cs" />
+    <Compile Include="Model\article_link.cs" />
+    <Compile Include="Model\WeixinMunu.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DTcms.BLL\DTcms.BLL.csproj">
+      <Project>{0484f2ed-8ef3-4c40-8b3a-fe52b5e71ac2}</Project>
+      <Name>DTcms.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTcms.Common\DTcms.Common.csproj">
+      <Project>{6468cbf1-9d41-4231-8814-14491922fecc}</Project>
+      <Name>DTcms.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTcms.DAL\DTcms.DAL.csproj">
+      <Project>{ce7d2820-3864-405c-bc07-73696661a311}</Project>
+      <Name>DTcms.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTcms.DBUtility\DTcms.DBUtility.csproj">
+      <Project>{80541f63-161f-45cd-9710-cd1ea08f1d67}</Project>
+      <Name>DTcms.DBUtility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTcms.Model\DTcms.Model.csproj">
+      <Project>{d67868c9-56b9-4e35-8e15-c105fc44cfb9}</Project>
+      <Name>DTcms.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

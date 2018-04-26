@@ -1,0 +1,199 @@
+﻿@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/_LayoutShow.cshtml";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   UserController bc = ViewBag.BasePage as UserController;
+   ViewBag.Title = "收货地址 - " + site.name;
+   string action = ViewBag.Action as string;
+   DTcms.Model.user_addr_book m = ViewData["model"] as DTcms.Model.user_addr_book;
+
+}
+
+@section HeaderContent{
+   <script>
+      //初始化表单
+      AjaxInitForm('#editForm', '#btnSubmit', 1, '#turl');
+   </script>
+   @if(action == "edit"){
+      <script>
+         $(function () {
+            //初始化地区
+            var mypcas = new PCAS("txtProvince,所属省份", "txtCity,所属城市", "txtArea,所属地区");
+            var areaArr = ("@(m.area)").split(",");
+            if (areaArr.length == 3) {
+               mypcas.SetValue(areaArr[0], areaArr[1], areaArr[2]);
+            }
+         });
+      </script>
+   }
+   else{
+      <script>
+			//初始化地区
+         var mypcas = new PCAS("txtProvince,所属省份", "txtCity,所属城市", "txtArea,所属地区");
+      </script>         
+   }
+}
+
+<div class="section clearfix">
+  <div class="line30"></div>
+
+  <div class="info-wrap">
+    <!--左侧导航-->
+    @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/partial_ucenter_nav.cshtml")
+    <!--/左侧导航-->
+    
+    <!--右侧内容-->
+    <div class="home-box">
+      <div class="u-tab-head">
+        <p>
+          <a class="selected" href="@bc.linkurl("useraddress")">收货地址</a>
+        </p>
+        <span>
+          <a class="add" href="javascript:history.back();">返回</a>
+        </span>
+      </div>
+      
+      @if(action == "edit"){
+      <!--编辑地址-->
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>编辑地址</strong>
+        </div>
+        <form id="editForm" name="editForm" url="@(config.webpath)tools/submit_ajax.ashx?action=user_address_edit&id=@m.id">
+          <div class="form-box">
+            <dl>
+              <dt>收件人姓名：</dt>
+              <dd>
+                <input name="txtAcceptName" id="txtAcceptName" type="text" class="input txt" value="@m.accept_name" datatype="s1-50"  nullmsg="请填写收件人用户名" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl>
+              <dt>所属地区：</dt>
+              <dd>
+                <select id="txtProvince" name="txtProvince" class="select"></select>
+                <select id="txtCity" name="txtCity" class="select"></select>
+                <select id="txtArea" name="txtArea" class="select" datatype="*" nullmsg="请选择所属地区" sucmsg=" "></select>
+              </dd>
+            </dl>
+            <dl>
+              <dt>详细地址：</dt>
+              <dd>
+                <input name="txtAddress" id="txtAddress" type="text" class="input wide" value="@m.address" datatype="*1-255" nullmsg="请填写详细地址" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl>
+              <dt>手机号码：</dt>
+              <dd>
+                <input name="txtMobile" id="txtMobile" type="text" class="input txt" value="@m.mobile" datatype="m" nullmsg="请填写手机号码" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>联系电话：</dt>
+              <dd>
+                <input name="txtTelphone" id="txtTelphone" type="text" class="input txt" value="@m.telphone" maxlength="30" datatype="*0-20" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>电子邮箱：</dt>
+              <dd>
+                <input name="txtEmail" id="txtEmail" type="text" class="input txt" value="@m.email" datatype="*0-20" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>邮政编码：</dt>
+              <dd>
+                <input name="txtPostCode" id="txtPostCode" type="text" class="input txt" value="@m.post_code" datatype="n0-10" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt></dt>
+              <dd>
+                <input id="txtCode" name="txtCode" class="input small" type="text" datatype="*" sucmsg=" " style="ime-mode:disabled;text-transform:uppercase;">
+                <a id="verifyCode" href="javascript:;" onclick="ToggleCode(this, '@(config.webpath)tools/verify_code.ashx');return false;"><img src="@(config.webpath)tools/verify_code.ashx" width="80" height="22" style="vertical-align:middle;" /> 看不清楚？</a>
+              </dd>
+            </dl>
+            <dl>
+              <dt></dt>
+              <dd><input name="btnSubmit" id="btnSubmit" type="submit" class="btn btn-success" value="确认提交" /></dd>
+            </dl>
+          </div>
+        </form>
+        <!--编辑地址-->
+        
+      }
+      else{
+      <!--添加新地址-->
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>添加新地址</strong>
+        </div>
+        <form id="editForm" name="editForm" url="@config.webpath)tools/submit_ajax.ashx?action=user_address_edit">
+          <div class="form-box">
+            <dl>
+              <dt>收件人姓名：</dt>
+              <dd>
+                <input name="txtAcceptName" id="txtAcceptName" type="text" class="input txt" datatype="s1-50"  nullmsg="请填写收件人用户名" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl>
+              <dt>所属地区：</dt>
+              <dd>
+                <select id="txtProvince" name="txtProvince" class="select"></select>
+                <select id="txtCity" name="txtCity" class="select"></select>
+                <select id="txtArea" name="txtArea" class="select" datatype="*" nullmsg="请选择所属地区" sucmsg=" "></select>
+              </dd>
+            </dl>
+            <dl>
+              <dt>详细地址：</dt>
+              <dd>
+                <input name="txtAddress" id="txtAddress" type="text" class="input wide" maxlength="255" datatype="*0-255" nullmsg="请填写详细地址" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl>
+              <dt>手机号码：</dt>
+              <dd>
+                <input name="txtMobile" id="txtMobile" type="text" class="input txt" maxlength="30" datatype="m" nullmsg="请填写手机号码" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>联系电话：</dt>
+              <dd>
+                <input name="txtTelphone" id="txtTelphone" type="text" class="input txt" maxlength="30" datatype="*0-20" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>电子邮箱：</dt>
+              <dd>
+                <input name="txtEmail" id="txtEmail" type="text" class="input txt" maxlength="30" datatype="*0-30" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt>邮政编码：</dt>
+              <dd>
+                <input name="txtPostCode" id="txtPostCode" type="text" class="input txt" maxlength="30" datatype="n0-10" sucmsg=" "  />
+              </dd>
+            </dl>
+            <dl>
+              <dt></dt>
+              <dd>
+                <input id="txtCode" name="txtCode" class="input small" type="text" datatype="*" sucmsg=" " style="ime-mode:disabled;text-transform:uppercase;">
+                <a id="verifyCode" href="javascript:;" onclick="ToggleCode(this, '@(config.webpath)tools/verify_code.ashx');return false;"><img src="@(config.webpath)tools/verify_code.ashx" width="80" height="22" style="vertical-align:middle;" /> 看不清楚？</a>
+              </dd>
+            </dl>
+            <dl>
+              <dt></dt>
+              <dd><input name="btnSubmit" id="btnSubmit" type="submit" class="btn btn-success" value="确认提交" /></dd>
+            </dl>
+          </div>
+        </form>
+        <!--添加新地址-->
+        }
+        <input id="turl" type="hidden" value="@bc.linkurl("useraddress")" />
+      </div>
+      
+    </div>
+    <!--/右侧内容-->
+  </div>
+</div>

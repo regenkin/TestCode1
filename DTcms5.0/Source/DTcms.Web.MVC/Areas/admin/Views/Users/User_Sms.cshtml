@@ -1,0 +1,119 @@
+﻿@using System.Data;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+    ViewBag.Title = "短信通知";
+    Dictionary<string, string> dict = ViewData["dict"] as Dictionary<string, string>;
+    string mobiles = ViewBag.Mobiles as string;
+    List<SelectListItem> smsListItems = new List<SelectListItem>(){
+       new SelectListItem(){ Text="请选择通道...", Value="" },
+       new SelectListItem(){ Text="通知短信", Value="2"},
+       new SelectListItem(){ Text="营销短信", Value="3"}
+    };
+}
+@section HeaderContent{
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+         //初始化上传控件
+         $(".upload-img").InitUploader({ sendurl: "/tools/upload_ajax.ashx", swf: "/scripts/webuploader/uploader.swf" });
+
+      });
+      //查询数据
+      function search() {
+         var smsType = $("#rblSmsType input[name='rblSmsType']:checked").val();
+         document.location = "index?smsType=" + smsType;
+      }
+   </script>
+}
+@using(Html.BeginForm("SubmitSave", "User_Sms", FormMethod.Post, new {id="form1"})){
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../user_list/index"><span>会员管理</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>短信通知</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">批量短信通知</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>输入类型</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        <span id="rblSmsType" >
+           @Html.RadioButton("rblSmsType", "1", mobiles != "", new {id="rblSmsType_1", onclick="search();"})<label for="rblSmsType_1">手动输入</label>
+           @Html.RadioButton("rblSmsType", "2", mobiles == "", new {id="rblSmsType_2", onclick="search();"})<label for="rblSmsType_2">批量通知</label>
+        </span>
+      </div>
+    </dd>
+  </dl>
+@if(mobiles == ""){
+  <dl>
+    <dt>会员组别</dt>
+    <dd>
+      <div class="rule-multi-porp">
+        <span id="cblGroupId">
+          @foreach (KeyValuePair<string, string> kv in dict) {
+             @Html.CheckBox("cblGroupId_" + kv.Value, ViewBag.groupId as string == kv.Value)<label for="cblGroupId_" + @kv.Value>@kv.Key</label>
+          }   
+        </span>
+      </div>
+    </dd>
+  </dl>
+}
+  <dl>
+    <dt>短信通道</dt>
+    <dd>
+      <div class="rule-single-select">
+         @Html.DropDownList("ddlSmsPass", new SelectList(smsListItems, "Value", "Text"), new { datatype="*", errormsg="请选择短信通道！", sucmsg=" " })
+       </div>
+       <span class="Validform_checktip">*通知通道禁止电话网址等宣传广告</span>
+    </dd>
+  </dl>
+@if(mobiles != ""){
+  <dl>
+    <dt>手机号码</dt>
+    <dd>
+      @Html.TextArea("txtMobileNumbers", ViewBag.MobileNumbers as string, new {@class= "input", style="padding:0;width:98%;height:150px;", datatype=@"/((^1\d{10})(,1\d{10})*$)+/", tip="以英文“,”逗号分隔开", nullmsg="请填写手机号码，多个手机号以“,”号分隔开！", errormsg="手机号必须是以1开头的11位数字，多个手机号以“,”号分隔开！"})
+       <div class="clear"></div>
+      <span class="Validform_checktip">*多个手机号码以英文“,”逗号分隔开</span>
+    </dd>
+  </dl>
+}
+  <dl>
+    <dt>短信内容</dt>
+    <dd>
+      @Html.TextArea("txtSmsContent", "", new { @class="input", style="padding:0;width:98%;height:150px;", datatype="*", tip="长短信按62个字符每条短信扣取", nullmsg="请填写短信内容！", onkeydown="checktxt(this, 'txtTip');", onkeyup="checktxt(this, 'txtTip');"})
+      <div class="clear"></div>
+      <span id="txtTip"></span>
+      <span class="Validform_checktip">*长短信按62个字符每条短信扣取</span>
+    </dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" value="提交保存" class="btn" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+
+}

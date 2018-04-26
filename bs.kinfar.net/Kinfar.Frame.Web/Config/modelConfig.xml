@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <BaseLogEntity isEnableCache="0" cacheType="0" dbType="MsSqlServer" readConnString="Data Source=localhost\SQL05;Initial Catalog=Rookey_Log;User ID=sa;Password=sa;Pooling=true;MAX Pool Size=512;Min Pool Size=50;Connection Lifetime=30"></BaseLogEntity>
+  <!--BaseLogEntity isEnableCache="0" cacheType="0" dbType="MsSqlServer" readConnString="Data Source=localhost\KF05;Initial Catalog=Kinfar_Log;User ID=sa;Password=sa;Pooling=true;MAX Pool Size=512;Min Pool Size=50;Connection Lifetime=30"></BaseLogEntity-->
+  <!--系统模块全部启用缓存-->
+  <BaseSysEntity isEnableCache="1"  cacheType="0"></BaseSysEntity>
+</Root>

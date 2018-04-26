@@ -1,0 +1,1684 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{70C2758A-8F45-48EF-BDF7-20B1C8F502F3}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DTcms.Web.MVC</RootNamespace>
+    <AssemblyName>DTcms.Web.MVC</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.JScript" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin, Version=3.3.9.26585, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Senparc.Weixin.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=12.4.6.31436, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Senparc.Weixin.MP.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="ThoughtWorks.QRCode">
+      <HintPath>..\Library\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="api\oauth\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\oauth\result_json.aspx.cs">
+      <DependentUpon>result_json.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\oauth\return_url.aspx.cs">
+      <DependentUpon>return_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\alipaymb\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\alipaymb\notify_url.aspx.cs">
+      <DependentUpon>notify_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\alipaymb\return_url.aspx.cs">
+      <DependentUpon>return_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\alipaypc\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\alipaypc\notify_url.aspx.cs">
+      <DependentUpon>notify_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\alipaypc\return_url.aspx.cs">
+      <DependentUpon>return_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\balance\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\chinabankpc\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\chinabankpc\notify_url.aspx.cs">
+      <DependentUpon>notify_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\chinabankpc\return_url.aspx.cs">
+      <DependentUpon>return_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\tenpaypc\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\tenpaypc\notify_url.aspx.cs">
+      <DependentUpon>notify_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\tenpaypc\return_url.aspx.cs">
+      <DependentUpon>return_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\wxapipay\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\wxapipay\jsapipay.aspx.cs">
+      <DependentUpon>jsapipay.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\wxapipay\notify_url.aspx.cs">
+      <DependentUpon>notify_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\wxapipay\redirect_url.aspx.cs">
+      <DependentUpon>redirect_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\wxnatpay\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\wxnatpay\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="api\payment\wxnatpay\notify_url.aspx.cs">
+      <DependentUpon>notify_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\wxnatpay\qrcode.aspx.cs">
+      <DependentUpon>qrcode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\wxnatpay\return_url.aspx.cs">
+      <DependentUpon>return_url.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="api\payment\wxnatpay\return_url.aspx.designer.cs">
+      <DependentUpon>return_url.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="api\weixin\wx.aspx.cs">
+      <DependentUpon>wx.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Areas\admin\adminAreaRegistration.cs" />
+    <Compile Include="Areas\admin\Controllers\Article\Article_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Article\Article_LinkController.cs" />
+    <Compile Include="Areas\admin\Controllers\Article\Article_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Article\Category_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Article\Category_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Article\Comment_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Article\Comment_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\CenterController.cs" />
+    <Compile Include="Areas\admin\Controllers\Channel\Attribute_Field_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Channel\Attribute_Field_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Channel\Channel_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Channel\Channel_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Article\Spec_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Article\Spec_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Channel\Site_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Channel\Site_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Channel\Tags_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Channel\Tags_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_AcceptController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_Article_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_Article_AttachController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_Article_SpecController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_Category_SpecController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_ChannelController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_ExpressController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_Group_PriceController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_MapController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_PictureController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_PrintController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_RewriteController.cs" />
+    <Compile Include="Areas\admin\Controllers\Dialog\Dialog_SpecController.cs" />
+    <Compile Include="Areas\admin\Controllers\ie6updateController.cs" />
+    <Compile Include="Areas\admin\Controllers\IndexController.cs" />
+    <Compile Include="Areas\admin\Controllers\LoginController.cs" />
+    <Compile Include="Areas\admin\Controllers\Manager\Manager_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Manager\Manager_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Manager\Manager_LogController.cs" />
+    <Compile Include="Areas\admin\Controllers\Manager\Manager_PwdController.cs" />
+    <Compile Include="Areas\admin\Controllers\Manager\Role_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Manager\Role_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Express_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Express_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Order_ConfigController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Order_ConfirmController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Order_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Order_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Payment_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Payment_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Site_Payment_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Order\Site_Payment_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Builder_HtmlController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Nav_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Nav_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Plugin_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Sys_ConfigController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Templet_File_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Templet_File_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Templet_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Url_Rewrite_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Settings\Url_Rewrite_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Amount_LogController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Group_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Group_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Mail_Template_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Mail_Template_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Message_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Message_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Oauth_App_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Oauth_App_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Point_LogController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Recharge_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Recharge_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Site_Oauth_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Site_Oauth_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Sms_Template_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\Sms_Template_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\User_AuditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\User_ConfigController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\User_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\User_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\User_OauthController.cs" />
+    <Compile Include="Areas\admin\Controllers\Users\User_SmsController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Account_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Account_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Menu_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Menu_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Picture_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Picture_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Response_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Sound_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Sound_ListController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Subscribe_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Text_EditController.cs" />
+    <Compile Include="Areas\admin\Controllers\Weixin\Text_ListController.cs" />
+    <Compile Include="Areas\Web\Controllers\CartController.cs" />
+    <Compile Include="Areas\Web\Controllers\CategoryController.cs" />
+    <Compile Include="Areas\Web\Controllers\ContentController.cs" />
+    <Compile Include="Areas\Web\Controllers\DownController.cs" />
+    <Compile Include="Areas\Web\Controllers\Down_ListController.cs" />
+    <Compile Include="Areas\Web\Controllers\Down_ShowController.cs" />
+    <Compile Include="Areas\Web\Controllers\ErrorController.cs" />
+    <Compile Include="Areas\Web\Controllers\GoodsController.cs" />
+    <Compile Include="Areas\Web\Controllers\Goods_ListController.cs" />
+    <Compile Include="Areas\Web\Controllers\Goods_ShowController.cs" />
+    <Compile Include="Areas\Web\Controllers\GSearchController.cs" />
+    <Compile Include="Areas\Web\Controllers\IndexController.cs" />
+    <Compile Include="Areas\Web\Controllers\LoginController.cs" />
+    <Compile Include="Areas\Web\Controllers\NewsController.cs" />
+    <Compile Include="Areas\Web\Controllers\News_ListController.cs" />
+    <Compile Include="Areas\Web\Controllers\News_ShowController.cs" />
+    <Compile Include="Areas\Web\Controllers\Oauth_LoginController.cs" />
+    <Compile Include="Areas\Web\Controllers\PaymentController.cs" />
+    <Compile Include="Areas\Web\Controllers\PhotoController.cs" />
+    <Compile Include="Areas\Web\Controllers\Photo_ListController.cs" />
+    <Compile Include="Areas\Web\Controllers\Photo_ShowController.cs" />
+    <Compile Include="Areas\Web\Controllers\RegisterController.cs" />
+    <Compile Include="Areas\Web\Controllers\RepasswordController.cs" />
+    <Compile Include="Areas\Web\Controllers\SearchController.cs" />
+    <Compile Include="Areas\Web\Controllers\ShoppingController.cs" />
+    <Compile Include="Areas\Web\Controllers\TestController.cs" />
+    <Compile Include="Areas\Web\Controllers\UserAddressController.cs" />
+    <Compile Include="Areas\Web\Controllers\UserAddress_EditController.cs" />
+    <Compile Include="Areas\Web\Controllers\UserAmountController.cs" />
+    <Compile Include="Areas\Web\Controllers\UserCenterController.cs" />
+    <Compile Include="Areas\Web\Controllers\UserMessageController.cs" />
+    <Compile Include="Areas\Web\Controllers\UserMessage_ShowController.cs" />
+    <Compile Include="Areas\Web\Controllers\UserOrderController.cs" />
+    <Compile Include="Areas\Web\Controllers\UserOrder_ShowController.cs" />
+    <Compile Include="Areas\Web\Controllers\UserPointController.cs" />
+    <Compile Include="Areas\Web\Controllers\VideoController.cs" />
+    <Compile Include="Areas\Web\Controllers\Video_ListController.cs" />
+    <Compile Include="Areas\Web\Controllers\Video_ShowController.cs" />
+    <Compile Include="Areas\Web\WebAreaRegistration.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tools\admin_ajax.ashx.cs">
+      <DependentUpon>admin_ajax.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\download.ashx.cs">
+      <DependentUpon>download.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\submit_ajax.ashx.cs">
+      <DependentUpon>submit_ajax.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\upload_ajax.ashx.cs">
+      <DependentUpon>upload_ajax.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="tools\verify_code.ashx.cs">
+      <DependentUpon>verify_code.ashx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Content Include="api\oauth\index.aspx" />
+    <Content Include="api\oauth\result_json.aspx" />
+    <Content Include="api\oauth\return_url.aspx" />
+    <Content Include="api\payment\alipaymb\ap.js" />
+    <Content Include="api\payment\alipaymb\index.aspx" />
+    <Content Include="api\payment\alipaymb\notify_url.aspx" />
+    <Content Include="api\payment\alipaymb\pay.htm" />
+    <Content Include="api\payment\alipaymb\return_url.aspx" />
+    <Content Include="api\payment\alipaypc\index.aspx" />
+    <Content Include="api\payment\alipaypc\notify_url.aspx" />
+    <Content Include="api\payment\alipaypc\return_url.aspx" />
+    <Content Include="api\payment\balance\index.aspx" />
+    <Content Include="api\payment\chinabankpc\index.aspx" />
+    <Content Include="api\payment\chinabankpc\notify_url.aspx" />
+    <Content Include="api\payment\chinabankpc\return_url.aspx" />
+    <Content Include="api\payment\tenpaypc\index.aspx" />
+    <Content Include="api\payment\tenpaypc\notify_url.aspx" />
+    <Content Include="api\payment\tenpaypc\return_url.aspx" />
+    <Content Include="api\payment\wxapipay\index.aspx" />
+    <Content Include="api\payment\wxapipay\jsapipay.aspx" />
+    <Content Include="api\payment\wxapipay\notify_url.aspx" />
+    <Content Include="api\payment\wxapipay\redirect_url.aspx" />
+    <Content Include="api\payment\wxnatpay\index.aspx" />
+    <Content Include="api\payment\wxnatpay\notify_url.aspx" />
+    <Content Include="api\payment\wxnatpay\qrcode.aspx" />
+    <Content Include="api\payment\wxnatpay\return_url.aspx" />
+    <Content Include="api\weixin\wx.aspx" />
+    <Content Include="Areas\admin\Content\base.css" />
+    <Content Include="Areas\admin\Content\default\ie_update.jpg" />
+    <Content Include="Areas\admin\Content\default\loadimg.gif" />
+    <Content Include="Areas\admin\Content\default\logo.png" />
+    <Content Include="Areas\admin\Content\default\style.css" />
+    <Content Include="Areas\admin\Content\default\valid_icons.png" />
+    <Content Include="Areas\admin\Content\icon\demo.css" />
+    <Content Include="Areas\admin\Content\icon\demo_fontclass.html" />
+    <Content Include="Areas\admin\Content\icon\demo_symbol.html" />
+    <Content Include="Areas\admin\Content\icon\demo_unicode.html" />
+    <Content Include="Areas\admin\Content\icon\iconfont.css" />
+    <Content Include="Areas\admin\Content\icon\iconfont.js" />
+    <Content Include="Areas\admin\Content\icon\iconfont.svg" />
+    <Content Include="Areas\admin\Content\layout.css" />
+    <Content Include="Areas\admin\Scripts\common.js" />
+    <Content Include="Areas\admin\Scripts\layindex.js" />
+    <Content Include="Areas\admin\Scripts\laymain.js" />
+    <Content Include="Areas\admin\Scripts\uploader.js" />
+    <Content Include="Areas\Web\Scripts\avatar.js" />
+    <Content Include="Areas\Web\Scripts\cart.js" />
+    <Content Include="Areas\Web\Scripts\common.js" />
+    <Content Include="Areas\Web\Scripts\login-validate.js" />
+    <Content Include="Areas\Web\Scripts\picture.js" />
+    <Content Include="Areas\Web\Scripts\register-validate.js" />
+    <Content Include="css\image1.gif" />
+    <Content Include="css\image2.gif" />
+    <Content Include="css\jcrop.gif" />
+    <Content Include="css\jquery.jcrop.css" />
+    <Content Include="css\lightbox.css" />
+    <Content Include="css\meneame.jpg" />
+    <Content Include="css\pagination.css" />
+    <Content Include="css\validate.css" />
+    <Content Include="css\valid_icons.png" />
+    <Content Include="css\waves.css" />
+    <Content Include="css\waves.min.css" />
+    <Content Include="editor\dialogs\anchor\anchor.html" />
+    <Content Include="editor\dialogs\attachment\attachment.css" />
+    <Content Include="editor\dialogs\attachment\attachment.html" />
+    <Content Include="editor\dialogs\attachment\attachment.js" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_chm.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_default.png" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_doc.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_exe.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_jpg.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_mp3.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_mv.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_pdf.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_ppt.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_psd.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_rar.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_txt.gif" />
+    <Content Include="editor\dialogs\attachment\fileTypeImages\icon_xls.gif" />
+    <Content Include="editor\dialogs\attachment\images\alignicon.gif" />
+    <Content Include="editor\dialogs\attachment\images\alignicon.png" />
+    <Content Include="editor\dialogs\attachment\images\bg.png" />
+    <Content Include="editor\dialogs\attachment\images\file-icons.gif" />
+    <Content Include="editor\dialogs\attachment\images\file-icons.png" />
+    <Content Include="editor\dialogs\attachment\images\icons.gif" />
+    <Content Include="editor\dialogs\attachment\images\icons.png" />
+    <Content Include="editor\dialogs\attachment\images\image.png" />
+    <Content Include="editor\dialogs\attachment\images\progress.png" />
+    <Content Include="editor\dialogs\attachment\images\success.gif" />
+    <Content Include="editor\dialogs\attachment\images\success.png" />
+    <Content Include="editor\dialogs\background\background.css" />
+    <Content Include="editor\dialogs\background\background.html" />
+    <Content Include="editor\dialogs\background\background.js" />
+    <Content Include="editor\dialogs\background\images\bg.png" />
+    <Content Include="editor\dialogs\background\images\success.png" />
+    <Content Include="editor\dialogs\charts\chart.config.js" />
+    <Content Include="editor\dialogs\charts\charts.css" />
+    <Content Include="editor\dialogs\charts\charts.html" />
+    <Content Include="editor\dialogs\charts\charts.js" />
+    <Content Include="editor\dialogs\charts\images\charts0.png" />
+    <Content Include="editor\dialogs\charts\images\charts1.png" />
+    <Content Include="editor\dialogs\charts\images\charts2.png" />
+    <Content Include="editor\dialogs\charts\images\charts3.png" />
+    <Content Include="editor\dialogs\charts\images\charts4.png" />
+    <Content Include="editor\dialogs\charts\images\charts5.png" />
+    <Content Include="editor\dialogs\emotion\emotion.css" />
+    <Content Include="editor\dialogs\emotion\emotion.html" />
+    <Content Include="editor\dialogs\emotion\emotion.js" />
+    <Content Include="editor\dialogs\emotion\images\0.gif" />
+    <Content Include="editor\dialogs\emotion\images\bface.gif" />
+    <Content Include="editor\dialogs\emotion\images\cface.gif" />
+    <Content Include="editor\dialogs\emotion\images\fface.gif" />
+    <Content Include="editor\dialogs\emotion\images\jxface2.gif" />
+    <Content Include="editor\dialogs\emotion\images\neweditor-tab-bg.png" />
+    <Content Include="editor\dialogs\emotion\images\tface.gif" />
+    <Content Include="editor\dialogs\emotion\images\wface.gif" />
+    <Content Include="editor\dialogs\emotion\images\yface.gif" />
+    <Content Include="editor\dialogs\gmap\gmap.html" />
+    <Content Include="editor\dialogs\help\help.css" />
+    <Content Include="editor\dialogs\help\help.html" />
+    <Content Include="editor\dialogs\help\help.js" />
+    <Content Include="editor\dialogs\image\image.css" />
+    <Content Include="editor\dialogs\image\image.html" />
+    <Content Include="editor\dialogs\image\image.js" />
+    <Content Include="editor\dialogs\image\images\alignicon.jpg" />
+    <Content Include="editor\dialogs\image\images\bg.png" />
+    <Content Include="editor\dialogs\image\images\icons.gif" />
+    <Content Include="editor\dialogs\image\images\icons.png" />
+    <Content Include="editor\dialogs\image\images\image.png" />
+    <Content Include="editor\dialogs\image\images\progress.png" />
+    <Content Include="editor\dialogs\image\images\success.gif" />
+    <Content Include="editor\dialogs\image\images\success.png" />
+    <Content Include="editor\dialogs\insertframe\insertframe.html" />
+    <Content Include="editor\dialogs\internal.js" />
+    <Content Include="editor\dialogs\link\link.html" />
+    <Content Include="editor\dialogs\map\map.html" />
+    <Content Include="editor\dialogs\map\show.html" />
+    <Content Include="editor\dialogs\music\music.css" />
+    <Content Include="editor\dialogs\music\music.html" />
+    <Content Include="editor\dialogs\music\music.js" />
+    <Content Include="editor\dialogs\preview\preview.html" />
+    <Content Include="editor\dialogs\scrawl\images\addimg.png" />
+    <Content Include="editor\dialogs\scrawl\images\brush.png" />
+    <Content Include="editor\dialogs\scrawl\images\delimg.png" />
+    <Content Include="editor\dialogs\scrawl\images\delimgH.png" />
+    <Content Include="editor\dialogs\scrawl\images\empty.png" />
+    <Content Include="editor\dialogs\scrawl\images\emptyH.png" />
+    <Content Include="editor\dialogs\scrawl\images\eraser.png" />
+    <Content Include="editor\dialogs\scrawl\images\redo.png" />
+    <Content Include="editor\dialogs\scrawl\images\redoH.png" />
+    <Content Include="editor\dialogs\scrawl\images\scale.png" />
+    <Content Include="editor\dialogs\scrawl\images\scaleH.png" />
+    <Content Include="editor\dialogs\scrawl\images\size.png" />
+    <Content Include="editor\dialogs\scrawl\images\undo.png" />
+    <Content Include="editor\dialogs\scrawl\images\undoH.png" />
+    <Content Include="editor\dialogs\scrawl\scrawl.css" />
+    <Content Include="editor\dialogs\scrawl\scrawl.html" />
+    <Content Include="editor\dialogs\scrawl\scrawl.js" />
+    <Content Include="editor\dialogs\searchreplace\searchreplace.html" />
+    <Content Include="editor\dialogs\searchreplace\searchreplace.js" />
+    <Content Include="editor\dialogs\snapscreen\snapscreen.html" />
+    <Content Include="editor\dialogs\spechars\spechars.html" />
+    <Content Include="editor\dialogs\spechars\spechars.js" />
+    <Content Include="editor\dialogs\table\dragicon.png" />
+    <Content Include="editor\dialogs\table\edittable.css" />
+    <Content Include="editor\dialogs\table\edittable.html" />
+    <Content Include="editor\dialogs\table\edittable.js" />
+    <Content Include="editor\dialogs\table\edittd.html" />
+    <Content Include="editor\dialogs\table\edittip.html" />
+    <Content Include="editor\dialogs\template\config.js" />
+    <Content Include="editor\dialogs\template\images\bg.gif" />
+    <Content Include="editor\dialogs\template\images\pre0.png" />
+    <Content Include="editor\dialogs\template\images\pre1.png" />
+    <Content Include="editor\dialogs\template\images\pre2.png" />
+    <Content Include="editor\dialogs\template\images\pre3.png" />
+    <Content Include="editor\dialogs\template\images\pre4.png" />
+    <Content Include="editor\dialogs\template\template.css" />
+    <Content Include="editor\dialogs\template\template.html" />
+    <Content Include="editor\dialogs\template\template.js" />
+    <Content Include="editor\dialogs\video\images\bg.png" />
+    <Content Include="editor\dialogs\video\images\center_focus.jpg" />
+    <Content Include="editor\dialogs\video\images\file-icons.gif" />
+    <Content Include="editor\dialogs\video\images\file-icons.png" />
+    <Content Include="editor\dialogs\video\images\icons.gif" />
+    <Content Include="editor\dialogs\video\images\icons.png" />
+    <Content Include="editor\dialogs\video\images\image.png" />
+    <Content Include="editor\dialogs\video\images\left_focus.jpg" />
+    <Content Include="editor\dialogs\video\images\none_focus.jpg" />
+    <Content Include="editor\dialogs\video\images\progress.png" />
+    <Content Include="editor\dialogs\video\images\right_focus.jpg" />
+    <Content Include="editor\dialogs\video\images\success.gif" />
+    <Content Include="editor\dialogs\video\images\success.png" />
+    <Content Include="editor\dialogs\video\video.css" />
+    <Content Include="editor\dialogs\video\video.html" />
+    <Content Include="editor\dialogs\video\video.js" />
+    <Content Include="editor\dialogs\webapp\webapp.html" />
+    <Content Include="editor\dialogs\wordimage\fClipboard_ueditor.swf" />
+    <Content Include="editor\dialogs\wordimage\imageUploader.swf" />
+    <Content Include="editor\dialogs\wordimage\tangram.js" />
+    <Content Include="editor\dialogs\wordimage\wordimage.html" />
+    <Content Include="editor\dialogs\wordimage\wordimage.js" />
+    <Content Include="editor\lang\en\en.js" />
+    <Content Include="editor\lang\en\images\addimage.png" />
+    <Content Include="editor\lang\en\images\alldeletebtnhoverskin.png" />
+    <Content Include="editor\lang\en\images\alldeletebtnupskin.png" />
+    <Content Include="editor\lang\en\images\background.png" />
+    <Content Include="editor\lang\en\images\button.png" />
+    <Content Include="editor\lang\en\images\copy.png" />
+    <Content Include="editor\lang\en\images\deletedisable.png" />
+    <Content Include="editor\lang\en\images\deleteenable.png" />
+    <Content Include="editor\lang\en\images\listbackground.png" />
+    <Content Include="editor\lang\en\images\localimage.png" />
+    <Content Include="editor\lang\en\images\music.png" />
+    <Content Include="editor\lang\en\images\rotateleftdisable.png" />
+    <Content Include="editor\lang\en\images\rotateleftenable.png" />
+    <Content Include="editor\lang\en\images\rotaterightdisable.png" />
+    <Content Include="editor\lang\en\images\rotaterightenable.png" />
+    <Content Include="editor\lang\en\images\upload.png" />
+    <Content Include="editor\lang\zh-cn\images\copy.png" />
+    <Content Include="editor\lang\zh-cn\images\localimage.png" />
+    <Content Include="editor\lang\zh-cn\images\music.png" />
+    <Content Include="editor\lang\zh-cn\images\upload.png" />
+    <Content Include="editor\lang\zh-cn\zh-cn.js" />
+    <Content Include="editor\themes\default\css\ueditor.css" />
+    <Content Include="editor\themes\default\css\ueditor.min.css" />
+    <Content Include="editor\themes\default\dialogbase.css" />
+    <Content Include="editor\themes\default\images\anchor.gif" />
+    <Content Include="editor\themes\default\images\arrow.png" />
+    <Content Include="editor\themes\default\images\arrow_down.png" />
+    <Content Include="editor\themes\default\images\arrow_up.png" />
+    <Content Include="editor\themes\default\images\button-bg.gif" />
+    <Content Include="editor\themes\default\images\cancelbutton.gif" />
+    <Content Include="editor\themes\default\images\charts.png" />
+    <Content Include="editor\themes\default\images\cursor_h.gif" />
+    <Content Include="editor\themes\default\images\cursor_h.png" />
+    <Content Include="editor\themes\default\images\cursor_v.gif" />
+    <Content Include="editor\themes\default\images\cursor_v.png" />
+    <Content Include="editor\themes\default\images\dialog-title-bg.png" />
+    <Content Include="editor\themes\default\images\filescan.png" />
+    <Content Include="editor\themes\default\images\highlighted.gif" />
+    <Content Include="editor\themes\default\images\icons-all.gif" />
+    <Content Include="editor\themes\default\images\icons.gif" />
+    <Content Include="editor\themes\default\images\icons.png" />
+    <Content Include="editor\themes\default\images\loaderror.png" />
+    <Content Include="editor\themes\default\images\loading.gif" />
+    <Content Include="editor\themes\default\images\lock.gif" />
+    <Content Include="editor\themes\default\images\neweditor-tab-bg.png" />
+    <Content Include="editor\themes\default\images\pagebreak.gif" />
+    <Content Include="editor\themes\default\images\scale.png" />
+    <Content Include="editor\themes\default\images\sortable.png" />
+    <Content Include="editor\themes\default\images\spacer.gif" />
+    <Content Include="editor\themes\default\images\sparator_v.png" />
+    <Content Include="editor\themes\default\images\table-cell-align.png" />
+    <Content Include="editor\themes\default\images\tangram-colorpicker.png" />
+    <Content Include="editor\themes\default\images\toolbar_bg.png" />
+    <Content Include="editor\themes\default\images\unhighlighted.gif" />
+    <Content Include="editor\themes\default\images\upload.png" />
+    <Content Include="editor\themes\default\images\videologo.gif" />
+    <Content Include="editor\themes\default\images\word.gif" />
+    <Content Include="editor\themes\default\images\wordpaste.png" />
+    <Content Include="editor\themes\iframe.css" />
+    <Content Include="editor\third-party\codemirror\codemirror.css" />
+    <Content Include="editor\third-party\codemirror\codemirror.js" />
+    <Content Include="editor\third-party\highcharts\adapters\mootools-adapter.js" />
+    <Content Include="editor\third-party\highcharts\adapters\mootools-adapter.src.js" />
+    <Content Include="editor\third-party\highcharts\adapters\prototype-adapter.js" />
+    <Content Include="editor\third-party\highcharts\adapters\prototype-adapter.src.js" />
+    <Content Include="editor\third-party\highcharts\adapters\standalone-framework.js" />
+    <Content Include="editor\third-party\highcharts\adapters\standalone-framework.src.js" />
+    <Content Include="editor\third-party\highcharts\highcharts-more.js" />
+    <Content Include="editor\third-party\highcharts\highcharts-more.src.js" />
+    <Content Include="editor\third-party\highcharts\highcharts.js" />
+    <Content Include="editor\third-party\highcharts\highcharts.src.js" />
+    <Content Include="editor\third-party\highcharts\modules\annotations.js" />
+    <Content Include="editor\third-party\highcharts\modules\annotations.src.js" />
+    <Content Include="editor\third-party\highcharts\modules\canvas-tools.js" />
+    <Content Include="editor\third-party\highcharts\modules\canvas-tools.src.js" />
+    <Content Include="editor\third-party\highcharts\modules\data.js" />
+    <Content Include="editor\third-party\highcharts\modules\data.src.js" />
+    <Content Include="editor\third-party\highcharts\modules\drilldown.js" />
+    <Content Include="editor\third-party\highcharts\modules\drilldown.src.js" />
+    <Content Include="editor\third-party\highcharts\modules\exporting.js" />
+    <Content Include="editor\third-party\highcharts\modules\exporting.src.js" />
+    <Content Include="editor\third-party\highcharts\modules\funnel.js" />
+    <Content Include="editor\third-party\highcharts\modules\funnel.src.js" />
+    <Content Include="editor\third-party\highcharts\modules\heatmap.js" />
+    <Content Include="editor\third-party\highcharts\modules\heatmap.src.js" />
+    <Content Include="editor\third-party\highcharts\modules\map.js" />
+    <Content Include="editor\third-party\highcharts\modules\map.src.js" />
+    <Content Include="editor\third-party\highcharts\modules\no-data-to-display.js" />
+    <Content Include="editor\third-party\highcharts\modules\no-data-to-display.src.js" />
+    <Content Include="editor\third-party\highcharts\themes\dark-blue.js" />
+    <Content Include="editor\third-party\highcharts\themes\dark-green.js" />
+    <Content Include="editor\third-party\highcharts\themes\gray.js" />
+    <Content Include="editor\third-party\highcharts\themes\grid.js" />
+    <Content Include="editor\third-party\highcharts\themes\skies.js" />
+    <Content Include="editor\third-party\jquery-1.10.2.js" />
+    <Content Include="editor\third-party\jquery-1.10.2.min.js" />
+    <Content Include="editor\third-party\snapscreen\UEditorSnapscreen.exe" />
+    <Content Include="editor\third-party\SyntaxHighlighter\shCore.js" />
+    <Content Include="editor\third-party\SyntaxHighlighter\shCoreDefault.css" />
+    <Content Include="editor\third-party\video-js\font\vjs.svg" />
+    <Content Include="editor\third-party\video-js\video-js.css" />
+    <Content Include="editor\third-party\video-js\video-js.min.css" />
+    <Content Include="editor\third-party\video-js\video-js.swf" />
+    <Content Include="editor\third-party\video-js\video.dev.js" />
+    <Content Include="editor\third-party\video-js\video.js" />
+    <Content Include="editor\third-party\webuploader\Uploader.swf" />
+    <Content Include="editor\third-party\webuploader\webuploader.css" />
+    <Content Include="editor\third-party\webuploader\webuploader.custom.js" />
+    <Content Include="editor\third-party\webuploader\webuploader.custom.min.js" />
+    <Content Include="editor\third-party\webuploader\webuploader.flashonly.js" />
+    <Content Include="editor\third-party\webuploader\webuploader.flashonly.min.js" />
+    <Content Include="editor\third-party\webuploader\webuploader.html5only.js" />
+    <Content Include="editor\third-party\webuploader\webuploader.html5only.min.js" />
+    <Content Include="editor\third-party\webuploader\webuploader.js" />
+    <Content Include="editor\third-party\webuploader\webuploader.min.js" />
+    <Content Include="editor\third-party\webuploader\webuploader.withoutimage.js" />
+    <Content Include="editor\third-party\webuploader\webuploader.withoutimage.min.js" />
+    <Content Include="editor\third-party\xss.min.js" />
+    <Content Include="editor\third-party\zeroclipboard\ZeroClipboard.js" />
+    <Content Include="editor\third-party\zeroclipboard\ZeroClipboard.min.js" />
+    <Content Include="editor\third-party\zeroclipboard\ZeroClipboard.swf" />
+    <Content Include="editor\ueditor.all.js" />
+    <Content Include="editor\ueditor.all.min.js" />
+    <Content Include="editor\ueditor.config.js" />
+    <Content Include="editor\ueditor.parse.js" />
+    <Content Include="editor\ueditor.parse.min.js" />
+    <Content Include="Global.asax" />
+    <Content Include="images\oauth\feixin.png" />
+    <Content Include="images\oauth\kaixin.png" />
+    <Content Include="images\oauth\qq.png" />
+    <Content Include="images\oauth\renren.png" />
+    <Content Include="images\oauth\weibo.png" />
+    <Content Include="images\oauth\weixin.png" />
+    <Content Include="Scripts\artdialog\dialog-min.js" />
+    <Content Include="Scripts\artdialog\dialog-plus-min.js" />
+    <Content Include="Scripts\artdialog\ui-dialog.css" />
+    <Content Include="Scripts\ckplayer\ckplayer.js" />
+    <Content Include="Scripts\ckplayer\ckplayer.swf" />
+    <Content Include="Scripts\ckplayer\ckplayer.xml" />
+    <Content Include="Scripts\ckplayer\language.xml" />
+    <Content Include="Scripts\ckplayer\related.xml" />
+    <Content Include="Scripts\ckplayer\share.xml" />
+    <Content Include="Scripts\ckplayer\share\feixin.png" />
+    <Content Include="Scripts\ckplayer\share\google.png" />
+    <Content Include="Scripts\ckplayer\share\kaixin001.png" />
+    <Content Include="Scripts\ckplayer\share\msn.png" />
+    <Content Include="Scripts\ckplayer\share\qq.png" />
+    <Content Include="Scripts\ckplayer\share\qq2.png" />
+    <Content Include="Scripts\ckplayer\share\qzone.png" />
+    <Content Include="Scripts\ckplayer\share\rr.png" />
+    <Content Include="Scripts\ckplayer\share\sina.png" />
+    <Content Include="Scripts\ckplayer\share\sohu.png" />
+    <Content Include="Scripts\ckplayer\share\tianya.png" />
+    <Content Include="Scripts\ckplayer\style.swf" />
+    <Content Include="Scripts\cuplayer\CuSunV4set.xml" />
+    <Content Include="Scripts\cuplayer\CuSunV4set15.xml" />
+    <Content Include="Scripts\cuplayer\CuSunV4set16.xml" />
+    <Content Include="Scripts\cuplayer\CuSunV4set2.xml" />
+    <Content Include="Scripts\cuplayer\CuSunV4setBlue.xml" />
+    <Content Include="Scripts\cuplayer\CuSunV4setLive.xml" />
+    <Content Include="Scripts\cuplayer\CuSunV4setNext.xml" />
+    <Content Include="Scripts\cuplayer\CuSunV4setRed.xml" />
+    <Content Include="Scripts\cuplayer\CuSunV4set_BAK_AD_DEMO.xml" />
+    <Content Include="Scripts\cuplayer\demo1.html" />
+    <Content Include="Scripts\cuplayer\demo10.html" />
+    <Content Include="Scripts\cuplayer\demo11.html" />
+    <Content Include="Scripts\cuplayer\demo12.html" />
+    <Content Include="Scripts\cuplayer\demo13.html" />
+    <Content Include="Scripts\cuplayer\demo14.html" />
+    <Content Include="Scripts\cuplayer\demo15.html" />
+    <Content Include="Scripts\cuplayer\demo16.html" />
+    <Content Include="Scripts\cuplayer\demo17.html" />
+    <Content Include="Scripts\cuplayer\demo18.html" />
+    <Content Include="Scripts\cuplayer\demo2.html" />
+    <Content Include="Scripts\cuplayer\demo3.html" />
+    <Content Include="Scripts\cuplayer\demo4.html" />
+    <Content Include="Scripts\cuplayer\demo5.html" />
+    <Content Include="Scripts\cuplayer\demo6.html" />
+    <Content Include="Scripts\cuplayer\demo7.html" />
+    <Content Include="Scripts\cuplayer\demo8.html" />
+    <Content Include="Scripts\cuplayer\demo9.html" />
+    <Content Include="Scripts\cuplayer\demoX1.html" />
+    <Content Include="Scripts\cuplayer\demoX2.html" />
+    <Content Include="Scripts\cuplayer\demoX3.html" />
+    <Content Include="Scripts\cuplayer\demoX4.html" />
+    <Content Include="Scripts\cuplayer\images\btn04_demo.gif" />
+    <Content Include="Scripts\cuplayer\images\btn04_down.gif" />
+    <Content Include="Scripts\cuplayer\images\common.css" />
+    <Content Include="Scripts\cuplayer\images\loading.gif" />
+    <Content Include="Scripts\cuplayer\images\logo.png" />
+    <Content Include="Scripts\cuplayer\images\logo44x38.png" />
+    <Content Include="Scripts\cuplayer\images\logoCu.jpg" />
+    <Content Include="Scripts\cuplayer\images\logoMini.jpg" />
+    <Content Include="Scripts\cuplayer\images\mini.css" />
+    <Content Include="Scripts\cuplayer\images\search.jpg" />
+    <Content Include="Scripts\cuplayer\images\startpic.jpg" />
+    <Content Include="Scripts\cuplayer\images\vico.png" />
+    <Content Include="Scripts\cuplayer\index.html" />
+    <Content Include="Scripts\cuplayer\index2.html" />
+    <Content Include="Scripts\cuplayer\js\action.js" />
+    <Content Include="Scripts\cuplayer\js\AsComV3.min.js" />
+    <Content Include="Scripts\cuplayer\js\CuSunL1.min.js" />
+    <Content Include="Scripts\cuplayer\js\CuSunL2.min.js" />
+    <Content Include="Scripts\cuplayer\js\CuSunX1.min.js" />
+    <Content Include="Scripts\cuplayer\js\CuSunX2.min.js" />
+    <Content Include="Scripts\cuplayer\js\CuSunX3.min.js" />
+    <Content Include="Scripts\cuplayer\js\CuSunX4.min.js" />
+    <Content Include="Scripts\cuplayer\js\jquery-1.4.2.min.js" />
+    <Content Include="Scripts\cuplayer\js\jquery172.js" />
+    <Content Include="Scripts\cuplayer\js\swfobject.js" />
+    <Content Include="Scripts\cuplayer\listDemo1.html" />
+    <Content Include="Scripts\cuplayer\listDemo2.html" />
+    <Content Include="Scripts\cuplayer\listDemo3.html" />
+    <Content Include="Scripts\cuplayer\listDemo4.html" />
+    <Content Include="Scripts\cuplayer\LiveL1.html" />
+    <Content Include="Scripts\cuplayer\LiveL2.html" />
+    <Content Include="Scripts\cuplayer\other\a300x250_01.jpg" />
+    <Content Include="Scripts\cuplayer\other\a300x250_01.swf" />
+    <Content Include="Scripts\cuplayer\other\a300x250_02.jpg" />
+    <Content Include="Scripts\cuplayer\other\a300x250_02.swf" />
+    <Content Include="Scripts\cuplayer\other\a400x300_01.swf" />
+    <Content Include="Scripts\cuplayer\other\a650x400_01.swf" />
+    <Content Include="Scripts\cuplayer\other\a650x400_02.swf" />
+    <Content Include="Scripts\cuplayer\other\a730x454_01.jpg" />
+    <Content Include="Scripts\cuplayer\other\a730x454_02.jpg" />
+    <Content Include="Scripts\cuplayer\other\a730x454_03.jpg" />
+    <Content Include="Scripts\cuplayer\other\a730x454_04.jpg" />
+    <Content Include="Scripts\cuplayer\other\a90x50_01.swf" />
+    <Content Include="Scripts\cuplayer\other\此目录下文件为广告示例.txt" />
+    <Content Include="Scripts\cuplayer\pic\pic01.jpg" />
+    <Content Include="Scripts\cuplayer\pic\pic02.jpg" />
+    <Content Include="Scripts\cuplayer\pic\pic03.jpg" />
+    <Content Include="Scripts\cuplayer\pic\pic04.jpg" />
+    <Content Include="Scripts\cuplayer\pic\pic05.jpg" />
+    <Content Include="Scripts\cuplayer\pic\pic06.jpg" />
+    <Content Include="Scripts\cuplayer\pic\pic07.jpg" />
+    <Content Include="Scripts\cuplayer\pic\pic08.jpg" />
+    <Content Include="Scripts\cuplayer\pic\pic09.jpg" />
+    <Content Include="Scripts\cuplayer\pic\pic10.jpg" />
+    <Content Include="Scripts\cuplayer\pic\此目录下文件为结束示例图片.txt" />
+    <Content Include="Scripts\cuplayer\player.swf" />
+    <Content Include="Scripts\cuplayer\setForShare.xml" />
+    <Content Include="Scripts\cuplayer\style.css" />
+    <Content Include="Scripts\datepicker\calendar.js" />
+    <Content Include="Scripts\datepicker\lang\en.js" />
+    <Content Include="Scripts\datepicker\lang\zh-cn.js" />
+    <Content Include="Scripts\datepicker\lang\zh-tw.js" />
+    <Content Include="Scripts\datepicker\skin\datePicker.gif" />
+    <Content Include="Scripts\datepicker\skin\default\datepicker.css" />
+    <Content Include="Scripts\datepicker\skin\default\img.gif" />
+    <Content Include="Scripts\datepicker\skin\WdatePicker.css" />
+    <Content Include="Scripts\datepicker\skin\whyGreen\bg.jpg" />
+    <Content Include="Scripts\datepicker\skin\whyGreen\datepicker.css" />
+    <Content Include="Scripts\datepicker\skin\whyGreen\img.gif" />
+    <Content Include="Scripts\datepicker\WdatePicker.js" />
+    <Content Include="Scripts\jquery\jquery-1.11.2.min.js" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_spec.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_group_price.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_map.cshtml" />
+    <Content Include="Areas\admin\Views\Article\spec_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Article\spec_list.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\account_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\account_list.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\menu_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\menu_list.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\picture_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\picture_list.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\response_list.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\sound_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\sound_list.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\subscribe_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\text_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Weixin\text_list.cshtml" />
+    <Content Include="Areas\admin\Views\Users\site_oauth_list.cshtml" />
+    <Content Include="Areas\admin\Views\Users\site_oauth_edit.cshtml" />
+    <Content Include="Areas\admin\Content\icon\iconfont.eot" />
+    <Content Include="Areas\admin\Content\icon\iconfont.ttf" />
+    <Content Include="Areas\admin\Content\icon\iconfont.woff" />
+    <Content Include="editor\third-party\jquery-1.10.2.min.map" />
+    <Content Include="editor\third-party\video-js\font\vjs.eot" />
+    <Content Include="editor\third-party\video-js\font\vjs.ttf" />
+    <Content Include="editor\third-party\video-js\font\vjs.woff" />
+    <Content Include="Areas\admin\Views\Channel\tags_list.cshtml" />
+    <Content Include="Areas\admin\Views\Channel\tags_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Users\user_oauth.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_article_spec.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_category_spec.cshtml" />
+    <Content Include="Areas\admin\Views\Order\site_payment_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Order\site_payment_list.cshtml" />
+    <None Include="Properties\PublishProfiles\jtdygs.com.pubxml" />
+    <None Include="Properties\PublishProfiles\ud77.com.pubxml" />
+    <Content Include="Scripts\jquery\jquery.form.min.js" />
+    <Content Include="Scripts\jquery\jquery.jcrop.min.js" />
+    <Content Include="Scripts\jquery\jquery.jqzoom.js" />
+    <Content Include="Scripts\jquery\jquery.lazyload.min.js" />
+    <Content Include="Scripts\jquery\jquery.lightbox.min.js" />
+    <Content Include="Scripts\jquery\jquery.nicescroll.js" />
+    <Content Include="Scripts\jquery\jquery.pagination.js" />
+    <Content Include="Scripts\layer\layer.js" />
+    <Content Include="Scripts\layer\mobile\layer.js" />
+    <Content Include="Scripts\layer\mobile\need\layer.css" />
+    <Content Include="Scripts\layer\skin\default\icon-ext.png" />
+    <Content Include="Scripts\layer\skin\default\icon.png" />
+    <Content Include="Scripts\layer\skin\default\layer.css" />
+    <Content Include="Scripts\layer\skin\default\loading-0.gif" />
+    <Content Include="Scripts\layer\skin\default\loading-1.gif" />
+    <Content Include="Scripts\layer\skin\default\loading-2.gif" />
+    <Content Include="Scripts\PCASClass.js" />
+    <Content Include="Scripts\readme.txt" />
+    <Content Include="Scripts\Validform_v5.3.2_min.js" />
+    <Content Include="Scripts\waves.min.js" />
+    <Content Include="Scripts\webuploader\uploader.swf" />
+    <Content Include="Scripts\webuploader\webuploader.min.js" />
+    <Content Include="templates\main\about.png" />
+    <Content Include="templates\main\about.xml" />
+    <Content Include="templates\main\css\flexslider.css" />
+    <Content Include="templates\main\css\icon\demo.css" />
+    <Content Include="templates\main\css\icon\demo_fontclass.html" />
+    <Content Include="templates\main\css\icon\demo_symbol.html" />
+    <Content Include="templates\main\css\icon\demo_unicode.html" />
+    <Content Include="templates\main\css\icon\iconfont.css" />
+    <Content Include="templates\main\css\icon\iconfont.js" />
+    <Content Include="templates\main\css\icon\iconfont.svg" />
+    <Content Include="templates\main\css\style5.css" />
+    <Content Include="templates\main\css\viewer.min.css" />
+    <Content Include="templates\main\data\DTcms5.0db.xml" />
+    <Content Include="templates\main\data\DTcms5.0db_schema.xml" />
+    <Content Include="templates\main\images\avatar-bg.png" />
+    <Content Include="templates\main\images\banner_1.png" />
+    <Content Include="templates\main\images\banner_2.png" />
+    <Content Include="templates\main\images\banner_3.png" />
+    <Content Include="templates\main\images\cart-arrow.gif" />
+    <Content Include="templates\main\images\close.png" />
+    <Content Include="templates\main\images\delivery.png" />
+    <Content Include="templates\main\images\focus_1.png" />
+    <Content Include="templates\main\images\focus_2.png" />
+    <Content Include="templates\main\images\icon-tips.png" />
+    <Content Include="templates\main\images\line-1.png" />
+    <Content Include="templates\main\images\line.png" />
+    <Content Include="templates\main\images\loading.gif" />
+    <Content Include="templates\main\images\login-bg.png" />
+    <Content Include="templates\main\images\logo.png" />
+    <Content Include="templates\main\images\next.png" />
+    <Content Include="templates\main\images\pic-bg.png" />
+    <Content Include="templates\main\images\prev.png" />
+    <Content Include="templates\main\images\search.png" />
+    <Content Include="templates\main\images\slider.png" />
+    <Content Include="templates\main\images\slide_btns.png" />
+    <Content Include="templates\main\images\sprite.gif" />
+    <Content Include="templates\main\images\user-avatar.png" />
+    <Content Include="templates\main\images\user.png" />
+    <Content Include="templates\main\js\avatar.js" />
+    <Content Include="templates\main\js\cart.js" />
+    <Content Include="templates\main\js\common.js" />
+    <Content Include="templates\main\js\jqslider.js" />
+    <Content Include="templates\main\js\jquery.flexslider-min.js" />
+    <Content Include="templates\main\js\lightbox.min.js" />
+    <Content Include="templates\main\js\login-validate.js" />
+    <Content Include="templates\main\js\picture.js" />
+    <Content Include="templates\main\js\register-validate.js" />
+    <Content Include="templates\main\js\viewer-jquery.min.js" />
+    <Content Include="templates\main\mobile\css\baoliao.css" />
+    <Content Include="templates\main\mobile\css\index.css" />
+    <Content Include="templates\main\mobile\css\login.css" />
+    <Content Include="templates\main\mobile\css\news.css" />
+    <Content Include="templates\main\mobile\css\owl.carousel.css" />
+    <Content Include="templates\main\mobile\css\owl.theme.css" />
+    <Content Include="templates\main\mobile\css\owl.transitions.css" />
+    <Content Include="templates\main\mobile\css\public.css" />
+    <Content Include="templates\main\mobile\css\style.css" />
+    <Content Include="templates\main\mobile\css\user.css" />
+    <Content Include="templates\main\mobile\images\10225357963.jpg" />
+    <Content Include="templates\main\mobile\images\10250290397.png" />
+    <Content Include="templates\main\mobile\images\178hui-app.png" />
+    <Content Include="templates\main\mobile\images\178hui-diannao.png" />
+    <Content Include="templates\main\mobile\images\178hui-shouji.png" />
+    <Content Include="templates\main\mobile\images\4.jpg" />
+    <Content Include="templates\main\mobile\images\5.jpg" />
+    <Content Include="templates\main\mobile\images\6.jpg" />
+    <Content Include="templates\main\mobile\images\avatar-bg.png" />
+    <Content Include="templates\main\mobile\images\bg.jpg" />
+    <Content Include="templates\main\mobile\images\cart-arrow.gif" />
+    <Content Include="templates\main\mobile\images\change_paypass_01.jpg" />
+    <Content Include="templates\main\mobile\images\change_paypass_02.png" />
+    <Content Include="templates\main\mobile\images\close.png" />
+    <Content Include="templates\main\mobile\images\code.jpg" />
+    <Content Include="templates\main\mobile\images\cxfsjhyj.png" />
+    <Content Include="templates\main\mobile\images\delivery.png" />
+    <Content Include="templates\main\mobile\images\icon-tips.png" />
+    <Content Include="templates\main\mobile\images\iconfont-33.png" />
+    <Content Include="templates\main\mobile\images\iconfont-denglumima.png" />
+    <Content Include="templates\main\mobile\images\iconfont-dingdan .png" />
+    <Content Include="templates\main\mobile\images\iconfont-duihuan.png" />
+    <Content Include="templates\main\mobile\images\iconfont-fanhui.png" />
+    <Content Include="templates\main\mobile\images\iconfont-fanhuidingbu.png" />
+    <Content Include="templates\main\mobile\images\iconfont-fanhuidingbu_up.png" />
+    <Content Include="templates\main\mobile\images\iconfont-fzst-ping.png" />
+    <Content Include="templates\main\mobile\images\iconfont-hui.png" />
+    <Content Include="templates\main\mobile\images\iconfont-i.png" />
+    <Content Include="templates\main\mobile\images\iconfont-iconxianluyudingchenggong.png" />
+    <Content Include="templates\main\mobile\images\iconfont-jiantou.png" />
+    <Content Include="templates\main\mobile\images\iconfont-jiaofei.png" />
+    <Content Include="templates\main\mobile\images\iconfont-pinglun.png" />
+    <Content Include="templates\main\mobile\images\iconfont-qiandaotubiao.png" />
+    <Content Include="templates\main\mobile\images\iconfont-shaixuan.png" />
+    <Content Include="templates\main\mobile\images\iconfont-shezhijiaoyimima.png" />
+    <Content Include="templates\main\mobile\images\iconfont-shoujibangding.png" />
+    <Content Include="templates\main\mobile\images\iconfont-shouye.png" />
+    <Content Include="templates\main\mobile\images\iconfont-shuaxin.png" />
+    <Content Include="templates\main\mobile\images\iconfont-sousuo.png" />
+    <Content Include="templates\main\mobile\images\iconfont-tuichu.png" />
+    <Content Include="templates\main\mobile\images\iconfont-wiappquxianguanli.png" />
+    <Content Include="templates\main\mobile\images\iconfont-yinxingqia.png" />
+    <Content Include="templates\main\mobile\images\iconfont-zhanghuanquan.png" />
+    <Content Include="templates\main\mobile\images\iconfont-zhanneixin.png" />
+    <Content Include="templates\main\mobile\images\iconfont-zhaohuimima.png" />
+    <Content Include="templates\main\mobile\images\iconfont-zhifubao.png" />
+    <Content Include="templates\main\mobile\images\line-1.png" />
+    <Content Include="templates\main\mobile\images\line.png" />
+    <Content Include="templates\main\mobile\images\loading.gif" />
+    <Content Include="templates\main\mobile\images\loading.jpg" />
+    <Content Include="templates\main\mobile\images\login-bg.png" />
+    <Content Include="templates\main\mobile\images\login_qq.png" />
+    <Content Include="templates\main\mobile\images\logo.png" />
+    <Content Include="templates\main\mobile\images\m-index_05.png" />
+    <Content Include="templates\main\mobile\images\m-index_10.png" />
+    <Content Include="templates\main\mobile\images\m-index_12.png" />
+    <Content Include="templates\main\mobile\images\m-index_14.png" />
+    <Content Include="templates\main\mobile\images\m-index_16.png" />
+    <Content Include="templates\main\mobile\images\m-index_22.png" />
+    <Content Include="templates\main\mobile\images\m-index_24.png" />
+    <Content Include="templates\main\mobile\images\m-index_26.png" />
+    <Content Include="templates\main\mobile\images\m-index_27.png" />
+    <Content Include="templates\main\mobile\images\news_01.png" />
+    <Content Include="templates\main\mobile\images\news_02.png" />
+    <Content Include="templates\main\mobile\images\news_03.png" />
+    <Content Include="templates\main\mobile\images\news_04.png" />
+    <Content Include="templates\main\mobile\images\news_05.png" />
+    <Content Include="templates\main\mobile\images\news_06.png" />
+    <Content Include="templates\main\mobile\images\news_07.png" />
+    <Content Include="templates\main\mobile\images\news_08.png" />
+    <Content Include="templates\main\mobile\images\next.png" />
+    <Content Include="templates\main\mobile\images\nothing.png" />
+    <Content Include="templates\main\mobile\images\no_niupin.png" />
+    <Content Include="templates\main\mobile\images\pic-bg.png" />
+    <Content Include="templates\main\mobile\images\prev.png" />
+    <Content Include="templates\main\mobile\images\qiandao.png" />
+    <Content Include="templates\main\mobile\images\qiandao_ok.png" />
+    <Content Include="templates\main\mobile\images\search.png" />
+    <Content Include="templates\main\mobile\images\slider.png" />
+    <Content Include="templates\main\mobile\images\sprite.gif" />
+    <Content Include="templates\main\mobile\images\taobao_liucheng.png" />
+    <Content Include="templates\main\mobile\images\top_alpha.png" />
+    <Content Include="templates\main\mobile\images\user-avatar.png" />
+    <Content Include="templates\main\mobile\images\user.png" />
+    <Content Include="templates\main\mobile\images\user_bg.jpg" />
+    <Content Include="templates\main\mobile\images\user_logo.jpg" />
+    <Content Include="templates\main\mobile\images\u_close.png" />
+    <Content Include="templates\main\mobile\images\u_s1.png" />
+    <Content Include="templates\main\mobile\images\u_s2.png" />
+    <Content Include="templates\main\mobile\js\cart.js" />
+    <Content Include="templates\main\mobile\js\common.js" />
+    <Content Include="templates\main\mobile\js\numformat.js" />
+    <Content Include="templates\main\mobile\js\owl.carousel.js" />
+    <Content Include="templates\main\mobile\js\owl.carousel.min.js" />
+    <Content Include="templates\main\web\css\style.css" />
+    <Content Include="templates\main\web\images\avatar-bg.png" />
+    <Content Include="templates\main\web\images\cart-arrow.gif" />
+    <Content Include="templates\main\web\images\close.png" />
+    <Content Include="templates\main\web\images\delivery.png" />
+    <Content Include="templates\main\web\images\icon-tips.png" />
+    <Content Include="templates\main\web\images\line-1.png" />
+    <Content Include="templates\main\web\images\line.png" />
+    <Content Include="templates\main\web\images\loading.gif" />
+    <Content Include="templates\main\web\images\login-bg.png" />
+    <Content Include="templates\main\web\images\logo.png" />
+    <Content Include="templates\main\web\images\next.png" />
+    <Content Include="templates\main\web\images\pic-bg.png" />
+    <Content Include="templates\main\web\images\prev.png" />
+    <Content Include="templates\main\web\images\search.png" />
+    <Content Include="templates\main\web\images\slider.png" />
+    <Content Include="templates\main\web\images\sprite.gif" />
+    <Content Include="templates\main\web\images\user-avatar.png" />
+    <Content Include="templates\main\web\images\user.png" />
+    <Content Include="templates\main\web\js\avatar.js" />
+    <Content Include="templates\main\web\js\cart.js" />
+    <Content Include="templates\main\web\js\common.js" />
+    <Content Include="templates\main\web\js\login-validate.js" />
+    <Content Include="templates\main\web\js\picture.js" />
+    <Content Include="templates\main\web\js\register-validate.js" />
+    <Content Include="templates\main_mobile\about.png" />
+    <Content Include="templates\main_mobile\about.xml" />
+    <Content Include="templates\main_mobile\cart.html" />
+    <Content Include="templates\main_mobile\content.html" />
+    <Content Include="templates\main_mobile\css\baoliao.css" />
+    <Content Include="templates\main_mobile\css\idangerous.swiper.css" />
+    <Content Include="templates\main_mobile\css\index.css" />
+    <Content Include="templates\main_mobile\css\login.css" />
+    <Content Include="templates\main_mobile\css\mobiscroll.custom-2.6.2.min.css" />
+    <Content Include="templates\main_mobile\css\news.css" />
+    <Content Include="templates\main_mobile\css\owl.carousel.css" />
+    <Content Include="templates\main_mobile\css\owl.theme.css" />
+    <Content Include="templates\main_mobile\css\owl.transitions.css" />
+    <Content Include="templates\main_mobile\css\public.css" />
+    <Content Include="templates\main_mobile\css\style.css" />
+    <Content Include="templates\main_mobile\css\user.css" />
+    <Content Include="templates\main_mobile\down.html" />
+    <Content Include="templates\main_mobile\down_list.html" />
+    <Content Include="templates\main_mobile\down_show.html" />
+    <Content Include="templates\main_mobile\error.html" />
+    <Content Include="templates\main_mobile\goods.html" />
+    <Content Include="templates\main_mobile\goods_list.html" />
+    <Content Include="templates\main_mobile\goods_show.html" />
+    <Content Include="templates\main_mobile\images\10225357963.jpg" />
+    <Content Include="templates\main_mobile\images\10250290397.png" />
+    <Content Include="templates\main_mobile\images\178hui-app.png" />
+    <Content Include="templates\main_mobile\images\178hui-diannao.png" />
+    <Content Include="templates\main_mobile\images\178hui-shouji.png" />
+    <Content Include="templates\main_mobile\images\4.jpg" />
+    <Content Include="templates\main_mobile\images\5.jpg" />
+    <Content Include="templates\main_mobile\images\6.jpg" />
+    <Content Include="templates\main_mobile\images\avatar-bg.png" />
+    <Content Include="templates\main_mobile\images\banner1.jpg" />
+    <Content Include="templates\main_mobile\images\banner2.jpg" />
+    <Content Include="templates\main_mobile\images\banner3.jpg" />
+    <Content Include="templates\main_mobile\images\bg.jpg" />
+    <Content Include="templates\main_mobile\images\cart-arrow.gif" />
+    <Content Include="templates\main_mobile\images\change_paypass_01.jpg" />
+    <Content Include="templates\main_mobile\images\change_paypass_02.png" />
+    <Content Include="templates\main_mobile\images\close.png" />
+    <Content Include="templates\main_mobile\images\code.jpg" />
+    <Content Include="templates\main_mobile\images\css\style.css" />
+    <Content Include="templates\main_mobile\images\cxfsjhyj.png" />
+    <Content Include="templates\main_mobile\images\delivery.png" />
+    <Content Include="templates\main_mobile\images\icon-tips.png" />
+    <Content Include="templates\main_mobile\images\iconfont-33.png" />
+    <Content Include="templates\main_mobile\images\iconfont-denglumima.png" />
+    <Content Include="templates\main_mobile\images\iconfont-dingdan .png" />
+    <Content Include="templates\main_mobile\images\iconfont-duihuan.png" />
+    <Content Include="templates\main_mobile\images\iconfont-fanhui.png" />
+    <Content Include="templates\main_mobile\images\iconfont-fanhuidingbu.png" />
+    <Content Include="templates\main_mobile\images\iconfont-fanhuidingbu_up.png" />
+    <Content Include="templates\main_mobile\images\iconfont-fzst-ping.png" />
+    <Content Include="templates\main_mobile\images\iconfont-hui.png" />
+    <Content Include="templates\main_mobile\images\iconfont-i.png" />
+    <Content Include="templates\main_mobile\images\iconfont-iconxianluyudingchenggong.png" />
+    <Content Include="templates\main_mobile\images\iconfont-jiantou.png" />
+    <Content Include="templates\main_mobile\images\iconfont-jiaofei.png" />
+    <Content Include="templates\main_mobile\images\iconfont-pinglun.png" />
+    <Content Include="templates\main_mobile\images\iconfont-qiandaotubiao.png" />
+    <Content Include="templates\main_mobile\images\iconfont-shaixuan.png" />
+    <Content Include="templates\main_mobile\images\iconfont-shezhijiaoyimima.png" />
+    <Content Include="templates\main_mobile\images\iconfont-shoujibangding.png" />
+    <Content Include="templates\main_mobile\images\iconfont-shouye.png" />
+    <Content Include="templates\main_mobile\images\iconfont-shuaxin.png" />
+    <Content Include="templates\main_mobile\images\iconfont-sousuo.png" />
+    <Content Include="templates\main_mobile\images\iconfont-tuichu.png" />
+    <Content Include="templates\main_mobile\images\iconfont-wiappquxianguanli.png" />
+    <Content Include="templates\main_mobile\images\iconfont-yinxingqia.png" />
+    <Content Include="templates\main_mobile\images\iconfont-zhanghuanquan.png" />
+    <Content Include="templates\main_mobile\images\iconfont-zhanneixin.png" />
+    <Content Include="templates\main_mobile\images\iconfont-zhaohuimima.png" />
+    <Content Include="templates\main_mobile\images\iconfont-zhifubao.png" />
+    <Content Include="templates\main_mobile\images\icons\buy.png" />
+    <Content Include="templates\main_mobile\images\icons\down.png" />
+    <Content Include="templates\main_mobile\images\icons\info.png" />
+    <Content Include="templates\main_mobile\images\icons\msg.png" />
+    <Content Include="templates\main_mobile\images\icons\news.png" />
+    <Content Include="templates\main_mobile\images\icons\photo.png" />
+    <Content Include="templates\main_mobile\images\icons\tel.png" />
+    <Content Include="templates\main_mobile\images\icons\user.png" />
+    <Content Include="templates\main_mobile\images\icons\video.png" />
+    <Content Include="templates\main_mobile\images\images\avatar-bg.png" />
+    <Content Include="templates\main_mobile\images\images\cart-arrow.gif" />
+    <Content Include="templates\main_mobile\images\images\close.png" />
+    <Content Include="templates\main_mobile\images\images\delivery.png" />
+    <Content Include="templates\main_mobile\images\images\icon-tips.png" />
+    <Content Include="templates\main_mobile\images\images\line-1.png" />
+    <Content Include="templates\main_mobile\images\images\line.png" />
+    <Content Include="templates\main_mobile\images\images\loading.gif" />
+    <Content Include="templates\main_mobile\images\images\login-bg.png" />
+    <Content Include="templates\main_mobile\images\images\logo.png" />
+    <Content Include="templates\main_mobile\images\images\next.png" />
+    <Content Include="templates\main_mobile\images\images\pic-bg.png" />
+    <Content Include="templates\main_mobile\images\images\prev.png" />
+    <Content Include="templates\main_mobile\images\images\search.png" />
+    <Content Include="templates\main_mobile\images\images\slider.png" />
+    <Content Include="templates\main_mobile\images\images\sprite.gif" />
+    <Content Include="templates\main_mobile\images\images\user-avatar.png" />
+    <Content Include="templates\main_mobile\images\images\user.png" />
+    <Content Include="templates\main_mobile\images\js\avatar.js" />
+    <Content Include="templates\main_mobile\images\js\cart.js" />
+    <Content Include="templates\main_mobile\images\js\common.js" />
+    <Content Include="templates\main_mobile\images\js\login-validate.js" />
+    <Content Include="templates\main_mobile\images\js\picture.js" />
+    <Content Include="templates\main_mobile\images\js\register-validate.js" />
+    <Content Include="templates\main_mobile\images\line-1.png" />
+    <Content Include="templates\main_mobile\images\line.png" />
+    <Content Include="templates\main_mobile\images\loading.gif" />
+    <Content Include="templates\main_mobile\images\loading.jpg" />
+    <Content Include="templates\main_mobile\images\login-bg.png" />
+    <Content Include="templates\main_mobile\images\login_qq.png" />
+    <Content Include="templates\main_mobile\images\logo.png" />
+    <Content Include="templates\main_mobile\images\m-index_05.png" />
+    <Content Include="templates\main_mobile\images\m-index_10.png" />
+    <Content Include="templates\main_mobile\images\m-index_12.png" />
+    <Content Include="templates\main_mobile\images\m-index_14.png" />
+    <Content Include="templates\main_mobile\images\m-index_16.png" />
+    <Content Include="templates\main_mobile\images\m-index_22.png" />
+    <Content Include="templates\main_mobile\images\m-index_24.png" />
+    <Content Include="templates\main_mobile\images\m-index_26.png" />
+    <Content Include="templates\main_mobile\images\m-index_27.png" />
+    <Content Include="templates\main_mobile\images\news_01.png" />
+    <Content Include="templates\main_mobile\images\news_02.png" />
+    <Content Include="templates\main_mobile\images\news_03.png" />
+    <Content Include="templates\main_mobile\images\news_04.png" />
+    <Content Include="templates\main_mobile\images\news_05.png" />
+    <Content Include="templates\main_mobile\images\news_06.png" />
+    <Content Include="templates\main_mobile\images\news_07.png" />
+    <Content Include="templates\main_mobile\images\news_08.png" />
+    <Content Include="templates\main_mobile\images\next.png" />
+    <Content Include="templates\main_mobile\images\nothing.png" />
+    <Content Include="templates\main_mobile\images\no_niupin.png" />
+    <Content Include="templates\main_mobile\images\pic-bg.png" />
+    <Content Include="templates\main_mobile\images\prev.png" />
+    <Content Include="templates\main_mobile\images\qiandao.png" />
+    <Content Include="templates\main_mobile\images\qiandao_ok.png" />
+    <Content Include="templates\main_mobile\images\search.png" />
+    <Content Include="templates\main_mobile\images\slider.png" />
+    <Content Include="templates\main_mobile\images\sprite.gif" />
+    <Content Include="templates\main_mobile\images\taobao_liucheng.png" />
+    <Content Include="templates\main_mobile\images\top_alpha.png" />
+    <Content Include="templates\main_mobile\images\user-avatar.png" />
+    <Content Include="templates\main_mobile\images\user.png" />
+    <Content Include="templates\main_mobile\images\user_avatar.png" />
+    <Content Include="templates\main_mobile\images\user_bg.jpg" />
+    <Content Include="templates\main_mobile\images\user_logo.jpg" />
+    <Content Include="templates\main_mobile\images\u_close.png" />
+    <Content Include="templates\main_mobile\images\u_s1.png" />
+    <Content Include="templates\main_mobile\images\u_s2.png" />
+    <Content Include="templates\main_mobile\index.html" />
+    <Content Include="templates\main_mobile\jqmobi\appframework.js" />
+    <Content Include="templates\main_mobile\jqmobi\appframework.min.js" />
+    <Content Include="templates\main_mobile\jqmobi\css\af.ui.base.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\af.ui.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\icons.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\android.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\appframework.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\badges.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\bb.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\buttons.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\forms.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\grid.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\ios.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\ios7.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\lists.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\main.css" />
+    <Content Include="templates\main_mobile\jqmobi\css\src\win8.css" />
+    <Content Include="templates\main_mobile\jqmobi\jq.appframework.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.8tiles.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.actionsheet.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.css3animate.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.desktopBrowsers.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.passwordBox.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.popup.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.scroller.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.selectBox.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.slidemenu.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.touchEvents.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\af.touchLayer.js" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\css\accordion.css" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\css\af.accordion.css" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\css\af.actionsheet.css" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\css\af.popup.css" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\css\af.scroller.css" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\css\af.selectBox.css" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\css\tabs.css" />
+    <Content Include="templates\main_mobile\jqmobi\plugins\jq.slidemenu.js" />
+    <Content Include="templates\main_mobile\jqmobi\ui\appframework.ui.js" />
+    <Content Include="templates\main_mobile\jqmobi\ui\appframework.ui.min.js" />
+    <Content Include="templates\main_mobile\jqmobi\ui\src\appframework.ui.js" />
+    <Content Include="templates\main_mobile\jqmobi\ui\transitions\fade.js" />
+    <Content Include="templates\main_mobile\jqmobi\ui\transitions\flip.js" />
+    <Content Include="templates\main_mobile\jqmobi\ui\transitions\pop.js" />
+    <Content Include="templates\main_mobile\jqmobi\ui\transitions\slide.js" />
+    <Content Include="templates\main_mobile\jqmobi\ui\transitions\slideDown.js" />
+    <Content Include="templates\main_mobile\jqmobi\ui\transitions\slideUp.js" />
+    <Content Include="templates\main_mobile\js\base.js" />
+    <Content Include="templates\main_mobile\js\cart.js" />
+    <Content Include="templates\main_mobile\js\common.js" />
+    <Content Include="templates\main_mobile\js\idangerous.swiper-2.1.min.js" />
+    <Content Include="templates\main_mobile\js\login_validate.js" />
+    <Content Include="templates\main_mobile\js\mobiscroll.custom-2.6.2.min.js" />
+    <Content Include="templates\main_mobile\js\numformat.js" />
+    <Content Include="templates\main_mobile\js\owl.carousel.js" />
+    <Content Include="templates\main_mobile\js\owl.carousel.min.js" />
+    <Content Include="templates\main_mobile\js\register_validate.js" />
+    <Content Include="templates\main_mobile\login.html" />
+    <Content Include="templates\main_mobile\news.html" />
+    <Content Include="templates\main_mobile\news_list.html" />
+    <Content Include="templates\main_mobile\news_show.html" />
+    <Content Include="templates\main_mobile\oauth_login.html" />
+    <Content Include="templates\main_mobile\payment.html" />
+    <Content Include="templates\main_mobile\photo.html" />
+    <Content Include="templates\main_mobile\photoswipe\code.photoswipe-3.0.5.min.js" />
+    <Content Include="templates\main_mobile\photoswipe\error.gif" />
+    <Content Include="templates\main_mobile\photoswipe\icons%402x.png" />
+    <Content Include="templates\main_mobile\photoswipe\icons.png" />
+    <Content Include="templates\main_mobile\photoswipe\klass.min.js" />
+    <Content Include="templates\main_mobile\photoswipe\loader.gif" />
+    <Content Include="templates\main_mobile\photoswipe\photoswipe.css" />
+    <Content Include="templates\main_mobile\photo_list.html" />
+    <Content Include="templates\main_mobile\photo_show.html" />
+    <Content Include="templates\main_mobile\register.html" />
+    <Content Include="templates\main_mobile\search.html" />
+    <Content Include="templates\main_mobile\shopping.html" />
+    <Content Include="templates\main_mobile\useramount.html" />
+    <Content Include="templates\main_mobile\usercenter.html" />
+    <Content Include="templates\main_mobile\usermessage.html" />
+    <Content Include="templates\main_mobile\usermessage_show.html" />
+    <Content Include="templates\main_mobile\userorder.html" />
+    <Content Include="templates\main_mobile\userorder_show.html" />
+    <Content Include="templates\main_mobile\userpoint.html" />
+    <Content Include="templates\main_mobile\video.html" />
+    <Content Include="templates\main_mobile\video_list.html" />
+    <Content Include="templates\main_mobile\video_show.html" />
+    <Content Include="templates\main_mobile\_comment_box.html" />
+    <Content Include="templates\main_mobile\_copyright.html" />
+    <Content Include="templates\main_mobile\_footer.html" />
+    <Content Include="templates\main_mobile\_header.html" />
+    <Content Include="templates\main_mobile\_nav.html" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="xmlconfig\order.config" />
+    <Content Include="xmlconfig\sys.config" />
+    <Content Include="xmlconfig\urls.config" />
+    <Content Include="xmlconfig\user.config" />
+    <Content Include="xmlconfig\alipaypc.config" />
+    <Content Include="xmlconfig\site.config" />
+    <Content Include="xmlconfig\tenpaypc.config" />
+    <Content Include="templates\main\cart.cshtml" />
+    <Content Include="templates\main\content_show.cshtml" />
+    <None Include="templates\main\css\icon\iconfont.eot" />
+    <None Include="templates\main\css\icon\iconfont.ttf" />
+    <None Include="templates\main\css\icon\iconfont.woff" />
+    <Content Include="templates\main\down.cshtml" />
+    <Content Include="templates\main\down_list.cshtml" />
+    <Content Include="templates\main\down_show.cshtml" />
+    <Content Include="templates\main\error.cshtml" />
+    <Content Include="templates\main\feedback.cshtml" />
+    <Content Include="templates\main\goods.cshtml" />
+    <Content Include="templates\main\goods_list.cshtml" />
+    <Content Include="templates\main\goods_show.cshtml" />
+    <Content Include="templates\main\index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="templates\main\link.cshtml" />
+    <Content Include="templates\main\login.cshtml" />
+    <Content Include="templates\main\mobile\cart.cshtml" />
+    <Content Include="templates\main\mobile\content_show.cshtml" />
+    <Content Include="templates\main\mobile\error.cshtml" />
+    <Content Include="templates\main\mobile\feedback.cshtml" />
+    <None Include="templates\main\mobile\fonts\gome_icon.woff" />
+    <Content Include="templates\main\mobile\goods.cshtml" />
+    <Content Include="templates\main\mobile\goods_list.cshtml" />
+    <Content Include="templates\main\mobile\goods_partial_list.cshtml" />
+    <Content Include="templates\main\mobile\goods_show.cshtml" />
+    <Content Include="templates\main\mobile\index.cshtml" />
+    <Content Include="templates\main\mobile\link.cshtml" />
+    <Content Include="templates\main\mobile\login.cshtml" />
+    <Content Include="templates\main\mobile\news.cshtml" />
+    <Content Include="templates\main\mobile\news_list.cshtml" />
+    <Content Include="templates\main\mobile\news_partial_list.cshtml" />
+    <Content Include="templates\main\mobile\news_show.cshtml" />
+    <Content Include="templates\main\mobile\oauth_login.cshtml" />
+    <Content Include="templates\main\mobile\payment.cshtml" />
+    <Content Include="templates\main\mobile\photo.cshtml" />
+    <Content Include="templates\main\mobile\photo_list.cshtml" />
+    <Content Include="templates\main\mobile\photo_partial_list.cshtml" />
+    <Content Include="templates\main\mobile\photo_show.cshtml" />
+    <Content Include="templates\main\mobile\register.cshtml" />
+    <Content Include="templates\main\mobile\search.cshtml" />
+    <Content Include="templates\main\mobile\search_partial_list.cshtml" />
+    <Content Include="templates\main\mobile\Shared\partial_comment.cshtml" />
+    <Content Include="templates\main\mobile\Shared\partial_filter.cshtml" />
+    <Content Include="templates\main\mobile\Shared\partial_footer.cshtml" />
+    <Content Include="templates\main\mobile\Shared\partial_header.cshtml" />
+    <Content Include="templates\main\mobile\Shared\partial_ucenter_nav.cshtml" />
+    <Content Include="templates\main\mobile\Shared\_Layout.cshtml" />
+    <Content Include="templates\main\mobile\Shared\_LayoutBase.cshtml" />
+    <Content Include="templates\main\mobile\Shared\_LayoutList.cshtml" />
+    <Content Include="templates\main\mobile\Shared\_LayoutPay.cshtml" />
+    <Content Include="templates\main\mobile\Shared\_LayoutShow.cshtml" />
+    <Content Include="templates\main\mobile\Shared\_LayoutUser.cshtml" />
+    <Content Include="templates\main\mobile\shopping.cshtml" />
+    <Content Include="templates\main\mobile\useramount.cshtml" />
+    <Content Include="templates\main\mobile\usercenter.cshtml" />
+    <Content Include="templates\main\mobile\usermessage.cshtml" />
+    <Content Include="templates\main\mobile\usermessage_show.cshtml" />
+    <Content Include="templates\main\mobile\userorder.cshtml" />
+    <Content Include="templates\main\mobile\userorder_show.cshtml" />
+    <Content Include="templates\main\mobile\userpoint.cshtml" />
+    <Content Include="templates\main\mobile\video.cshtml" />
+    <Content Include="templates\main\mobile\video_list.cshtml" />
+    <Content Include="templates\main\mobile\video_partial_list.cshtml" />
+    <Content Include="templates\main\mobile\video_show.cshtml" />
+    <Content Include="templates\main\news.cshtml" />
+    <Content Include="templates\main\news_list.cshtml" />
+    <Content Include="templates\main\news_show.cshtml" />
+    <Content Include="templates\main\oauth_login.cshtml" />
+    <Content Include="templates\main\payment.cshtml" />
+    <Content Include="templates\main\photo.cshtml" />
+    <Content Include="templates\main\photo_list.cshtml" />
+    <Content Include="templates\main\photo_show.cshtml" />
+    <Content Include="templates\main\register.cshtml" />
+    <Content Include="templates\main\repassword.cshtml" />
+    <Content Include="templates\main\search.cshtml" />
+    <Content Include="templates\main\Shared\EditResult.cshtml" />
+    <Content Include="templates\main\Shared\partial_comment_box.cshtml" />
+    <Content Include="templates\main\Shared\partial_footer.cshtml" />
+    <Content Include="templates\main\Shared\partial_header.cshtml" />
+    <Content Include="templates\main\Shared\partial_share_js.cshtml" />
+    <Content Include="templates\main\Shared\partial_ucenter_nav.cshtml" />
+    <Content Include="templates\main\Shared\_Layout.cshtml" />
+    <Content Include="templates\main\Shared\_LayoutDialog.cshtml" />
+    <Content Include="templates\main\Shared\_LayoutList.cshtml" />
+    <Content Include="templates\main\Shared\_LayoutShow.cshtml" />
+    <Content Include="templates\main\shopping.cshtml" />
+    <Content Include="templates\main\useramount.cshtml" />
+    <Content Include="templates\main\usercenter.cshtml" />
+    <Content Include="templates\main\usermessage.cshtml" />
+    <Content Include="templates\main\usermessage_show.cshtml" />
+    <Content Include="templates\main\userorder.cshtml" />
+    <Content Include="templates\main\userorder_show.cshtml" />
+    <Content Include="templates\main\userpoint.cshtml" />
+    <Content Include="templates\main\video.cshtml" />
+    <Content Include="templates\main\video_list.cshtml" />
+    <Content Include="templates\main\video_show.cshtml" />
+    <Content Include="templates\main\web\cart.cshtml" />
+    <Content Include="templates\main\web\content_show.cshtml" />
+    <Content Include="templates\main\web\down.cshtml" />
+    <Content Include="templates\main\web\down_list.cshtml" />
+    <Content Include="templates\main\web\down_show.cshtml" />
+    <Content Include="templates\main\web\error.cshtml" />
+    <Content Include="templates\main\web\feedback.cshtml" />
+    <Content Include="templates\main\web\goods.cshtml" />
+    <Content Include="templates\main\web\goods_list.cshtml" />
+    <Content Include="templates\main\web\goods_show.cshtml" />
+    <Content Include="templates\main\web\index.cshtml" />
+    <Content Include="templates\main\web\link.cshtml" />
+    <Content Include="templates\main\web\login.cshtml" />
+    <Content Include="templates\main\web\news.cshtml" />
+    <Content Include="templates\main\web\news_list.cshtml" />
+    <Content Include="templates\main\web\news_show.cshtml" />
+    <Content Include="templates\main\web\oauth_login.cshtml" />
+    <Content Include="templates\main\web\payment.cshtml" />
+    <Content Include="templates\main\web\photo.cshtml" />
+    <Content Include="templates\main\web\photo_list.cshtml" />
+    <Content Include="templates\main\web\photo_show.cshtml" />
+    <Content Include="templates\main\web\register.cshtml" />
+    <Content Include="templates\main\web\repassword.cshtml" />
+    <Content Include="templates\main\web\search.cshtml" />
+    <Content Include="templates\main\web\Shared\EditResult.cshtml" />
+    <Content Include="templates\main\web\Shared\partial_comment_box.cshtml" />
+    <None Include="templates\main\web\Shared\partial_comment_box.cshtml.bak" />
+    <Content Include="templates\main\web\Shared\partial_footer.cshtml" />
+    <None Include="templates\main\web\Shared\partial_footer.cshtml.bak" />
+    <Content Include="templates\main\web\Shared\partial_header.cshtml" />
+    <None Include="templates\main\web\Shared\partial_header.cshtml.bak" />
+    <Content Include="templates\main\web\Shared\partial_share_js.cshtml" />
+    <Content Include="templates\main\web\Shared\partial_ucenter_nav.cshtml" />
+    <Content Include="templates\main\web\Shared\_Layout.cshtml" />
+    <None Include="templates\main\web\Shared\_Layout.cshtml.bak" />
+    <Content Include="templates\main\web\Shared\_LayoutDialog.cshtml" />
+    <Content Include="templates\main\web\Shared\_LayoutEdit.cshtml" />
+    <None Include="templates\main\web\Shared\_LayoutEdit.cshtml.bak" />
+    <Content Include="templates\main\web\Shared\_LayoutList.cshtml" />
+    <None Include="templates\main\web\Shared\_LayoutList.cshtml.bak" />
+    <Content Include="templates\main\web\shopping.cshtml" />
+    <Content Include="templates\main\web\useramount.cshtml" />
+    <Content Include="templates\main\web\usercenter.cshtml" />
+    <Content Include="templates\main\web\usermessage.cshtml" />
+    <Content Include="templates\main\web\usermessage_show.cshtml" />
+    <Content Include="templates\main\web\userorder.cshtml" />
+    <Content Include="templates\main\web\userorder_show.cshtml" />
+    <Content Include="templates\main\web\userpoint.cshtml" />
+    <Content Include="templates\main\web\video.cshtml" />
+    <Content Include="templates\main\web\video_list.cshtml" />
+    <Content Include="templates\main\web\video_show.cshtml" />
+    <Content Include="templates\main_mobile\cart.cshtml" />
+    <Content Include="templates\main_mobile\content_show.cshtml" />
+    <Content Include="templates\main_mobile\error.cshtml" />
+    <Content Include="templates\main_mobile\feedback.cshtml" />
+    <None Include="templates\main_mobile\fonts\gome_icon.woff" />
+    <Content Include="templates\main_mobile\goods.cshtml" />
+    <Content Include="templates\main_mobile\goods_list.cshtml" />
+    <Content Include="templates\main_mobile\goods_partial_list.cshtml" />
+    <Content Include="templates\main_mobile\goods_show.cshtml" />
+    <Content Include="templates\main_mobile\index.cshtml" />
+    <None Include="templates\main_mobile\jqmobi\css\src\afui.less" />
+    <None Include="templates\main_mobile\jqmobi\plugins\README.md" />
+    <None Include="templates\main_mobile\jqmobi\ui\README.md" />
+    <Content Include="templates\main_mobile\link.cshtml" />
+    <Content Include="templates\main_mobile\login.cshtml" />
+    <Content Include="templates\main_mobile\news.cshtml" />
+    <Content Include="templates\main_mobile\news_list.cshtml" />
+    <Content Include="templates\main_mobile\news_partial_list.cshtml" />
+    <Content Include="templates\main_mobile\news_show.cshtml" />
+    <Content Include="templates\main_mobile\oauth_login.cshtml" />
+    <Content Include="templates\main_mobile\payment.cshtml" />
+    <Content Include="templates\main_mobile\photo.cshtml" />
+    <Content Include="templates\main_mobile\photo_list.cshtml" />
+    <Content Include="templates\main_mobile\photo_partial_list.cshtml" />
+    <Content Include="templates\main_mobile\photo_show.cshtml" />
+    <Content Include="templates\main_mobile\register.cshtml" />
+    <Content Include="templates\main_mobile\search.cshtml" />
+    <Content Include="templates\main_mobile\search_partial_list.cshtml" />
+    <Content Include="templates\main_mobile\Shared\partial_comment.cshtml" />
+    <Content Include="templates\main_mobile\Shared\partial_filter.cshtml" />
+    <Content Include="templates\main_mobile\Shared\partial_footer.cshtml" />
+    <Content Include="templates\main_mobile\Shared\partial_header.cshtml" />
+    <Content Include="templates\main_mobile\Shared\partial_ucenter_nav.cshtml" />
+    <Content Include="templates\main_mobile\Shared\_Layout.cshtml" />
+    <Content Include="templates\main_mobile\Shared\_LayoutBase.cshtml" />
+    <Content Include="templates\main_mobile\Shared\_LayoutList.cshtml" />
+    <Content Include="templates\main_mobile\Shared\_LayoutPay.cshtml" />
+    <Content Include="templates\main_mobile\Shared\_LayoutShow.cshtml" />
+    <Content Include="templates\main_mobile\Shared\_LayoutUser.cshtml" />
+    <Content Include="templates\main_mobile\shopping.cshtml" />
+    <Content Include="templates\main_mobile\useramount.cshtml" />
+    <Content Include="templates\main_mobile\usercenter.cshtml" />
+    <Content Include="templates\main_mobile\usermessage.cshtml" />
+    <Content Include="templates\main_mobile\usermessage_show.cshtml" />
+    <Content Include="templates\main_mobile\userorder.cshtml" />
+    <Content Include="templates\main_mobile\userorder_show.cshtml" />
+    <Content Include="templates\main_mobile\userpoint.cshtml" />
+    <Content Include="templates\main_mobile\video.cshtml" />
+    <Content Include="templates\main_mobile\video_list.cshtml" />
+    <Content Include="templates\main_mobile\video_partial_list.cshtml" />
+    <Content Include="templates\main_mobile\video_show.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Areas\admin\Models\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Plugins\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\admin\Views\Article\article_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Article\article_link_partial_list.cshtml" />
+    <Content Include="Areas\admin\Views\Article\article_list.cshtml" />
+    <Content Include="Areas\admin\Views\Article\category_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Article\category_list.cshtml" />
+    <Content Include="Areas\admin\Views\Article\comment_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Article\comment_list.cshtml" />
+    <Content Include="Areas\admin\Views\center.cshtml" />
+    <Content Include="Areas\admin\Views\Channel\attribute_field_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Channel\attribute_field_list.cshtml" />
+    <Content Include="Areas\admin\Views\Channel\channel_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Channel\channel_list.cshtml" />
+    <Content Include="Areas\admin\Views\Channel\site_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Channel\site_list.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_accept.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_article_list.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_article_partial_list.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_article_attach.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_channel.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_express.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_picture.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_print.cshtml" />
+    <Content Include="Areas\admin\Views\Dialog\dialog_rewrite.cshtml" />
+    <Content Include="Areas\admin\Views\ie6update.cshtml" />
+    <Content Include="Areas\admin\Views\Index.cshtml" />
+    <Content Include="Areas\admin\Views\Login.cshtml" />
+    <Content Include="Areas\admin\Views\Manager\Manager_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Manager\Manager_List.cshtml" />
+    <Content Include="Areas\admin\Views\Manager\Manager_Log.cshtml" />
+    <Content Include="Areas\admin\Views\Manager\Manager_Pwd.cshtml" />
+    <Content Include="Areas\admin\Views\Manager\Role_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Manager\Role_List.cshtml" />
+    <Content Include="Areas\admin\Views\Order\express_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Order\express_list.cshtml" />
+    <Content Include="Areas\admin\Views\Order\order_config.cshtml" />
+    <Content Include="Areas\admin\Views\Order\order_confirm.cshtml" />
+    <Content Include="Areas\admin\Views\Order\order_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Order\order_list.cshtml" />
+    <Content Include="Areas\admin\Views\Order\payment_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Order\payment_list.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\Builder_Html.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\nav_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\nav_list.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\Plugin_List.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\sys_config.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\Templet_File_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\Templet_File_List.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\Templet_List.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\url_rewrite_edit.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\url_rewrite_list.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\EditResult.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\_LayoutDialog.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\_LayoutEdit.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\_LayoutList.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Amount_Log.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Group_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Group_List.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Mail_Template_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Mail_Template_List.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Message_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Message_List.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Oauth_App_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Oauth_App_List.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Point_Log.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Recharge_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Recharge_List.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Sms_Template_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Users\Sms_Template_List.cshtml" />
+    <Content Include="Areas\admin\Views\Users\User_Audit.cshtml" />
+    <Content Include="Areas\admin\Views\Users\User_Config.cshtml" />
+    <Content Include="Areas\admin\Views\Users\User_Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Users\User_List.cshtml" />
+    <Content Include="Areas\admin\Views\Users\User_Sms.cshtml" />
+    <Content Include="Areas\admin\Views\Web.config" />
+    <Content Include="Areas\admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Web\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tools\admin_ajax.ashx" />
+    <Content Include="tools\download.ashx" />
+    <Content Include="tools\submit_ajax.ashx" />
+    <Content Include="tools\upload_ajax.ashx" />
+    <Content Include="tools\verify_code.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DTcms.API\DTcms.API.csproj">
+      <Project>{6f974b43-717a-48f3-8eee-54f5f66391e2}</Project>
+      <Name>DTcms.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTcms.BLL\DTcms.BLL.csproj">
+      <Project>{0484f2ed-8ef3-4c40-8b3a-fe52b5e71ac2}</Project>
+      <Name>DTcms.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTcms.Common\DTcms.Common.csproj">
+      <Project>{6468cbf1-9d41-4231-8814-14491922fecc}</Project>
+      <Name>DTcms.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTcms.Extension\DTcms.Extension.csproj">
+      <Project>{47e5dd03-442f-4134-8f54-289db2a0244b}</Project>
+      <Name>DTcms.Extension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTcms.Model\DTcms.Model.csproj">
+      <Project>{d67868c9-56b9-4e35-8e15-c105fc44cfb9}</Project>
+      <Name>DTcms.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTcms.Web.MVC.UI\DTcms.Web.MVC.UI.csproj">
+      <Project>{8811c896-2577-44b8-a4f5-bf5e05e69251}</Project>
+      <Name>DTcms.Web.MVC.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="plugins\sitebackup\DTcms.Web.Mvc.Plugin.SiteBackup.csproj">
+      <Project>{c77d7436-1cbe-49ff-b8da-5217041db3df}</Project>
+      <Name>DTcms.Web.Mvc.Plugin.SiteBackup</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>14574</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:12215/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

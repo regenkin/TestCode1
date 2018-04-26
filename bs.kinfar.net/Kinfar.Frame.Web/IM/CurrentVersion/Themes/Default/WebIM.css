@@ -1,0 +1,33 @@
+﻿.MsgPanel
+{
+    border: solid 1px #D0D0D0;
+    background-color:#FFFFFF;
+}
+
+.GroupMemberList,
+.UserImageCtrl,
+.UserInfoCtrl
+{
+    border: solid 1px #E0E0E0;
+    background-color:#FFFFFF;
+}
+
+.HeaderCtrl
+{
+	height:20px;
+	width: 100%;
+	padding:0px;
+	margin:0px;
+    border-bottom: solid 1px #E0E0E0;
+    background:url(Images/horiz.png) repeat-x 0px -730px;
+}
+
+
+.HeaderCtrl .HeaderCtrlText
+{
+	padding-top:4px;
+	padding-left:4px;
+    color: #074977;
+	font-size:12px;
+	font-family:SimSun;
+}

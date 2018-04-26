@@ -1,0 +1,9 @@
+artdialog	对话框组件
+cuplayer	视频播放组件
+datepicker	日期插件
+jquery		jquery框架,基于jq的插件(表单提交、分页、图片截取等)
+layer		对话框插件，支持mobile设备
+webuploader	文件上传组件
+PCASClass.js	行政区划插件,省、市、区选择
+Validform_v5.3.2.js	表单数据验证插件
+waves.min.js		鼠标点击波浪效果插件

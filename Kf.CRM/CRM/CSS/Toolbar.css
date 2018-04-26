@@ -1,0 +1,44 @@
+﻿@charset "utf-8";
+
+.toolbar { background-color: #D6E3F3; width: 100%; white-space: nowrap; background: url(../images/Toolbar/bg.gif) repeat-x; /*position: relative;*/height:29px; }
+    .toolbar .button_table { cursor: pointer;/*text-shadow: 1px 1px 0 #fff*/ }
+    .toolbar .toolbar_disabled { filter: alpha(opacity = 60); -moz-opacity: 0.6; opacity: 0.6;text-shadow: 1px 1px 0 #fff }
+        .toolbar .toolbar_disabled * { cursor: no-drop; }
+
+    .toolbar td { vertical-align: middle; }
+    /*.toolbar .spacer { height: 17px; font-size: 1px; border-left: solid 1px #9AC6FF; border-right: solid 1px white; display: block; margin: 0 2px; padding: 0; }*/
+    /*.toolbar .select { width: 140px; }*/
+    .toolbar .b_left { width: 3px; }
+    .toolbar .b_right { width: 3px; }
+    .toolbar .b_center { }
+
+    .toolbar .over .b_left { background: url(../images/Toolbar/tb_border.gif) no-repeat 0 0; width: 3px; }
+    .toolbar .over .b_right { background: url(../images/Toolbar/tb_border.gif) no-repeat 0 -21px; width: 3px; }
+    .toolbar .over .b_center { background: url(../images/Toolbar/tb_border.gif) repeat-x 0 -42px; }
+
+    .toolbar .b_center a { display: block; vertical-align: middle; padding-top: 3px; padding-bottom: 4px; margin-left: 2px; margin-right: 2px; text-decoration: none; white-space: nowrap; height: 14px; *height: auto; color: #333;}
+    /*.toolbar .down .b_left { background: url(../images/Toolbar/tb_border.gif) no-repeat 0 -63px; }
+    .toolbar .down .b_right { background: url(../images/Toolbar/tb_border.gif) no-repeat 0 -84px; }*/
+    /*.toolbar .down .b_center { background: url(../images/Toolbar/tb_border.gif) repeat-x 0 -105px; }*/
+
+    .toolbar .filterTable { position: absolute; right: 67px; top: 52px; }
+        .toolbar .filterTable tr, a { cursor: pointer; }
+
+    .toolbar .filter-spacer { height: 21px; font-size: 1px; border-left: solid 1px #84A4CE; border-right: solid 1px white; display: block; margin: 0; padding: 0; }
+    /*.toolbar .border-center-active { background: url(../images/Toolbar/tb_border.gif) repeat-x 0px -105px !important; }
+    .toolbar .border-left-active { background: url(../images/Toolbar/tb_border.gif) no-repeat 0 -63px !important; }
+    .toolbar .border-right-active { background: url(../images/Toolbar/tb_border.gif) no-repeat 0 -84px !important; }*/
+
+.az { display: none; height: auto; line-height: 26px; width: 100%; background: url(../images/Toolbar/bg.gif) repeat-x; background-color: #D6E3F3; position: absolute; left: 0; z-index: 2; }
+
+.az-fix { position: absolute; display: none; z-index: 3; }
+    .az-fix td { font-size: 1px; height: 8px; }
+    .az-fix .left { width: 4px; background: url(../images/Toolbar/fix_border.gif) no-repeat 0 0; }
+    .az-fix .right { width: 4px; background: url(../images/Toolbar/fix_border.gif) no-repeat -5px 0; }
+    .az-fix .center { background: url(../images/Toolbar/fix_bg.gif) repeat-x; }
+
+.az-fix-2 { position: absolute; display: none; z-index: 3; }
+    .az-fix-2 td { font-size: 1px; height: 5px; }
+    .az-fix-2 .left { width: 4px; background: url(../images/Toolbar/fix_border_2.gif) no-repeat 0 0; }
+    .az-fix-2 .right { width: 4px; background: url(../images/Toolbar/fix_border_2.gif) no-repeat -5px 0; }
+    .az-fix-2 .center { background: url(../images/Toolbar/fix_bg_2.gif) repeat-x; }

@@ -1,0 +1,69 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/_LayoutPay.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.sysconfig config = ViewData["config"] as DTcms.Model.sysconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   ViewBag.Title = @m.title + " - " + @site.name;
+   string channel = site.build_path + "_content";
+   DataTable list = bc.get_article_list(channel, 0, 0, "status=0");
+   string category_title = bc.get_category_title(m.category_id, "公司介绍");
+}
+<div class="section clearfix">
+  <!--右边-->
+  <div class="list-right">
+    <div class="sidebar-box">
+      <div class="line30"></div>
+      <h3>栏目导航</h3>
+      <ul class="navbar">
+      @foreach(DataRow dr in list.Rows){
+        <li>
+          <h4><a title="@dr["title"]" href="@bc.linkurl("content",@dr["call_index"])">@dr["title"]</a></h4>
+        </li>
+      }
+        <li>
+          <h4><a href="@bc.linkurl("feedback")">留言反馈</a></h4>
+        </li>
+        <li>
+          <h4><a href="@bc.linkurl("link")">友情链接</a></h4>
+        </li>
+      </ul>
+      <div class="line20"></div>
+      <h3>客户服务</h3>
+      <div class="sidebar-txt">
+        <p><strong>@site.company</strong></p>
+        <p>地址：@site.address</p>
+        <p>电话：@site.tel</p>
+        <p>E-mail：@site.email</p>
+        <p>新浪微博：http://weibo.com/dtcms</p>
+      </div>
+    </div>
+  </div>
+  <!--/右边-->
+  
+  <!--左边-->
+  <div class="list-auto">
+    <div class="ntitle">
+      <h2>
+        <a href="javascript:;">@m.title</a>
+      </h2>
+      <span>当前位置：<a href="@bc.linkurl("index")">首页</a> &gt; @category_title &gt; @m.title</span>
+    </div>
+    
+    <div class="entry">
+      @Html.Raw(m.content)
+    </div>
+    
+    <!--分享-->
+    @RenderPage("~/Areas/Web/Views/" + @ViewBag.TemplateSkin + "/web/_share_js.cshtml")
+    <!--/分享-->
+    
+  </div>
+  <!--/左边-->
+  
+</div>

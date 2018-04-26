@@ -1,0 +1,199 @@
+﻿@using System.Data;
+@using DTcms.Common;
+@using DTcms.BLL;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+   ViewBag.Title = "order_list";
+   DataSet list = ViewData["list"] as DataSet;
+   List<SelectListItem> statusList = ViewData["statusList"] as List<SelectListItem>;
+   List<SelectListItem> paymentStatusList = ViewData["paymentStatusList"] as List<SelectListItem>;
+   List<SelectListItem> expressStatusList = ViewData["expressStatusList"] as List<SelectListItem>;
+}
+@section HeaderContent{
+   <script>
+      function getQueryParam() {
+         var text = $("#txtKeywords").val();
+         var pageNum = $("#txtPageNum").val();
+         var ddlStatus = $("#ddlStatus").val();
+         var ddlPaymentStatus = $("#ddlPaymentStatus").val();
+         var ddlExpressStatus = $("#ddlExpressStatus").val();
+         return "keywords=" + text + "&pageNum=" + pageNum + "&status=" + ddlStatus + "&payment_status=" + ddlPaymentStatus + "&express_status=" + ddlExpressStatus;
+      }
+      //查询数据
+      function search() {
+         document.location = "index?" + getQueryParam();
+      }
+
+      //ExePostBack回调函数
+      function __doPostBack(objId) {
+         if (objId == "btnDelete") {
+            submitdelete();
+         }
+      }
+      
+      //批量删除
+      function submitdelete() {
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitDelete?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("删除数据失败!");
+            }
+         });
+      }
+   </script>
+}
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>订单列表</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a><a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a href="javascript:;" id="btnDelete" onclick="ExePostBack('btnDelete','只允许删除已作废订单，是否继续？');"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+        </ul>
+        <div class="menu-list">
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlStatus", new SelectList(statusList, "Value", "Text", ViewBag.Status as string), new { change="search();"})
+          </div>
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlPaymentStatus", new SelectList(paymentStatusList, "Value", "Text", ViewBag.PaymentStatus as string), new { change="search();"})
+          </div>
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlExpressStatus", new SelectList(expressStatusList, "Value", "Text", ViewBag.ExpressStatus as string), new { change="search();"})
+          </div>
+        </div>
+      </div>
+      <div class="r-list">
+        <input type="text" id="txtKeywords" class="keyword" value="@ViewBag.Keywords" />
+        <a href="javascript:search();" id="lbtnSearch" class="btn-search"><i class="iconfont icon-search"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
+  <tr>
+    <th width="8%">选择</th>
+    <th align="left">订单号</th>
+    <th align="left" width="12%">会员账号</th>
+    <th align="left" width="10%">支付方式</th>
+    <th align="left" width="10%">配送方式</th>
+    <th width="8%">订单状态</th>
+    <th width="10%">总金额</th>
+    <th align="left" width="16%">下单时间</th>
+    <th width="8%">操作</th>
+  </tr>
+@if(list.Tables.Count > 0){
+  foreach(DataRow dr in list.Tables[0].Rows){
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle">
+         @if(Convert.ToInt32(dr["status"].ToString()) > 3){
+            <input type="checkbox" />
+         }
+         else{
+            <input type="checkbox" disabled="disabled" />
+         }
+      </span>
+      <label style="display:none">@dr["id"]</label>
+    </td>
+    <td><a href="../order_edit/index?action=@DTEnums.ActionEnum.Edit&id=@dr["id"]">@dr["order_no"]</a></td>
+    <td>
+       @if(dr["user_name"].ToString() == ""){
+          @:匿名用户
+       }
+       else{
+          @dr["user_name"]
+       }
+    </td>
+    <td>@(new DTcms.BLL.site_payment().GetTitle(Convert.ToInt32(dr["payment_id"])))</td>
+    <td>@(new DTcms.BLL.express().GetTitle(Convert.ToInt32(dr["express_id"])))</td>
+    <td align="center">
+       @{
+         DTcms.Model.orders model = new DTcms.BLL.orders().GetModel(Convert.ToInt32(dr["id"]));
+         string _title;
+         switch (model.status) {
+            case 1: //如果是线下支付，支付状态为0，如果是线上支付，支付成功后会自动改变订单状态为已确认
+               if (model.payment_status > 0) {
+                  @:待付款
+               }
+               else {
+                  @:待确认
+               }
+               break;
+            case 2: //如果订单为已确认状态，则进入发货状态
+               if (model.express_status > 1) {
+                  @:已发货
+               }
+               else {
+                  @:待发货
+               }
+               break;
+            case 3:
+               @:交易完成
+               break;
+            case 4:
+               @:已取消
+               break;
+            case 5:
+               @:已作废
+               break;
+         }
+       }
+    </td>
+    <td align="center">@dr["order_amount"]</td>
+    <td>@string.Format("{0:g}",dr["add_time"])</td>
+    <td align="center"><a href="../order_edit/index?action=@DTEnums.ActionEnum.Edit&id=@dr["id"]">详细</a></td>
+  </tr>
+  }
+}
+@if (list.Tables.Count == 0 || list.Tables[0].Rows.Count == 0) {
+   <tr><td align="center" colspan="9">暂无记录</td></tr>
+}
+</table>
+</div>
+<!--/列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span>
+    <input type="text" id="txtPageNum" class="pagenum" onkeydown="return checkNumber(event);" onchange="search();" value="@ViewBag.PageNum" />
+    <span>条/页</span>
+  </div>
+  <div class="default">@Html.Raw(ViewBag.PageContent)</div>
+</div>
+<!--/内容底部-->
+
+</form>

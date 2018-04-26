@@ -1,0 +1,73 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController c = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+}
+
+<div class="clear"></div>
+<div class="baozhang w1200">
+	<!-- 保证承诺 -->
+   <div class="bao fl">
+      <img src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/fdf07394ea963f69837b3f4e3779a8afa8b2de06.jpg" class="fl" width='48' height='50' />
+      <div class="text fl">正品保障</div>
+      <div class="clear"></div>
+   </div>
+   <div class="bao fl">
+      <img src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/fa3fa440b84b189d857912a4805b265fed3216cb.jpg" class="fl" width='48' height='50' />
+      <div class="text fl">售后无忧</div>
+      <div class="clear"></div>
+   </div>
+   <div class="bao fl">
+      <img src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/9ccc0cba779756683ebef638a10f62787d8bd7d0.jpg" class="fl" width='48' height='50' />
+      <div class="text fl">品类齐全</div>
+      <div class="clear"></div>
+   </div>
+   <div class="bao fl">
+      <img src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/f96c477af5d8766408142bc798e2af82d90bc703.jpg" class="fl" width='48' height='50' />
+      <div class="text fl">急速物流</div>
+      <div class="clear"></div>
+   </div>
+</div>
+<div class="clear"></div>
+	<div class="help w1200">
+		<ul>
+         <li class="fl">
+            <b>
+               <a target="_blank" href="@c.linkurl("goods")"><span>首页</span></a>
+            </b>
+         </li>
+         <li class="fl">
+            <b>
+               <a target="_blank" href="@c.linkurl("content","about")"><span>关于我们</span></a>
+            </b>
+         </li>
+         <li class="fl">
+            <b>
+               <a target="_blank" href="@c.linkurl("feedback")"><span>留言反馈</span></a>
+            </b>
+         </li>
+         <li class="fl">
+            <b>
+               <a target="_blank" href="@c.linkurl("link")"><span>友情链接</span></a>
+            </b>
+         </li>
+         <li class="fl">
+            <b>
+               <a target="_blank" href="@c.linkurl("content","contact")"><span>联系我们</span></a>
+            </b>
+         </li>
+		</ul>
+	</div>
+    <div class="clear"></div>
+<div class="copyright w1200 text-center">
+   <div class="clear"></div>
+   <div class="w1200" style="width: 600px; margin: 0 auto;">
+<div align="center" style="text-align: center;"><strong>诚聘英才</strong> 任何购物问题请联系我们在线客服 | 电话：<strong style="font-size: medium;"><span class="15" style="font-family: 楷体_GB2312; letter-spacing: 0pt;">@site.tel</span></strong></div><p class="MsoNormal"><span style="mso-spacerun:'yes';font-family:Calibri;mso-fareast-font-family:宋体;mso-bidi-font-family:'Times New Roman';font-size:10.5000pt;mso-font-kerning:1.0000pt;"><o:p></o:p></span></p>
+    <p>@site.crod 版本号：@Utils.GetVersion()</p>
+    <p>@Html.Raw(site.copyright)</p>
+    <p>@Html.Raw(config.webcountcode)</p>
+    <p align="center">&nbsp;工作时间：周一至周日 8:30-21:00 &nbsp;其他时间购物将于次日进行配送</p>
+   </div>
+</div>

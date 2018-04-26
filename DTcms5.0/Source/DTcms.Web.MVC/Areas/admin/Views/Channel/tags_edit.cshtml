@@ -1,0 +1,79 @@
+﻿@using System.Data;
+@using DTcms.Model;
+@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "编辑Tags标签";
+   DTcms.Model.article_tags m = ViewData["model"] as DTcms.Model.article_tags;
+}
+
+@section HeaderContent{
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+      });
+   </script>
+}
+
+<form id="form1">
+<!--导航栏-->
+<div class="location">
+  <a href="../tags_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../tags_list/index"><span>标签管理</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>编辑标签</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">Tags标签信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>Tags标题</dt>
+    <dd>
+      @Html.TextBox("txtTitle", m.title, new { @class="input normal",  datatype="s2-100", sucmsg=" "})
+      <span class="Validform_checktip">*信息关联的关键字。</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>推荐显示</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+         @Html.CheckBox("cbIsRed", m.is_red == 1)
+      </div>
+      <span class="Validform_checktip">*是否推荐到标签列表页显示</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>排序数字</dt>
+    <dd>
+       @Html.TextBox("txtSortId", m.sort_id, new { @class="input small", datatype="n", sucmsg=" "})
+      <span class="Validform_checktip">*数字，越小越向前</span>
+    </dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript: history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+
+</form>

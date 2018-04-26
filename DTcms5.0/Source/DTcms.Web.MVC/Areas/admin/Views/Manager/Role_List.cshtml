@@ -1,0 +1,118 @@
+﻿@using DTcms.Common;
+@using System.Data;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+    ViewBag.Title = "Role_List";
+    DataTable list = ViewData["list"] as DataTable;
+}
+@section HeaderContent{
+   <script>
+      //查询数据
+      function search() {
+         var text = $("#txtKeywords").val();
+         var pageCount = $("#txtPageNum").val();
+         document.location = "index?keywords=" + text + "&pageNum=" + pageCount;
+      }
+
+      //删除数据
+      function __doPostBack() {
+         var text = $("#txtKeywords").val();
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:gt(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitDelete?keywords=" + text,
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("error");
+            }
+         });
+      }
+   </script>
+}
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../manager_list/index"><span>管理员</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>角色列表</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a><a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="../role_edit/index?action=@DTEnums.ActionEnum.Add"><i class="iconfont icon-close"></i><span>新增</span></a></li>
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a href="javascript:;" id="btnDelete" onclick="ExePostBack('btnDelete','本操作会删除角色及相关权限，是否继续？');"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+        </ul>
+      </div>
+      <div class="r-list">
+        <input type="text" id="txtKeywords" class="keyword" value="@ViewBag.Keywords" />
+        <a href="javascritp:search();" id="lbtnSearch" class="btn-search"><i class="iconfont icon-search"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+    <tr>
+      <th width="8%">选择</th>
+      <th align="left">角色名称</th>
+      <th width="12%" align="left">类型</th>
+      <th width="12%">操作</th>
+    </tr>
+@foreach(DataRow dr in list.Rows){
+    <tr>
+      <td align="center">
+        <span class="checkall" style="vertical-align:middle">
+           @if(Convert.ToInt32(dr["is_sys"])==0){
+               <input type="checkbox" />
+           }
+           else{
+              <input type="checkbox" disabled="disabled" />
+           }
+        </span>
+        <label style="display:none">@dr["id"]</label>
+      </td>
+      <td><a href="../role_edit/index?action=@DTEnums.ActionEnum.Edit&id=@dr["id"]">@dr["role_name"]</a></td>
+      <td>
+         @if(Convert.ToInt32(dr["role_type"]) == 1){
+            @:超级用户
+         }
+         else{
+            @:系统用户
+         }
+      </td>
+      <td align="center"><a href="../role_edit/index?action=@DTEnums.ActionEnum.Edit&id=@dr["id"]">修改</a></td>
+    </tr>
+}
+@if(list.Rows.Count == 0){
+   <tr><td align="center" colspan="4">暂无记录</td></tr>
+}
+  </table>
+</div>
+<!--/列表-->
+
+</form>

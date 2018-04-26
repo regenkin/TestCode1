@@ -1,0 +1,31 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.channel_site site = ViewData["site"] as DTcms.Model.channel_site;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+}
+<div class="footer w">
+   <a href="@bc.linkurl("index")" class="waves-effect waves-button"><div class="ico_img"><img src="@(config.webpath)templates/@ViewBag.TemplateSkin/mobile/images/178hui-shouji.png"></div><span style="color:#eb4f38">触摸版</span></a>
+   <a href="@bc.linkurl("index")" class="waves-effect waves-button"><div class="ico_img"><img src="@(config.webpath)templates/@ViewBag.TemplateSkin/mobile/images/178hui-diannao.png"></div><span>电脑版</span></a>
+</div>
+<div class="copyright">@site.copyright</div>
+<div class="gotop backtop" style="display:none; background-image: url(@(config.webpath)templates/@ViewBag.TemplateSkin/mobile/images/iconfont-fanhuidingbu.png);"></div>
+<script>
+   $(function () {
+      //返回顶部
+      $(document).ready(function () {
+         $(window).scroll(function () {
+            var scrollHeight = $(document).height();
+            var scrollTop = $(window).scrollTop();
+            var $windowHeight = $(window).innerHeight();
+            scrollTop > 175 ? $(".backtop").fadeIn(200).css("display", "block") : $(".gotop").fadeOut(200).css({ "background-image": "url@(config.webpath)templates/@site.templet_path/mobile/images/iconfont-fanhuidingbu.png)" });
+         });
+         $('.backtop').click(function (e) {
+            $(".backtop").css({ "background-image": "url(@(config.webpath)templates/@site.templet_path/mobile/images/iconfont-fanhuidingbu_up.png)" });
+            e.preventDefault();
+            $('html,body').animate({ scrollTop: 0 });
+         });
+      });
+   });
+</script>

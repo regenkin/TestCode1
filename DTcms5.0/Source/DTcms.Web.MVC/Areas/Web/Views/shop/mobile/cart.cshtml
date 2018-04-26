@@ -1,0 +1,118 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/_LayoutPay.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = "购物车 - " + site.name;
+   List<DTcms.Model.cart_items> goodsList = ViewData["goodsList"] as List<DTcms.Model.cart_items>;
+}
+@section HeaderContent{
+   <script src="~/templates/@ViewBag.TemplateSkin/mobile/js/cart.js"></script>
+}
+
+@section Scripts{
+   <script>
+      $(".more").bind("click", function () {
+         var btn = $(".more a");
+         if (btn.text() == "编辑") {
+            //设置数量可编辑
+            btn.text("完成");
+            $(".goods-price .count").hide();
+            $(".goods-opts").show();
+         }
+         else {
+            btn.text("编辑");
+            //设置数量完成编辑
+            $(".goods-price .count").show();
+            $(".goods-opts").hide();
+            //遍历商品项, 更新购买数量
+            $(".item").each(function (i, obj) {
+               var quantity = $(obj).find("[name='goodsQuantity']").val();
+               $(obj).find(".goods-price label").text(quantity);
+            });
+         }
+      });
+   </script>
+}
+ 
+<div id="J_cart">
+   <div class="page-cart">
+      <!--v-for-start-->
+      <!--fragment-start-->
+      <div class="sec-cart-group">
+         <div class="hd">
+            <div class="more"><a href="javascript:;">编辑</a></div>
+            <h3>@site.title</h3>
+         </div>
+         <div class="bd">
+            <!--v-for-start-->
+            @foreach (DTcms.Model.cart_items item in goodsList) {
+               <!--fragment-start-->
+               <div class="item item-disabled cart_content">
+               <span class="wd-icheck">
+                  <input type="checkbox" id="wd-icheck-1" class="checkall" onclick="selectCart();"><!--v-if-->
+                  <label for="wd-icheck-1" class="wd-icheck-radio"></label>
+                  <input name="hideArticleId" type="hidden" value="@item.article_id" />
+                  <input name="hideStockQuantity" type="hidden" value="@item.stock_quantity" />
+                  <input name="hideGoodsPrice" type="hidden" value="@item.user_price" />
+                  <input name="hidePoint" type="hidden" value="@item.point" />
+                  <input id="jsondata" name="jsondata" type="hidden" />
+               </span>
+                  <div class="goods-media">
+                     <div class="goods-img">
+                        <img src="@item.img_url" />
+                        <span class="img-desc">已下架</span>
+                     </div>
+                     <div class="goods-title">@item.title</div>
+                     <div class="goods-props">默认规格</div>
+                     <div class="goods-quota">限购@(item.stock_quantity)件</div>
+                     <div class="goods-price">
+                        <span class="price">￥@(item.sell_price)</span>
+                        <span class="count gray"><small>x</small><label>@item.quantity</label></span>
+                     </div>
+                     <div class="goods-opts" style="display:none">
+                        <button type="button" class="btn btn-secondary btn-mini" style="display:none;">删除</button>
+                        <div class="wd-numinput">
+                          <span onclick="updateCart(this, '@config.webpath', -1);"><a class="btn-decrease disabled" href="javascript:;">-</a></span>
+                          <input type="text" name="goodsQuantity" value="@item.quantity" onkeydown="return checkNumber(event);" />
+                          <span onclick="updateCart(this,'@config.webpath', 1);"><a class="btn-increase" href="javascript:;">+</a></span>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <!--fragment-end-->
+            }
+            <!--v-for-end-->
+         </div>
+      </div>
+      <!--v-component-->
+      <!--fragment-end-->
+      <!--v-for-end-->
+      <!--v-if-->
+      <!--fragment-start-->
+      <div class="footer-bar cart-total">
+         <div class="f-r">
+            <a href="javascript:;" onclick="formSubmit($('.f-r a'), '@config.webpath', '@bc.linkurl("shopping")');" class="btn btn-large btn-primary">结算</a><!--v-if-->
+         </div>
+         <div class="total-price">
+            <span class="wd-icheck">
+               <input type="checkbox" id="wd-icheck-3" checked=""><!--v-if-->
+
+               <label for="wd-icheck-3" class="wd-icheck-radio"></label>
+            </span>
+            <!--v-component-->
+            <span class="red">总计: <span class="num">￥1.00</span></span><!--v-if-->
+         </div>
+      </div>
+      <!--v-component-->
+      <!--fragment-end-->
+      <!--v-if-->
+   </div>
+   <!--v-component-->
+</div>
+<div class="powered-by">@config.webcompany</div>

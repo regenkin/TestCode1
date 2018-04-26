@@ -1,0 +1,85 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "feedback_reply";
+   DTcms.Model.feedback m = ViewData["model"] as DTcms.Model.feedback;
+}
+
+<form id="form1" method="post" action="SubmitSave?id=@ViewBag.Id">
+<!--导航栏-->
+<div class="location">
+  <a href="../feedback_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index" class="home"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../feedback_list/index"><span>物流配送</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>插件管理</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>在线留言</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>回复留言</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">查看留言</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>所属站点</dt>
+    <dd>@(new DTcms.BLL.channel_site().GetTitle(m.site_path))</dd>
+  </dl>
+  <dl>
+    <dt>联系人</dt>
+    <dd>@m.user_name</dd>
+  </dl>
+  <dl>
+    <dt>联系电话</dt>
+    <dd>@m.user_tel</dd>
+  </dl>
+  <dl>
+    <dt>联系QQ</dt>
+    <dd>@m.user_qq</dd>
+  </dl>
+  <dl>
+    <dt>电子邮箱</dt>
+    <dd>@m.user_email</dd>
+  </dl>
+  <dl>
+    <dt>留言时间</dt>
+    <dd>@m.add_time</dd>
+  </dl>
+  <dl>
+    <dt>留言标题</dt>
+    <dd>@m.title</dd>
+  </dl>
+  <dl>
+    <dt>留言内容</dt>
+    <dd>@m.content</dd>
+  </dl>
+  <dl>
+    <dt>回复留言</dt>
+    <dd>@Html.TextArea("txtReContent", Utils.ToTxt(m.reply_content), new { @class="input", datatype="*", sucmsg=" "})</dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" value="回复留言" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+</form>

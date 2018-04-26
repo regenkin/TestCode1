@@ -1,0 +1,143 @@
+﻿@using System.Xml;
+@using DTcms.Common;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "编辑支付方式";
+   DTcms.Model.site_payment m = ViewData["model"] as DTcms.Model.site_payment;
+   DTcms.Model.sysconfig sysConfig = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   List<SelectListItem> siteList = ViewData["siteListItems"] as List<SelectListItem>;
+   List<SelectListItem> PaysiteList = ViewData["PaysiteList"] as List<SelectListItem>;
+   DTcms.Web.Mvc.Areas.admin.Controllers.Order.PaymentKeys pkeys = ViewData["PaymentKeys"] as DTcms.Web.Mvc.Areas.admin.Controllers.Order.PaymentKeys;
+}
+@section HeaderContent{
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+     });
+
+     function getQueryParam() {
+         var _Id = @m.id;
+         var _action="@ViewBag.Action";
+         var siteID = $("#ddlSiteId").val();
+         var paymentID = $("#ddlPaymentId").val();
+         return "action="+_action+"&id=" + _Id+"&siteid="+siteID+"&paymentid="+paymentID;
+     }
+     //查询数据
+     function search() {
+         document.location = "index?" + getQueryParam();
+     }
+   </script>
+}
+<form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id">
+<!--导航栏-->
+<div class="location">
+  <a href="../site_payment_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>订单设置</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>支付方式</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>编辑支付方式</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">编辑支付方式</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>所属站点</dt>
+    <dd>
+      <div class="rule-single-select">
+         @Html.DropDownList("ddlSiteId", new SelectList(siteList, "Value", "Text", m.site_id.ToString()), new { datatype = "*", errormsg = "请选择所属站点！", sucmsg = " ", onchange = "search();" })
+      </div>
+      <span class="Validform_checktip">*选择站点后查询未安装支付平台</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>所属平台</dt>
+    <dd>
+      <div class="rule-single-select">
+       @Html.DropDownList("ddlPaymentId", new SelectList(PaysiteList, "Value", "Text", m.payment_id.ToString()), new { datatype = "*", errormsg = "请选择所属平台！", sucmsg = " ", onchange = "search();" })
+      </div>
+      <span class="Validform_checktip">*请先选择站点后显示支付平台</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>排序数字</dt>
+    <dd>
+      @Html.TextBox("txtSortId", m.sort_id.ToString(), new { @class = "input small", datatype = "n", sucmsg = " " })
+      <span class="Validform_checktip">*数字，越小越向前</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>标题名称</dt>
+    <dd>
+        @Html.TextBox("txtTitle", m.title, new { @class="input normal", datatype="*1-100", sucmsg=" "})
+       <span class="Validform_checktip">*类别中文名称，100字符内</span>
+    </dd>
+  </dl>
+  @if (pkeys.txtKey1_visible)
+  {
+   <dl>
+    <dt>@pkeys.txtKey1_title</dt>
+    <dd>
+      @Html.TextBox("txtKey1", m.key1, new { @class = "input normal", datatype = "*", sucmsg = " " })
+       <span class="Validform_checktip">@pkeys.txtKey1_tip</span>
+    </dd>
+  </dl>
+  }
+  @if (pkeys.txtKey2_visible)
+  {
+   <dl>
+    <dt>@pkeys.txtKey2_title</dt>
+    <dd>
+      @Html.TextBox("txtKey2", m.key2, new { @class = "input normal", datatype = "*", sucmsg = " " })
+       <span class="Validform_checktip">@pkeys.txtKey2_tip</span>
+    </dd>
+  </dl>
+  }
+  @if (pkeys.txtKey3_visible)
+  {
+   <dl>
+    <dt>@pkeys.txtKey3_title</dt>
+    <dd>
+      @Html.TextBox("txtKey3", m.key3, new { @class = "input normal", datatype = "*", sucmsg = " " })
+       <span class="Validform_checktip">@pkeys.txtKey3_tip</span>
+    </dd>
+  </dl>
+  }
+  @if (pkeys.txtKey4_visible)
+  {
+   <dl>
+    <dt>@pkeys.txtKey4_title</dt>
+    <dd>
+      @Html.TextBox("txtKey4", m.key4, new { @class = "input normal", datatype = "*", sucmsg = " " })
+       <span class="Validform_checktip">@pkeys.txtKey4_tip</span>
+    </dd>
+  </dl>
+  }
+</div>
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript: location.href = '../site_payment_list/index';" />
+  </div>
+</div>
+<!--/工具栏-->
+
+</form>

@@ -1,0 +1,210 @@
+﻿@using System.Data;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutDialog.cshtml";
+    ViewBag.Title = "dialog_article_list";
+   
+    DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+    DTcms.Model.site_channel m_channel = ViewData["channelModel"] as DTcms.Model.site_channel;
+    List<DTcms.Model.sites> siteList = new DTcms.BLL.sites().GetModelList();
+    DataTable list = new DTcms.BLL.article().GetList(m.channel_id, 20, "1=1", "sort_id").Tables[0];
+}
+
+@section HeaderContent{
+<link href="~/css/pagination.css" rel="stylesheet" />
+   <script>
+      var api = top.dialog.get(window); //获取父窗体对象
+      $(function () {
+         //设置按钮及事件
+         api.button([{
+            value: '确定',
+            callback: function () {
+               api.returnValue = submitForm();
+               api.close().remove();
+            },
+            autofocus: true
+         }, {
+            value: '取消',
+            callback: function () { }
+         }
+         ]);
+
+         function submitForm() {
+            var json = {list:[]};
+            var count = 0;
+            var _channel_id = $("#selChannel").val();
+            //保存选中行内容的channel_id,id到list中
+            $("#list input:checkbox").each(function () {
+               if ($(this).is(":checked")) {
+                  var _id = Number($(this).parent().parent().find("label").text());
+                  var obj = { channel_id: _channel_id, id: _id };
+                  json.list.push(obj);
+                  count++;
+               }
+            });
+            return json;
+         }
+
+         setChannel($("#ddlSite").val());
+
+         //站点选择改变事件
+         $("#ddlSite").change(function () {
+            var selValue = $("#ddlSite").val();
+            setChannel(selValue);
+         });
+         //通道选择改变事件
+         $("#selChannel").change(function () {
+            var selVal = $("#selChannel").val();
+            setCategory(selVal);
+         });
+         //内容类别选择改变事件
+         $("#selCategory").change(function () {
+            getPageList(1);
+         });
+
+         //属性选择改变事件
+         $("#selProperty").change(function () {
+            getPageList(1);
+         });
+      });
+
+      //设置通道下拉列表
+      function setChannel(site_id) {
+         $("#selChannel").empty();
+         var channel_id = Number(@m_channel.id);
+         $.ajax({
+            type: "post",
+            url: "@Url.Action("GetJsonChannelList","dialog_article_list")?site_id=" + site_id,
+            data: {},
+            dataType: "json",
+            success: function (data) {
+               var html = "";
+               var isFind = false;
+               $(data).each(function (index, obj) {
+                  if (obj["id"] == channel_id) {
+                     isFind = true;
+                     html += '<option value="' + obj["id"] + '" selected="selected">' + obj["title"] + '</option>';
+                  }
+                  else {
+                     html += '<option value="' + obj["id"] + '">' + obj["title"] + '</option>';
+                  }
+               });
+               $("#selChannel").append(html);
+               if (!isFind) {
+                  $("#selChannel").find("option:eq(0)").attr("selected", true);
+               }
+               $("#selChannel").parent().ruleSingleSelect();
+               setTimeout(setCategory($("#selChannel").val()), 100);//延迟更新内容类别
+            }
+         });
+      }
+
+      //设置内容类别下拉列表
+      function setCategory(_channel_id) {
+         var $selCategory = $("#selCategory");
+         $selCategory.empty();
+
+         $.ajax({
+            type: "post",
+            url: "GetCategoryOptionHtml?channel_id=" + _channel_id,
+            dataType: "html",
+            success: function (data) {
+               $selCategory.append(data);
+               $selCategory.parent().ruleSingleSelect();
+               getPageList(1);
+            }
+         });
+         return;
+         $.ajax({
+            type: "post",
+            url: "@Url.Action("GetJsonCategoryList", "dialog_article_list")?channel_id=" + _channel_id,
+            dataType: "json",
+            success: function (data) {
+               var html = "<option value='-1' selected='selected'>所有类别</option>";
+               $(data).each(function (index, obj) {
+                  html += "<option value='" + obj["id"] + "'>" + obj["title"] + "</option>";
+               });
+               $selCategory.append(html);
+               $selCategory.parent().ruleSingleSelect();
+               getPageList(1);
+            }
+         });
+      }
+
+      //设置内容列表
+      function getPageList(_page) {
+         var param = getQueryParam(_page);
+         $("#list").html("<div class='loading'><span></span></div>");
+         $.ajax({
+            type: "post",
+            url: "GetPartialList?" + param,
+            success: function (data) {
+               $("#list").html(data);
+            },
+            error: function (data) {
+               alert("error:" + data);
+            }
+         });
+      }
+
+      function getQueryParam(_page) {
+         var text = escape($("#txtKeywords").val());
+         var property = $("#selProperty").val();
+         var category_id = $("#selCategory").val();
+         var channel_id = $("#selChannel").val();
+         var site_id = $("#ddlSite").val();
+         var pagesize = 8;
+         if ($("#txtPageNum").length > 0) {
+            pagesize = $("#txtPageNum").val();
+            
+         }
+         return "site_id=" + site_id + "&channel_id="+ channel_id +"&keywords=" + text + "&pagesize=" + pagesize + "&page="+ _page +"&property=" + property + "&category_id=" + category_id;
+      }
+   </script>
+}
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap" style="padding-top:0;">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a><a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+        </ul>
+        <div class="menu-list">
+          <div class="rule-single-select">
+             @Html.DropDownList("ddlSite", new SelectList(siteList, "id", "name", m_channel.site_id.ToString()))
+          </div>
+          <div class="rule-single-select">
+            <select id="selChannel"></select>
+          </div>
+          <div class="rule-single-select">
+            <select id="selCategory"></select>
+          </div>
+          <div class="rule-single-select">
+            <select id="selProperty">
+               <option value="">所有属性</option>
+               <option value="isLock">待审核</option>
+               <option value="unIsLock">已审核</option>
+               <option value="isMsg">可评论</option>
+               <option value="isTop">置顶</option>
+               <option value="isRed">推荐</option>
+               <option value="isHot">热门</option>
+               <option value="isSlide">幻灯片</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="r-list">
+        <input type="text" id="txtKeywords" class="keyword" value="" />
+        <a href="javascript:getPageList(1);" id="lbtnSearch" class="btn-search"><i class="iconfont icon-search"></i></a>
+        <a href="javascript:;" id="lbtnViewImg" class="img-view" title="图像列表视图"><i class="iconfont icon-list-img"></i></a>
+        <a href="javascript:;" id="lbtnViewTxt" class="txt-view" title="文字列表视图"><i class="iconfont icon-list-txt"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+<div id="list">
+   <div class="loading"><span></span></div>
+</div>
+

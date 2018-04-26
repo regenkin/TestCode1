@@ -1,0 +1,49 @@
+﻿@using DTcms.Web.MVC;
+@using DTcms.Model;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   UserController c = ViewBag.This as UserController;
+   DTcms.Model.users m = c.userModel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+}
+    <div class="info-box">
+      <div class="avatar-box">
+        <a href="@c.linkurl("usercenter","avatar")" class="img-box">
+          @if(m.avatar!=""){
+            <img src="@m.avatar" />
+          }
+          else{
+            <img src="@(config.webpath)templates/@ViewBag.Templateskin/web/images/user-avatar.png" />
+          }
+        </a>
+        <h3>
+        @if(m.nick_name!=""){
+          @m.nick_name
+        }
+        else{
+          @m.user_name
+        }
+        </h3>
+        <p>余额：@m.amount 元</p>
+        <p>积分：@m.point 分</p>					
+      </div>
+      <ul class="side-nav">
+        <li>
+          <a href="@c.linkurl("userorder","list")">订单管理</a>
+          <a href="@c.linkurl("userorder","close")">已关闭订单</a>
+        </li>
+        <li>
+          <a href="@c.linkurl("useramount","recharge")">账户余额</a>
+          <a href="@c.linkurl("userpoint","convert")">我的积分</a>
+          <a href="@c.linkurl("usermessage","system")">站内消息</a>
+          <a href="@c.linkurl("usercenter","invite")">邀请好友</a>
+        </li>
+        <li>
+          
+          <a href="@c.linkurl("usercenter","proinfo")">个人资料</a>
+          <a href="@c.linkurl("usercenter","avatar")">头像设置</a>
+          <a href="@c.linkurl("usercenter","password")">修改密码</a>
+          <a href="@c.linkurl("usercenter","exit")">退出登录</a>
+        </li>
+      </ul>
+    </div>

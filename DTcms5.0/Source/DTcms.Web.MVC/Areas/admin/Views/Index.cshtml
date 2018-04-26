@@ -1,0 +1,83 @@
+﻿@using DTcms.Model;
+@{
+    ViewBag.Title = "后台管理中心";
+    DTcms.Model.manager admin_info = ViewData["admin_info"] as DTcms.Model.manager;
+}
+@section HeaderContent{
+<script>
+   $(function () {
+      if ('undefined' == typeof (document.body.style.maxHeight)) {
+         window.location.href = 'ie6update/index';
+      }
+      $("body").addClass("indexbody");
+   });
+
+   function set() {
+      alert("set");
+   }
+</script>   
+}
+
+@section Scripts{
+   <script src="~/Scripts/jquery.nicescroll.js"></script>
+}
+  <!--全局菜单-->
+  <a class="btn-paograms" href="javascript:;" onclick="togglePopMenu();">
+    <i class="iconfont icon-list-fill"></i>
+  </a>
+  <div id="pop-menu" class="pop-menu">
+    <div class="pop-box">
+      <h1 class="title"><i class="iconfont icon-setting"></i>导航菜单</h1>
+      <i class="close iconfont icon-remove" onclick="togglePopMenu();"></i>
+      <div class="list-box"></div>
+    </div>
+  </div>
+  <!--/全局菜单-->
+
+<div class="main-top">
+   <a class="icon-menu"><i class="iconfont icon-nav"></i></a>
+   <div id="main-nav" class="main-nav"></div>
+   <div class="nav-right">
+      <div class="info">
+        <h4>
+          @if (!string.IsNullOrEmpty(admin_info.avatar)){
+          <img src="@admin_info.avatar" />
+          }else{
+          <i class="iconfont icon-user"></i>
+          }
+        </h4>
+        <span>
+          您好，@admin_info.user_name<br />
+          @(new DTcms.BLL.manager_role().GetTitle(admin_info.role_id))
+        </span>
+      </div>
+      <div class="option">
+         <i class="iconfont icon-arrow-down"></i>
+         <div class="drop-wrap">
+            <ul class="item">
+               <li>
+                  <a href="../../" target="_blank">预览网站</a>
+               </li>
+               <li>
+                  @Html.ActionLink("管理中心","index","center", new {area = "admin"}, new {target = "mainframe"})
+               </li>
+               <li>
+                  @Html.ActionLink("修改密码", "index", "Manager_Pwd", new {area = "admin"}, new { onclick="linkMenuTree(false,'');", target="mainframe"})
+               </li>
+               <li>
+                  @Html.ActionLink("注销登录","LogOff","Index", new{area = "admin"}, null)
+               </li>
+            </ul>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="main-left">
+   <h1 class="logo"></h1>
+   <div id="sidebar-nav" class="sidebar-nav"></div>
+</div>
+
+<div class="main-container">
+   <iframe id="mainframe" name="mainframe" frameborder="0" src="../center/index"></iframe>
+</div>

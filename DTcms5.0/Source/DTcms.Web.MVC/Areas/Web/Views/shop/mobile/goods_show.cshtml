@@ -1,0 +1,144 @@
+﻿@using System.Data;
+@using DTcms.BLL;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/_LayoutShow.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   Article_ShowController bc = ViewBag.BasePage as Article_ShowController;
+   SearchController c = ViewBag.This as SearchController;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   DTcms.BLL.article bll_article = new DTcms.BLL.article();
+   DTcms.BLL.article_comment bll_article_comment = new DTcms.BLL.article_comment();
+   string category_title = bc.get_category_title(m.category_id, "商品详情");
+   ViewBag.Title = m.title + " - " + category_title;   
+}
+
+@section Scripts{
+   <script>
+      $(document).ready(function () {
+         //设置点击效果
+         Waves.displayEffect();
+
+         //设置轮播图
+         var mySwiper = new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            pagination: '.swiper-pagination'
+         });
+
+         //设置加入购物车按钮功能
+         $(".sec-bd a").click(function () {
+            $(".ui-mask").fadeIn();
+            $(".cart-sku").show();
+            $(".action-item .ui-btn").attr("href", "javascript:cartAdd($('.action-item .ui-btn'),'@(config.webpath)',0,'@bc.linkurl("cart")');");
+         });
+
+         //设置立即购买按钮功能
+         $(".sec-ft a").click(function () {
+            $(".ui-mask").fadeIn();
+            $(".cart-sku").show();
+            $(".action-item .ui-btn").attr("href", "javascript:cartAdd($('.action-item .ui-btn'),'@(config.webpath)',1,'@bc.linkurl("shopping")');");
+         });
+
+         //设置弹出层关闭按钮功能
+         $(".cell-ft").click(function () {
+            $(".ui-mask").fadeOut();
+            $(".cart-sku").hide();
+         });
+      });
+   </script>
+}
+
+<section class="imgs-swiper">
+   <div class="swiper-container">
+      <div class="swiper-wrapper">
+         @if (m.albums != null) {
+            foreach (DTcms.Model.article_albums modelt in m.albums) {
+               <div class="swiper-slide">
+                  <div class="img-item" style="background-image:url(@modelt.original_path)"></div>
+               </div>
+            }
+         }
+      </div>
+      <div class="swiper-pagination"></div>
+   </div>
+</section>
+
+<section class="goods-intro">
+<div class="intro-cell">
+   <div class="cell-hd intro-title">@m.zhaiyao</div>
+</div>
+<div class="intro-other">
+   <div class="other-price">￥@m.fields["sell_price"] </div>
+   <div class="other-sell">已售 @m.fields["stock_quantity"]</div>
+   <div class="other-exprice">快递:0.00</div>
+</div>
+</section>
+
+<section id="J_detail" class="goods-detail">
+<div class="detail-title">商品详情</div>
+<div class="detail-cont">@Html.Raw(m.content)</div>
+</section>
+
+<section class="footer-sec">
+   <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=24477290&amp;site=qq&amp;menu=yes" class="hd-item">
+      <div class="item-icon"><i class="iconfont"></i></div>
+      <div class="item-name">客服</div>
+      </a>
+      <a href="@bc.linkurl("goods")" class="hd-item">
+         <div class="item-icon"><i class="iconfont"></i></div>
+         <div class="item-name">店铺</div>
+      </a>
+      <div class="sec-bd">
+      <a class="ui-btn plain-primary" href="javascript:;"><div class="btn-cont"><i class="loader" style="display: none;"></i><span>加入购物车</span></div></a>
+      </div>
+
+      <div class="sec-ft">
+      <a class="ui-btn primary" href="javascript:;"> <div class="btn-cont"><i class="loader" style="display: none;"></i><span>立即购买</span></div></a>
+      </div>
+</section>
+
+<section class="cart-sku slide-in-up-transition" style="display:none;">
+   <div class="header-cell">
+      <div class="cell-hd">
+         <img class="img" src="@m.img_url">
+      </div>
+      <div class="cell-bd">
+         <div class="bd-title">@m.fields["sub_title"]</div>
+         <div class="bd-price"><span class="price-title"></span>￥@m.fields["sell_price"]</div>
+      </div>
+      <div class="cell-ft"><i class="iconfont"></i></div>
+   </div>
+   <div class="iscroll-sku">
+      <div class="sku-cont" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+         <div class="cont-title">默认规格：</div>
+         <ul class="cont-list">
+            <li class="sku-item"><a class="ui-btn secondary primary" href="javascript:;">
+               <div class="btn-cont"><i class="loader" style="display: none;"></i><span>默认 </span></div>
+            </a></li>
+         </ul>
+      </div>
+   </div>
+   <div class="num-cont">
+      <div class="cont-bd"><span class="bd-hd">数量：</span>
+         <div class="num-input">
+            <input id="commodityArticleId" type="hidden" value="@m.id" />
+            <input id="commodityGoodsId" type="hidden" value="0" />
+            <a onclick="addCartNum(-1);"><div class="action-btn"><i class="iconfont"></i></div></a>
+            <input id="commoditySelectNum" class="input" type="text" pattern="[0-9]*" value="1">
+            <a onclick="addCartNum(1);"><div class="action-btn"><i class="iconfont"></i></div></a>
+            <div>@m.fields["stock_quantity"]</div>
+         </div>
+         <span class="bd-ft">库存 <label id="commodityStockNum">@m.fields["stock_quantity"]</label> 件</span> </div>
+   </div>
+   <div class="btn-action">
+      <div class="action-item">
+         <a class="ui-btn primary" href="javascript:;">
+            <div class="btn-cont"><i class="loader" style="display: none;"></i><span>确定</span></div>
+         </a>
+      </div>
+   </div>
+</section>
+<div class="ui-mask fade-in-transition" style="display:none;"></div>

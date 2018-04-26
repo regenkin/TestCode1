@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Grid";
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{
+    string page = Request["page"].ObjToStr(); //页面类型
+}
+@section styles
+{
+    <style type="text/css">
+       @if (page == "fdGrid") //弹出网格
+       {
+           Html.Raw(".datagrid-cell {line-height: 25px;}");
+       }
+    </style>
+}
+@Html.Raw(UIOperate.GetGridHTML(Request))

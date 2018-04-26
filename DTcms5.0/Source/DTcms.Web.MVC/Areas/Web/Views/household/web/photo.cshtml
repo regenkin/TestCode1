@@ -1,0 +1,123 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_Layout.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = "创意灵感 - " + site.name;
+   DataTable list = null;
+   string channel = "household_photo";
+   int count = 0;
+   string pagelist = string.Empty;
+   list = bc.get_category_child_list(channel, 0);//获取根类别
+   DataTable art_list = bc.get_article_list(channel, 20, "status=0");
+}
+
+@section HeaderContent{
+   <link href="~/templates/@ViewBag.TemplateSkin/web/css/Ideas.css" rel="stylesheet" />
+}
+
+<div id="main">
+   <div id="topNavigation">
+      <div class="departmentLinks">
+         <ul>
+            <li class="departmentName"></li>
+
+         </ul>
+      </div>
+      <div class="clearAll"></div>
+   </div>
+   <div class="ideasbody">
+      <div id="galleryHeaderConatiner" class="galleryHeaderConatiner">
+         <div class="ideasMainGalleryHeader"><h1>宜家创意灵感</h1></div>
+         <div><h2 class="galleryTitle"></h2></div>
+         <p class="ideasMainGalleryDescription">我们不相信会有完美无缺的家，但是我们相信家能够完美彰显房子主人的风格特点。在家里，一切风格和功能都能按照你的喜好和需求设计，而且无需花费太多，即可为你带来舒适的感觉。这就是我们在本章介绍各种家居创意的原因所在，从家居装饰创意到收纳技巧，再到让你的家充满更多绿色的灵感，一应俱全。有了这些创意和灵感，就可以打造出一方你喜欢称其为家的空间。</p>
+      </div>
+      <div class="gridRow filterBlock">
+         <div class="productsFilter">
+            <div class="productsFilterOptions">
+               <div class="productsFilterButtons floatLeft">
+                  <div class="productsFilterChapters" id="ideas-tags">
+                     <a class="orangeBtn btnIdeas active">查看所有创意灵感</a>
+                     @foreach (DataRow cdr in list.Rows) {
+                        <a class="orangeBtn btnIdeas" href="@bc.linkurl("photo_list",cdr["id"])">@cdr["title"]</a>
+                     }
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="ideasbody">
+         <div class="ideascontainer">
+            <div class="ideasoddDiv">
+               @for(int i=0; i < art_list.Rows.Count; i+=2){
+               DataRow dr = art_list.Rows[i];
+               <div class="ideasblock">
+                  <a class="ideas-link" href="@bc.linkurl("photo_show",dr["id"])">
+                  <img src="@dr["img_url"]" width="512"><h2 class="ideasHeadLine">@dr["title"]</h2>
+                  <div class="ideasdate">@DateTime.Parse(dr["add_time"].ToString()).ToString("yyyy-MM-dd")</div>
+                  <p class="ideasPara">@dr["zhaiyao"]</p>
+               </a>
+                  <ul class="ideastags">
+                     <li class="ideastagspecific">
+                        @{
+                           DataRow[] findRow = list.Select("id=" + dr["category_id"]);
+                           if(findRow.Length > 0){
+                              <input name="ideastagspecific" class="ideastagspecific" type="radio" value="@findRow[0]["title"]"><label>@findRow[0]["title"]</label>
+                           }
+                        }
+                     </li>
+                  </ul>
+               </div>
+               }
+
+            </div>
+            <div class="ideasevenDiv">
+               @for(int i=1; i < art_list.Rows.Count; i+=2){
+               DataRow dr = art_list.Rows[i];
+               <div class="ideasblock">
+                  <a class="ideas-link" href="@bc.linkurl("photo_show",dr["id"])">
+                  <img src="@dr["img_url"]" width="512"><h2 class="ideasHeadLine">@dr["title"]</h2>
+                  <div class="ideasdate">@DateTime.Parse(dr["add_time"].ToString()).ToString("yyyy-MM-dd")</div>
+                  <p class="ideasPara">@dr["zhaiyao"]</p>
+               </a>
+                  <ul class="ideastags">
+                     <li class="ideastagspecific">
+                        @{
+                           DataRow[] findRow = list.Select("id=" + dr["category_id"]);
+                           if(findRow.Length > 0){
+                              <input name="ideastagspecific" class="ideastagspecific" type="radio" value="@findRow[0]["title"]"><label>@findRow[0]["title"]</label>
+                           }
+                        }
+                     </li>
+                  </ul>
+               </div>
+               }
+            </div>
+         </div>
+      <div class="clearAll"></div>
+      <!-- 分享 -->
+      <div class="roomsetlinkContainer">
+         <div class="floatLeft">
+            <div class="shareMPAContainer" id="roomsetShare">
+               @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_share_js.cshtml")
+               <div class="clearAll"></div>
+            </div>
+         </div>
+      </div>
+      <!-- 分享/ -->
+   </div>
+
+   <div class="gridRow breadCrumbNew">
+      <ul>
+         <li><a href="@bc.linkurl("index")">首页</a></li>
+         <li class="divider">/ </li>
+         <li class="activeLink"><a href="@bc.linkurl("photo")">创意灵感</a></li>
+      </ul>
+   </div>
+</div>

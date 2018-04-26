@@ -1,0 +1,130 @@
+﻿@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "order_config";
+   DTcms.Model.orderconfig m = ViewData["model"] as DTcms.Model.orderconfig;
+}
+@section HeaderContent{
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+      });
+   </script>
+}
+<form id="form1"  method="post" action="SubmitSave">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>订单设置</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>参数设置</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">基本参数设置</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--订单参数设置-->
+<div class="tab-content">
+  <dl>
+    <dt>开启匿名购物</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+         @Html.CheckBox("anonymous", m.anonymous == 1)
+      </div>
+      <span class="Validform_checktip">*注意：开启匿名后无需登录即可下订单</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>发票税费类型</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        @Html.RadioButton("taxtype", "1", m.taxtype == 1, new { id = "taxtype_1" })<label for="taxtype_1">百分比</label>
+        @Html.RadioButton("taxtype", "2", m.taxtype == 2, new { id = "taxtype_2" })<label for="taxtype_2">固定金额</label>
+      </div>
+      <span class="Validform_checktip">*百分比的计算公式：商品总金额+(商品总金额*百分比)+配送+支付费用=订单总金额</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>发票税金费用</dt>
+    <dd>
+      @Html.TextBox("taxamount", m.taxamount, new { @class="input small", datatype=@"/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/", sucmsg=" "})
+      <span class="Validform_checktip">*注意：百分比取值范围：0-100，固定金额单位为“元”</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>订单确认通知</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        @Html.RadioButton("confirmmsg", "0", m.confirmmsg == 0, new { id = "confirmmsg_0" })<label for="confirmmsg_0">关闭通知</label>
+        @Html.RadioButton("confirmmsg", "1", m.confirmmsg == 1, new { id = "confirmmsg_1" })<label for="confirmmsg_1">短信通知</label>
+        @Html.RadioButton("confirmmsg", "2", m.confirmmsg == 2, new { id = "confirmmsg_2" })<label for="confirmmsg_2">邮件通知</label>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>确认模板别名</dt>
+    <dd> 
+      @Html.TextBox("confirmcallindex", m.confirmcallindex, new { @class="input normal", datatype="*", sucmsg=" "})
+      <span class="Validform_checktip">*订单确认通知模板调用别名</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>订单发货通知</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        @Html.RadioButton("expressmsg", "0", m.expressmsg == 0, new { id="expressmsg_0"})<label for="expressmsg_0">关闭通知</label>
+        @Html.RadioButton("expressmsg", "1", m.expressmsg == 1, new { id="expressmsg_1"})<label for="expressmsg_1">短信通知</label>
+        @Html.RadioButton("expressmsg", "2", m.expressmsg == 2, new { id="expressmsg_2"})<label for="expressmsg_2">邮件通知</label>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>发货模板别名</dt>
+    <dd>
+      @Html.TextBox("expresscallindex", m.expresscallindex, new { @class="input normal", datatype="*", sucmsg=" "})
+      <span class="Validform_checktip">*订单发货通知模板调用别名</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>订单完成通知</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        @Html.RadioButton("completemsg", "0", m.completemsg == 0, new { id="completemsg_0" })<label for="completemsg_0">关闭通知</label>
+        @Html.RadioButton("completemsg", "1", m.completemsg == 1, new { id="completemsg_1" })<label for="completemsg_1">短信通知</label>
+        @Html.RadioButton("completemsg", "2", m.completemsg == 2, new { id="completemsg_2" })<label for="completemsg_2">邮件通知</label>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>完成模板别名</dt>
+    <dd>
+      @Html.TextBox("completecallindex", m.completecallindex, new { @class="input normal", datatype="*", sucmsg=" " })
+      <span class="Validform_checktip">*订单完成通知模板调用别名</span>
+    </dd>
+  </dl>
+</div>
+<!--/订单参数设置-->
+<!--内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+</form>

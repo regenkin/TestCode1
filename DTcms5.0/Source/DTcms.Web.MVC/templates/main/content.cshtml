@@ -1,0 +1,57 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   Layout = "~/Areas/Web/Views/" + site.build_path + "/Shared/_Layout.cshtml";
+   BaseController bc = ViewBag.BasePage as BaseController;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   ViewBag.Title = m.title + " - " + site.name;
+   string channel = "content";
+   DataTable categoryList = bc.get_article_list(channel, 0, 0, "status=0");
+   string category_title = bc.get_category_title(m.category_id, "公司介绍");
+   DataTable contentList = bc.get_article_list(channel, 0, 0, "status=0");
+}
+
+<!--当前位置-->
+<div class="section">
+    <div class="location">
+        <span>当前位置：</span>
+        <a href="@bc.linkurl("index")">首页</a> &gt;
+        <a href="javascript:;">@category_title</a> &gt;
+        <a href="javascript:;">@m.title</a>
+    </div>
+</div>
+<!--/当前位置-->
+
+<div class="section">
+  <div class="wrapper">
+    <div class="bg-wrap">
+      <!--导航推荐-->
+      <div class="nav-tit">
+        @for (int i = 0; i < contentList.Rows.Count; i++) {
+          DataRow cdr = contentList.Rows[i];
+          <a class="@(Convert.ToInt32(cdr["id"]) == m.id ? "selected" : "")" href="@bc.linkurl("content", cdr["call_index"])">@cdr["title"]</a>
+          if (i + 1 < contentList.Rows.Count) {
+          <i>|</i>
+          }
+        }
+      </div>
+      <!--/导航推荐-->
+      <h1 style="padding: 20px; line-height: 30px; color: #c00; font-size: 30px; text-align: center; font-weight: 300;">@m.title</h1>
+      <div class="entry">
+        @Html.Raw(m.content)
+      </div>
+      <div class="line15"></div>
+      <!--分享-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_share_js.cshtml")
+      <!--/分享-->
+      <div class="line15"></div>
+    </div>
+  </div>
+</div>
+    
+

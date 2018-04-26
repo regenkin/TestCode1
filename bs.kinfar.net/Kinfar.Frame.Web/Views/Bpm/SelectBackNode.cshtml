@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "SelectBackNode";
+}
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/Bpm/SelectBackNode.js"></script>
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid todoId = Request["todoId"].ObjToGuid();}
+@Html.Raw(frameFactory.GetSelectBackNodeHTML(todoId))

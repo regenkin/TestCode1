@@ -1,0 +1,169 @@
+﻿@using System.Data;
+@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+   ViewBag.Title = "规格管理";
+   DataTable list = ViewData["list"] as DataTable;
+   DTcms.BLL.article_spec bll_spec = new DTcms.BLL.article_spec();
+}
+
+@section HeaderContent{
+   <script>
+      //搜索
+      function search() {
+         document.location = "index?" + getQueryParam();
+      }
+
+      //处理Url参数
+      function getQueryParam() {
+         var text = $("#txtKeywords").val();
+         var pageSize = $("#txtPageNum").val();
+         var channel_id = Number(@ViewBag.ChannelId);
+         return "channel_id="+ channelId +"keywords=" + text + "&pagesize=" + pageSize;
+      }
+
+      //保存排序
+      function submitSave() {
+         //遍历表格行设置Json数据
+         var $tr = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($tr).each(function (i, item) {
+            var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+            var sortId = $(item).find(".sort").val();
+            var obj = { id: id, sortId: sortId };
+            json.list.push(obj);
+         });
+         // 提交保存排序字段
+         $.ajax({
+            url: "SubmitSave?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("保存排序失败!");
+            }
+         });
+      }
+
+      //批量删除
+      function submitdelete() {
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitDelete?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("删除数据失败!");
+            }
+         });
+      }
+
+      //ExePostBack回调函数
+      function __doPostBack(objId) {
+         if (objId == "btnDelete") {
+            submitdelete();
+         }
+      }
+   </script>
+}
+
+<form id="form1" runat="server">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>规格管理</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="../spec_edit/index?channel_id=@ViewBag.ChannelId&action=@DTEnums.ActionEnum.Add"><i class="iconfont icon-close"></i><span>新增</span></a></li>
+          <li><a href="javascript:;" onclick="submitSave();"><i class="iconfont icon-save"></i><span>保存</span></a></li>
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a href="javascript:;" onclick="ExePostBack('btnDelete','本操作会删除本规格及规格值，是否继续？');"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+        </ul>
+      </div>
+      <div class="r-list">
+        <input type="text" id="txtKeywords" class="keyword" value="@ViewBag.Keywords" />
+        <a href="javascript:search();" id="lbtnSearch" class="btn-search"><i class="iconfont icon-search"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+    <tr>
+      <th width="6%">选择</th>
+      <th align="left" width="20%">名称</th>
+      <th align="left" width="50%">规格值</th>
+      <th align="left" width="10%">排序</th>
+      <th width="12%">操作</th>
+    </tr>
+   @foreach (DataRow dr in list.Rows) {
+      DataSet ds = bll_spec.GetList(0, "parent_id=" + dr["id"], "sort_id asc,id desc");
+      DataTable specList = ds.Tables.Count > 0 ? ds.Tables[0] : new DataTable();  
+      <tr>
+      <td align="center">
+         <span class="checkall" style="vertical-align:middle"><input type="checkbox" /></span>
+         <label style="display:none;">@dr["id"]</label>
+      </td>
+      <td>@dr["title"]</td>
+      <td>
+      @foreach (DataRow cdr in specList.Rows) {
+         if (cdr["img_url"].ToString() == "") {
+            <span class="txt-box">@cdr["title"]</span>
+         }
+         else {
+            <span class="img-box" title="@cdr["title"]"><img src="@cdr["img_url"]" alt="@cdr["title"]" /></span>
+         }
+      }
+      </td>
+      <td><input type="text" value="@dr["sort_id"]" class="sort" onkeydown="return checkNumber(event);" /></td>
+      <td align="center"><a href="../spec_edit/index?action=@DTEnums.ActionEnum.Edit&channel_id=@ViewBag.ChannelId&id=@dr["id"]">修改</a></td>
+      </tr>
+   }
+   @if (list.Rows.Count == 0) {
+      <tr><td align="center" colspan="5">暂无记录</td></tr>
+   }
+  </table>
+</div>
+<!--/列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+     <span>显示</span>
+     <input type="text" id="txtPageNum" class="pagenum" value="@ViewBag.PageSize" onkeydown="return checkNumber(event);" onchange="javascript:search();" />
+     <span>条/页</span>
+  </div>
+  <div class="default">@Html.Raw(ViewBag.PageContent)</div>
+</div>
+<!--/内容底部-->
+
+</form>

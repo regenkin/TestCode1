@@ -1,0 +1,86 @@
+﻿@using System.Data;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutDialog.cshtml";
+   ViewBag.Title = "类别规格";
+   DataTable list = ViewData["list"] as DataTable;
+   DTcms.BLL.article_spec bll = new DTcms.BLL.article_spec();
+}
+
+@section HeaderContent{
+  <script>
+    var api = top.dialog.get(window);; //获取父窗体对象
+    $(function () {
+      //设置窗口按钮及事件
+      api.button([{
+        value: '确定',
+        callback: function () {
+          appendSpecHtml();
+        },
+        autofocus: true
+      }, {
+        value: '取消',
+        callback: function () { }
+      }
+      ]);
+
+      //设置按钮事件
+      $(".spec-item li a").click(function () {
+        if ($(this).parent().hasClass("selected")) {
+          $(this).parent().removeClass("selected");
+        } else {
+          $(this).parent().addClass("selected");
+        }
+      });
+
+      //初始化已选择的规格
+      $(api.data).parent().find("input[name='hide_spec_id']").each(function () {
+        var hideId = $(this).val();
+        $(".spec-item li").each(function () {
+          if (!$(this).hasClass("selected") && $(this).attr("id") == hideId) {
+            $(this).addClass("selected");
+          }
+        });
+      });
+    });
+
+    //插入规格节点
+    function appendSpecHtml() {
+      $(api.data).siblings("li").remove(); //先删除所有同辈节点
+      $(".spec-item li").each(function () {
+        if ($(this).hasClass("selected")) {
+          execSpecHtml($(this).attr("title"), $(this).attr("id"));
+        }
+      });
+    }
+
+    //创建品牌的HTML
+    function execSpecHtml(title, id) {
+      var liHtml = '<li>'
+      + '<input name="hide_spec_id" type="hidden" value="' + id + '" />'
+      + '<a href="javascript:;" class="del" title="删除" onclick="delNode(this);"><i class="iconfont icon-remove"></i></a>'
+      + '<span>' + title + '</span>'
+      + '</li>';
+      $(api.data).before(liHtml);
+    }
+  </script>
+}
+
+<form id="form1">
+<div style="width:500px; height:280px;overflow:auto;">
+  <div class="div-content">
+    <dl>
+      <dt>规格列表</dt>
+      <dd>
+        <ul class="spec-item">
+          @foreach(DataRow dr in list.Rows){
+          <li title="@dr["title"]" id="@dr["id"]">
+            <a href="javascript:;">@dr["title"]</a>
+          </li>
+          }
+        </ul>
+      </dd>
+    </dl>
+  </div>
+</div>
+</form>

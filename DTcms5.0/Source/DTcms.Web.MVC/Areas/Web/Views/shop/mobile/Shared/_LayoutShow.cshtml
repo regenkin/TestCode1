@@ -1,0 +1,49 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+   string channel = ViewBag.Channel as string;
+   DTcms.Model.users userModel = bc.GetUserInfo();
+}
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="author" content="@site.domain" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+   <meta name="format-detection" content="telephone=no">
+   <meta name="apple-touch-fullscreen" content="yes">
+   <meta name="apple-mobile-web-app-capable" content="yes" >
+   <meta name="apple-mobile-web-app-status-bar-style" content="black" >
+   <meta name="keywords" content="@site.seo_keyword" />
+   <meta name="discription" content="@site.seo_description" />
+   <title>@ViewBag.Title</title>
+   <link href="~/templates/shop/mobile/css/main.css" rel="stylesheet" />
+   <link href="~/templates/shop/mobile/css/distr_item_show.css" rel="stylesheet" />
+   <link href="~/Content/waves.css" rel="stylesheet" />
+   <link href="~/Scripts/artdialog/ui-dialog.css" rel="stylesheet" />
+   <script src="~/Scripts/jquery/jquery-1.11.2.min.js"></script>
+   <script src="~/templates/shop/mobile/js/cart.js"></script>
+   <script src="~/templates/shop/mobile/js/common.js"></script>
+   <script src="~/templates/shop/mobile/js/swiper.jquery.min.js"></script>
+   <script src="~/Scripts/artdialog/dialog-plus-min.js"></script>
+   <script src="~/Scripts/waves.min.js"></script>
+   <script src="~/templates/shop/mobile/js/layer/layer.js"></script>
+   @RenderSection("HeaderContent",false)
+</head>
+<body>
+<div class="container" id="J_container">
+<main class="main-sec">
+   <header>
+   @RenderPage("~/Areas/Web/Views/shop/mobile/Shared/partial_header.cshtml")
+   </header>
+   @RenderBody()
+   <footer>
+   </footer>
+</main>
+   @RenderSection("Scripts", required: false)
+</div>
+</body>
+</html>

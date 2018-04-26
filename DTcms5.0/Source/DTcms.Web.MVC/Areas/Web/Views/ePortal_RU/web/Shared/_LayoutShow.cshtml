@@ -1,0 +1,41 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController c = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+}
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>@ViewBag.Title</title>
+   <meta name="keywords" content="@site.seo_keyword" />
+   <meta name="discription" content="@site.seo_description" />
+   <link href="~/templates/@ViewBag.TemplateSkin/web/css/public.css" rel="stylesheet" />
+   <script src="~/Scripts/jquery/jquery-1.11.2.min.js"></script>
+   <script src="~/templates/@ViewBag.templateSkin/web/js/jqslider.js"></script>
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/public.js"></script>
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/backTop.js"></script>
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/other.js"></script>
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/common.js"></script>
+   @RenderSection("HeaderContent",false)
+   @RenderSection("Styles", false)
+   @RenderSection("Scripts", required: false)
+   <script>
+      $(function () {
+         @Html.Raw(ViewBag.ClientScript as string)
+      });
+   </script>
+</head>
+<body>
+   <header>
+   @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_header.cshtml")
+   </header>
+   @RenderBody()
+   <footer>
+   @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_footer.cshtml")
+   </footer>
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/_LayoutUser.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   UserController c = ViewBag.This as UserController;
+   DTcms.Model.users m = c.userModel;
+   ViewBag.Title = "我的订单 - " + site.name;
+   string action = ViewBag.Action as string;
+   DataTable list = null;
+   int count = 0;
+   int totalcount = 0;
+   int page = int.Parse(ViewBag.Page as string);
+   string pagelist = string.Empty;
+   string user_avatar = string.Empty;
+}
+@section HeaderContent{
+}
+
+<div class="menu-bar">
+   <a href="javascript:;" class="item active">全部</a>
+   <a href="javascript:;" class="item">待支付</a>
+   <a href="javascript:;" class="item">待发货</a>
+   <a href="javascript:;" class="item">待收货</a>
+   <a href="javascript:;" class="item">已完成</a>
+</div>
+
+<section class="footer-bar" ><a class="bar-item" href="#"><i class="iconfont"></i>
+   <div class="item-name">首页</div>
+</a><a class="bar-item" href="javascript:;">
+   <div class="cart-badge"><i class="iconfont"></i>
+      <div class="inner-badge">
+         <div class="badge" style="display: none;">0</div>
+      </div>
+   </div>
+   <div class="item-name">购物车</div>
+</a><a class="bar-item active" href="/my/trades/lists/shop_id/3IAGNBCQ"><i class="iconfont"></i>
+   <div class="item-name">我的</div>
+</a>
+</section>
+
+
+<main id="" class="main-sec">
+    <div>
+        <div class="fade-in-up-transition">
+            <div class="empty-hint">
+               <div class="hint-icon"><i class="iconfont"></i></div>
+               <div class="hint-text">暂无数据</div>
+            </div>
+         </div>
+    </div>
+</main>
+
+<section class="to-top  fade-in-up-transition" style="display: none; right: 10px; bottom: 60px;"><i class="iconfont"></i></section>

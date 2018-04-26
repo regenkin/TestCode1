@@ -1,0 +1,45 @@
+﻿@using System.Data;
+@using DTcms.BLL;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/_LayoutShow.cshtml";
+   DTcms.Model.channel_site site = ViewData["site"] as DTcms.Model.channel_site;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   Article_ShowController bc = ViewBag.BasePage as Article_ShowController;
+   SearchController c = ViewBag.This as SearchController;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   DTcms.BLL.article bll_article = new article();
+   DTcms.BLL.article_comment bll_article_comment = new article_comment();
+   string category_title = bc.get_category_title(m.category_id, "新闻资讯");
+   ViewBag.Title = m.title + " - " + category_title;
+
+}
+@section HeaderContent{
+   <script src="@(config.webpath)templates/@ViewBag.TemplateSkin/mobile/js/cart.js"></script>
+}
+<div class="view w">
+   <div class="bl_view_img"><img src="@m.img_url" /></div>
+   <div class="bl_view_tag">
+      <div class="bl_view_user">时间：@m.add_time.ToString("MM-dd HH:mm")</div>
+      <div class="bl_view_time">浏览：@(bll_article.GetClick(m.id))次</div>
+      <div class="bl_view_time">评论：<span class="niu_pin">@(bll_article_comment.GetCount("is_lock=0 and article_id=" + m.id.ToString()))</span>条</div>
+   </div>
+   <div class="bl_view_content w">
+      <h1>@m.title<span></span></h1>
+      <div class="bl_view_word">
+    	   <p style="text-indent:2em;">
+         <span style="color: rgb(51, 51, 51); font-family: Arial, " helvetica="" neue",="" helvetica,="" sans-serif;="" line-height:="" 28px;="" white-space:="" normal;"="">‍‍
+            @Html.Raw(m.content)
+            ‍<span style="color: rgb(51, 51, 51); font-family: Arial, " helvetica="" neue",="" helvetica,="" sans-serif;="" line-height:="" 28px;="" white-space:="" normal;"="">‍</span>
+         </span>
+         </p>
+      </div>
+   </div>
+   <div class="bl_view_tag">
+     <div class="bl_view_user">上一篇：@Html.Raw(bc.get_prevandnext_article("news_show", -1, "没有了", 0))</div>
+	  <div class="bl_view_time">下一篇：@Html.Raw(bc.get_prevandnext_article("news_show", 1, "没有了", 0))</div>
+   </div>
+</div>
+
+

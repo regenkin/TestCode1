@@ -1,0 +1,94 @@
+﻿@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+    ViewBag.Title = "Manager_Pwd";
+    DTcms.Model.manager m = ViewData["model"] as DTcms.Model.manager;
+}
+@section HeaderContent{
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+      });
+   </script>
+}
+@using(Html.BeginForm("SubmitSave", "Manager_Pwd", FormMethod.Post, new {id="form1"})){
+<!--导航栏-->
+<div class="location">
+  <a href="../manager_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>修改密码</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">修改密码</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>用户名</dt>
+    <dd>
+       @Html.TextBox("txtUserName", m.user_name, new { @class="input normal", disabled="disabled"})
+    </dd>
+  </dl>
+  <dl>
+    <dt>旧登录密码</dt>
+    <dd>
+       @Html.Password("txtOldPassword", "", new { @class="input normal", datatype="*6-20", nullmsg="请输入旧密码", errormsg="密码范围在6-20位之间", sucmsg=" "})
+       <span class="Validform_checktip">*</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>新登录密码</dt>
+    <dd>
+       @Html.Password("txtPassword", "", new { @class="input normal", datatype="*6-20", nullmsg="请输入新密码", errormsg="密码范围在6-20位之间", sucmsg=" "})
+       <span class="Validform_checktip">*</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>新确认密码</dt>
+    <dd>
+       @Html.Password("txtPassword1", "", new { @class="input normal", datatype="*", recheck="txtPassword", nullmsg="请再输入一次新密码", errormsg="两次输入的密码不一致", sucmsg=" "})
+       <span class="Validform_checktip">*</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>姓名</dt>
+    <dd>
+       @Html.TextBox("txtRealName", m.real_name, new { @class="input normal" })
+    </dd>
+  </dl>
+  <dl>
+    <dt>电话</dt>
+    <dd>
+       @Html.TextBox("txtTelephone", m.telephone, new { @class="input normal"})
+    </dd>
+  </dl>
+  <dl>
+    <dt>邮箱</dt>
+    <dd>
+       @Html.TextBox("txtEmail", m.email, new { @class="input normal" })
+    </dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+}

@@ -1,0 +1,44 @@
+﻿@using System.Data;
+@using DTcms.BLL;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   Layout = "";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.sysconfig config = ViewData["config"] as DTcms.Model.sysconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   SearchController c = ViewBag.This as SearchController;
+   int totalcount;
+   int page = int.Parse(ViewBag.Page as string);
+   string channel = ViewBag.Channel as string;
+   string keyword = ViewBag.Keyword as string;
+   DataTable list = c.get_search_list(15, out totalcount);
+   DTcms.BLL.article bll_article = new article();
+   DTcms.BLL.article_comment bll_article_comment = new article_comment();
+}
+@foreach(DataRow dr in list.Rows){
+<a href="@dr["link_url"]">
+   <div class="baoliao_content">
+      <div class="bl_img"><img = src="@dr["img_url"]" /></div>
+      <div class="bl_right">
+         <div class="bl_title">@dr["title"]</div>
+         <div class="bl_note">@dr["zhaiyao"]</div>
+         <div class="bl_tag">
+            <div class="bl_price"></div>
+            <div class="bl_oprice"></div>
+            <div class="bl_time"><span class="time">@DateTime.Parse(dr["add_time"].ToString()).ToString("MM-dd HH:mm")</span></div>
+            <div class="bl_mall">
+               <span class="comm">@(bll_article_comment.GetCount("is_lock=0 and article_id=" + dr["id"].ToString())) 人评论</span>
+               <span class="view">@(bll_article.GetClick((int)dr["id"])) 次浏览</span>
+            </div>
+         </div>
+      </div>
+   </div>
+</a>
+}
+@if(totalcount == 0){
+<p style="text-align:center; width:100%">
+   <img src="@(config.webpath)templates/@ViewBag.TemplateSkin/mobile/images/nothing.png" style="height:120px">
+</p>
+}
+<label id="totalcount" style="display:none">@totalcount</label>

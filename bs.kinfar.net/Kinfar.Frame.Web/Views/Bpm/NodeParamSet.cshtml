@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "NodeParamSet";
+}
+@section styles
+{
+    <style type="text/css">
+        .td_label {
+            width: 90px;
+        }
+
+        .td_btnInput {
+            width: 120px;
+        }
+    </style>
+}
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/Bpm/NodeParamSet.js"></script>
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid workflowId = Request["workflowId"].ObjToGuid();
+   string tagId = Request["tagId"].ObjToStr();}
+@Html.Raw(frameFactory.GetNodeParamSetHTML(workflowId, tagId))

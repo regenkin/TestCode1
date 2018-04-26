@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "LineParamSet";
+}
+@section styles
+{
+    <style type="text/css">
+        .td_label {
+            width: 120px;
+        }
+    </style>
+}
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/Bpm/LineParamSet.js"></script>
+    <script type="text/javascript" src="~/Scripts/common/QueryCondition.js"></script>
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid workflowId = Request["workflowId"].ObjToGuid();
+   string tagId = Request["tagId"].ObjToStr();}
+@Html.Raw(frameFactory.GetLineParamSetHTML(workflowId, tagId))

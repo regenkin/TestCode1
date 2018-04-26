@@ -1,0 +1,230 @@
+﻿@using System.Data;
+@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+   ViewBag.Title = "友情链接管理";
+   DataTable list = ViewData["list"] as DataTable;
+}
+@section HeaderContent{
+   <link href="~/Content/pagination.css" rel="stylesheet" />
+   <script src="~/Scripts/jquery.lazyload.min.js"></script>
+   <script>
+
+      function getQueryParam() {
+         var text = $("#txtKeywords").val();
+         var pageCount = $("#txtPageNum").val();
+         return "keywords=" + text + "&pagesize=" + pageCount + "&page=@ViewBag.Page";
+      }
+      //查询数据
+      function search() {
+         document.location = "index?" + getQueryParam();
+      }
+
+      //ExePostBack回调函数
+      function __doPostBack(objId) {
+         if (objId == "btnUnLock") {
+            submitAudit();
+         }
+         if (objId == "btnDelete") {
+            submitdelete();
+         }
+      }
+      
+      //批量删除
+      function submitdelete() {
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitDelete?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("删除数据失败!");
+            }
+         });
+      }
+
+      //批量审核
+      function submitAudit() {
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitAudit?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("审核数据失败!");
+            }
+         });
+      }
+
+      //保存排序
+      function submitSave() {
+         //遍历表格行设置Json数据
+         var $tr = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($tr).each(function (i, item) {
+            var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+            var sortId = $(item).find(".sort").val();
+            var obj = { id: id, sortId: sortId };
+            json.list.push(obj);
+         });
+         // 提交保存排序字段
+         $.ajax({
+            url: "SubmitSave?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function(){
+               alert("保存排序失败!");
+            }
+         });
+      }
+
+      //设置状态
+      function setStatus(id, objId, obj) {
+         $.ajax({
+            url: "SetStatus",
+            type: "POST",
+            dataType: "text",
+            data: "id=" + id + "&cmdName=" + objId,
+            success: function (data) {
+               if (data == "1") {
+                  if ($(obj).hasClass("selected")) {
+                     $(obj).removeClass("selected");
+                  }
+                  else {
+                     $(obj).addClass("selected");
+                  }
+               }
+            },
+            error: function () {
+               alert("保存友情链接状态失败!");
+            }
+         });
+      }
+   </script>
+}
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index" class="home"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>插件管理</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>友情链接</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a><a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a class="add" href="../link_edit/index?action=@DTEnums.ActionEnum.Add"><i class="iconfont icon-close"></i><span>新增</span></a></li>
+          <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a class="save" href="javascript:submitSave();" id="btnSave"><i class="iconfont icon-save"></i><span>保存</span></a></li>
+          <li><a class="lock" href="javascript:;" id="btnUnLock" onclick="ExePostBack('btnUnLock','审核后前台将显示该信息，确定继续吗？');"><i class="iconfont icon-survey"></i><span>审核</span></a></li>
+          <li><a class="del" href="javascript:;" id="btnDelete" onclick="ExePostBack('btnDelete');"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+        </ul>
+      </div>
+      <div class="r-list">
+        <input type="text" id="txtKeywords" class="keyword" value="@ViewBag.Keywords" />
+        <a href="javasctript:search();" id="btnSearch" class="btn-search"><i class="iconfont icon-search"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+  <tr>
+    <th width="8%">选择</th>
+    <th align="left">标题</th>
+    <th align="left" width="16%">所属站点</th>
+    <th align="left" width="12%">是否图片</th>
+    <th align="left" width="16%">发布时间</th>
+    <th align="left" width="10%">排序</th>
+    <th align="left" width="8%">属性</th>
+    <th width="10%">操作</th>
+  </tr>
+@foreach(DataRow dr in list.Rows){
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle">
+         <input type="checkbox" />
+      </span>
+      <label style="display:none">@dr["id"]</label>
+    </td>
+    <td><a href="../link_edit/index?action=@DTEnums.ActionEnum.Edit&id=@dr["id"]">@dr["title"] @(Convert.ToInt32(dr["is_lock"]) == 1 ? "(未审核)" : "")</a></td>
+    <td>@(new DTcms.BLL.sites().GetTitle(Convert.ToInt32(dr["site_id"])))</td>
+    <td>@if(Convert.ToInt32(dr["is_image"]) == 0){
+           @:文字链接
+         }else{
+           <img src="@dr["img_url"]" width="50" height="20" />
+         }                                                   
+    </td>
+    <td>@string.Format("{0:g}",dr["add_time"])</td>
+    <td><input type="text" class="sort" value="@dr["sort_id"]" onkeydown="return checkNumber(event);" /></td>
+    <td>
+      <div class="btn-tools">
+          @if (Convert.ToInt32(dr["is_red"]) == 1) {
+             <a href="javascript:;" class="red selected" title="取消推荐" onclick="setStatus(@dr["id"], 'lbtnIsRed', this);"><i class="iconfont icon-good"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="red" title="设置推荐" onclick="setStatus(@dr["id"], 'lbtnIsRed', this);"><i class="iconfont icon-good"></i></a>
+          }
+      </div>
+    </td>
+    <td align="center"><a href="../link_edit/index?action=@DTEnums.ActionEnum.Edit&id=@dr["id"]">修改</a></td>
+  </tr>
+}
+@if (list.Rows.Count == 0) {
+   <tr><td align="center" colspan="7">暂无记录</td></tr>
+}
+</table>
+</div>
+<!--/列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span>
+     <input type="text" id="txtPageNum" class="pagenum" onkeydown="return checkNumber(event);" onchange="search();" value="@ViewBag.PageSize" />
+     <span>条/页</span>
+  </div>
+  <div class="default">@Html.Raw(ViewBag.PageContent)</div>
+</div>
+<!--/内容底部-->
+</form>

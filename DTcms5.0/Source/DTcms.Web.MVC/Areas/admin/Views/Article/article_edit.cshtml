@@ -1,0 +1,1007 @@
+﻿@using System.Data;
+@using DTcms.Common;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "编辑内容";
+   DTcms.Model.sysconfig sysConfig = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   List<SelectListItem> categoryList = ViewData["categoryList"] as List<SelectListItem>;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   DataTable priceList = ViewData["priceList"] as DataTable;
+   List<DTcms.Model.article_attribute_field> sysFieldList = ViewData["sysFieldList"] as List<DTcms.Model.article_attribute_field>;
+   List<DTcms.Model.article_attribute_field> otherFieldList = ViewData["otherFieldList"] as List<DTcms.Model.article_attribute_field>;
+   DTcms.Model.site_channel channelModel = ViewData["channelModel"] as DTcms.Model.site_channel;
+   int channel_id = int.Parse(ViewBag.ChannelId as string);
+}
+@section HeaderContent{
+<script src="~/editor/ueditor.config.js"></script>
+<script src="~/editor/ueditor.all.min.js"></script>
+<script src="~/editor/lang/zh-cn/zh-cn.js"></script>
+<script>
+   var artId = Number(@ViewBag.Id);
+   $(function () {
+      //初始化表单验证
+      $("#form1").initValidform();
+
+      //初始化编辑器
+      $(".editor").each(function (i) {
+         var objId = $(this).attr("id");
+         if (objId != "undefined") {
+            var editor = UE.getEditor(objId, {
+               serverUrl: '/tools/upload_ajax.ashx',
+               initialFrameWidth: '100%',
+               initialFrameHeight: 350
+            });
+         }
+      });
+      $(".editor-mini").each(function (i) {
+         var objId = $(this).attr("id");
+         if (objId != "undefined") {
+            var editorMini = UE.getEditor(objId, {
+               serverUrl: '/tools/upload_ajax.ashx',
+               initialFrameWidth: '100%',
+               initialFrameHeight: 250,
+               toolbars: [[
+                   'fullscreen', 'source', '|', 'undo', 'redo', '|',
+                   'bold', 'italic', 'underline', 'strikethrough', 'removeformat', 'pasteplain', '|', 'forecolor', 'insertorderedlist', 'insertunorderedlist', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+                'link', 'unlink', 'anchor', '|',
+                'simpleupload', 'insertimage', 'scrawl', 'insertvideo'
+               ]]
+            });
+         }
+      });
+
+
+
+      //初始化上传控件
+      $(".upload-img").InitUploader({ filesize: "@sysConfig.imgsize", sendurl: "/tools/upload_ajax.ashx", swf: "/scripts/webuploader/uploader.swf", filetypes: "@sysConfig.fileextension" });
+      $(".upload-video").InitUploader({ filesize: "@sysConfig.videosize", sendurl: "/tools/upload_ajax.ashx", swf: "/scripts/webuploader/uploader.swf", filetypes: "@sysConfig.videoextension" });
+      $(".upload-album").InitUploader({ btntext: "批量上传", multiple: true, water: true, thumbnail: true, filesize: "@sysConfig.imgsize", sendurl: "/tools/upload_ajax.ashx", swf: "/scripts/webuploader/uploader.swf" });
+
+      //设置封面图片的样式
+      $(".photo-list ul li .img-box img").each(function () {
+         if ($(this).attr("src") == $("#hidFocusPhoto").val()) {
+            $(this).parent().addClass("selected");
+         }
+      });
+
+      //创建上传附件
+      $(".attach-btn").click(function () {
+         showAttachDialog();
+      });
+
+      //创建商品规格
+      $(".spec-btn").click(function () {
+         showSpecDialog();
+      });
+
+      //赋值规格市场价格
+      $("#field_control_market_price").blur(function () {
+         $("#div_spec__container").find("input[name='spec_market_price']").val($(this).val());
+      });
+      //赋值规格销售价格
+      $("#field_control_sell_price").blur(function () {
+         $("#div_spec__container").find("input[name='spec_sell_price']").val($(this).val());
+      });
+
+      //判断是否为编辑状态
+      if ("@ViewBag.Action" == "Edit") {
+         //获取关联内容
+         getLinkArticleList();
+      }
+      else {
+         //隐藏关联内容选项卡
+         $("#linkArticle-tab").hide();
+      }
+   });
+
+   //初始化附件窗口
+   function showAttachDialog(obj) {
+      var objNum = arguments.length;
+      var attachDialog = top.dialog({
+         id: 'attachDialogId',
+         title: "上传附件",
+         url: '../dialog/dialog_article_attach/index',
+         width: 500,
+         height: 180,
+         onclose: function () {
+            var liHtml = this.returnValue; //获取返回值
+            if (liHtml.length > 0) {
+               $("#showAttachList").children("ul").append(liHtml);
+            }
+         }
+      }).showModal();
+      //如果是修改状态，将对象传进去
+      if (objNum == 1) {
+         attachDialog.data = obj;
+      }
+   }
+   //删除附件节点
+   function delAttachNode(obj) {
+      $(obj).parent().remove();
+   }
+
+   //初始化规格窗口
+   function showSpecDialog() {
+      var d = top.dialog({
+         id: 'specDialogId',
+         padding: 0,
+         title: "商品规格",
+         width:800,
+         url: '../dialog/dialog_article_spec/index?channel_id=@channel_id'
+      }).showModal();
+      //将容器对象传进去
+      d.data = $("#item_box");
+   }
+   //初始化会员组价格窗口
+   function showPriceDialog(obj) {
+      var d = top.dialog({
+         padding: 0,
+         title: "会员组价格",
+         url: '../dialog/dialog_group_price/index',
+         width: 400
+      }).showModal();
+      //将对象传进去
+      d.data = obj;
+   }
+   //计算出最小的市场价格
+   function countMarketPrice(obj) {
+      var objName = $(obj).attr("name");
+      var minValue = parseFloat($(obj).val());
+      $("input[name='" + objName + "']").each(function () {
+         if ($(this).val().length > 0) {
+            if (parseFloat($(this).val()) < minValue) {
+               minValue = parseFloat($(this).val());
+            }
+         }
+      });
+      $("#field_control_market_price").val(minValue);
+   }
+   //计算最小的销售价格
+   function countSellPrice(obj) {
+      var objName = $(obj).attr("name");
+      var minValue = parseFloat($(obj).val());
+      $("input[name='" + objName + "']").each(function () {
+         if ($(this).val().length > 0) {
+            if (parseFloat($(this).val()) < minValue) {
+               minValue = parseFloat($(this).val());
+            }
+         }
+      });
+      $("#field_control_sell_price").val(minValue);
+   }
+   //计算库存总数量
+   function countStockQuantity(obj) {
+      var objName = $(obj).attr("name");
+      var countValue = 0;
+      $("input[name='" + objName + "']").each(function () {
+         if ($(this).val().length > 0) {
+            countValue += parseFloat($(this).val());
+         }
+      });
+      $("#field_control_stock_quantity").val(countValue);
+   }
+
+   /*//封面图片服务端浏览
+   KindEditor.ready(function (K) {
+      // 设置封面图片增设的浏览按钮功能(打开KindEditor的图片管理窗口)
+      var editor2 = K.editor({
+         uploadJson: '/tools/upload_ajax.ashx?action=EditorFile&IsWater=1',
+         fileManagerJson: '/tools/upload_ajax.ashx?action=ManagerFile',
+         allowFileManager: true
+      });
+      K('#imagemanager').click(function () {
+         editor2.loadPlugin('image', function () {
+            editor2.plugin.imageDialog({
+               imageUrl: K('#txtImgUrl').val(),
+               clickFn: function (url, title, width, height, border, align) {
+                  K('#txtImgUrl').val(url);
+                  editor2.hideDialog();
+               }
+            });
+         });
+      });
+
+      // 设置扩展字段上传图片新增按钮功能(打开KindEditor的图片管理窗口)
+      if ($("#exp_imagemanager").length > 0) {
+         var editor3 = K.editor({
+            uploadJson: '/tools/upload_ajax.ashx?action=EditorFile&IsWater=1',
+            fileManagerJson: '/tools/upload_ajax.ashx?action=ManagerFile',
+            allowFileManager: true
+         });
+         K('#exp_imagemanager').click(function () {
+            editor3.loadPlugin('image', function () {
+               editor3.plugin.imageDialog({
+                  imageUrl: K('#txtImgUrl').val(),
+                  clickFn: function (url, title, width, height, border, align) {
+                     K('#txtImgUrl').val(url);
+                     editor3.hideDialog();
+                  }
+               });
+            });
+         });
+      }
+   });*/
+
+   //设置视图样式
+   function setView(viewStyle) {
+      document.location = "index?action=Edit&id=@ViewBag.Id&channel_id=@ViewBag.ChannelId&category_id=@ViewBag.CategoryId&keywords=@ViewBag.Keywords&property=@ViewBag.Property&page=@ViewBag.Page&prolistview=" + viewStyle;
+   }
+
+   //获取关联内容列表
+   function getLinkArticleList() {
+      $("#link-article").html("<div class='loading'><span></span></div>");
+      $.ajax({
+         type: "post",
+         url: "get_link_article_list?channel_id=@ViewBag.ChannelId&category_id=@m.category_id&prolistview=@ViewBag.ProListView&id=@m.id&action=View",
+         success: function (data) {
+            $("#link-article").html(data);
+            $(".imglist").ruleLayoutImgList();
+         },
+         error: function () {
+            $("#link-article").html("<div><span>获取关联内容失败......</span></div>");
+         }
+      });
+   }
+
+   //创建选择内容窗口
+   function showArticleListDialog(channel_name, id) {
+      var d = top.dialog({
+         id: 'dialogArticleList',
+         title: '选择关联内容',
+         url: "../dialog/dialog_article_list/index?channel_name=" + channel_name + "&id=" + id,
+         width: 850,
+         height: 550,
+         onclose: function () {
+            var json = this.returnValue; //获取返回值
+            if (json.length > 0) {
+               $("#link-article").html("<div class='loading'><span></span></div>");
+               addLinkArticle(json);
+            }
+         }
+      }).showModal();
+   }
+
+   //批量添加关联内容(格式:{"channel_id": 1, "list":[{id:1},{id:2}]})
+   function addLinkArticle(json) {
+      var channel_id = Number(@ViewBag.ChannelId);
+      var _json = { channel_id: channel_id, id: artId, list: json["list"] };
+      $.ajax({
+         type: "post",
+         data: "json=" + JSON.stringify(_json),
+         url: "AddLinkArticle?action=addlink&channel_id=" + channel_id,
+         success: function (data) {
+            if (data != "0")
+               getLinkArticleList();
+         },
+         error: function () {
+            alert("保存关联内容失败! json:" + json.stringify(_json));
+         }
+      });
+   }
+
+   //删除指定关联内容
+   function delLinkArticle(id) {
+      var channel_id = Number(@ViewBag.ChannelId);
+      var json = { channel_id: channel_id, id: artId, list: [{ id: id }] };
+      $.ajax({
+         type: "post",
+         data: "json=" + JSON.stringify(json),
+         url: "DelLinkArticle?action=dellink&channel_id=" + channel_id,
+         success: function (data) {
+            if (data != "0") {
+               $("#row_" + id).remove();
+            }
+         }
+      });
+   }
+
+   //批量删除
+   function submitDelete() {
+      var channel_id = Number(@ViewBag.ChannelId);
+      var $row = $("#ltable tr:gt(0)");
+      var json = { channel_id: channel_id, id: artId, list: [] };
+      $($row).each(function (i, item) {
+         if ($(item).find("input:checkbox").prop("checked")) {
+            var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+            var obj = { id: id };
+            json.list.push(obj);
+         }
+      });
+      $.ajax({
+         type: "post",
+         data: "json=" + JSON.stringify(json),
+         url: "DelLinkArticle?action=dellink&channel_id=" + channel_id,
+         success: function (data) {
+            if (data != "0") {
+               getLinkArticleList();
+            }
+         }
+      });
+   }
+
+   //ExePostBack回调函数
+   function __doPostBack(objId) {
+      if (objId == "btnDelete") {
+         submitDelete();
+      }
+   }
+
+
+</script>
+}
+<form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id&channel_id=@ViewBag.ChannelId">
+<!--导航栏-->
+<div class="location">
+  <a href="../article_list/index?channel_id=@ViewBag.ChannelId" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../article_list/index?channel_id=@ViewBag.ChannelId"><span>内容管理</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>编辑内容</span>
+  <div class="clipboard">
+     <span><label id="clipMess"></label></span>
+     <a href="javascript:;" class="copy" onclick="copy();"><i class="iconfont icon-copy"></i><span>复制</span></a>
+     <a href="javascript:;" class="paste disable" onclick="paste();"><i class="iconfont icon-log"></i><span>粘贴</span></a>
+  </div>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">基本信息</a></li>
+        @if (otherFieldList.Count > 0) {
+        <li id="field_tab_item"><a href="javascript:;">扩展选项</a></li>
+        }
+        <li><a href="javascript:;">详细描述</a></li>
+        <li><a href="javascript:;">SEO选项</a></li>
+        <li id="linkArticle-tab"><a href="javascript:getLinkArticleList();">关联内容</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 基本信息 -->
+<div class="tab-content">
+  <dl>
+    <dt>所属类别</dt>
+    <dd>
+      <div class="rule-single-select">
+        @Html.DropDownList("ddlCategoryId", new SelectList(categoryList, "Value", "Text", m.category_id.ToString()), new { datatype = "*", sucmsg = " " })
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>是否发布</dt>
+    <dd>
+      <div class="rule-single-checkbox">
+         @Html.CheckBox("cbStatus", m.status != 2, new { id = "cbStatus" })
+      </div>
+      <span class="Validform_checktip">*不发布前台则无法显示</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>推荐类型</dt>
+    <dd>
+      <div class="rule-multi-checkbox">
+        <span>
+           @Html.CheckBox("cblItem_0", m.is_msg == 1, new { id = "cblItem_0" })<label for="cblItem_0">允许评论</label>
+           @Html.CheckBox("cblItem_1", m.is_top == 1, new { id = "cblItem_1" })<label for="cblItem_1">置顶</label>
+           @Html.CheckBox("cblItem_2", m.is_red == 1, new { id = "cblItem_2" })<label for="cblItem_2">推荐</label>
+           @Html.CheckBox("cblItem_3", m.is_hot == 1, new { id = "cblItem_3" })<label for="cblItem_3">热门</label>
+           @Html.CheckBox("cblItem_4", m.is_slide == 1, new { id = "cblItem_4" })<label for="cblItem_4">幻灯片</label>
+        </span>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>内容标题</dt>
+    <dd>
+      @Html.TextBox("txtTitle", m.title, new { @class = "input normal", datatype = "*2-100", sucmsg = " " })
+      <span class="Validform_checktip">*标题最多100个字符</span>
+    </dd>
+  </dl>
+  @{
+     DTcms.Model.article_attribute_field findItem = sysFieldList.Find(delegate(DTcms.Model.article_attribute_field item) { return item.name == "sub_title"; });
+     if (findItem != null) {
+      <dl ID="div_sub_title">
+       <dt><label id="div_sub_title_title">@findItem.title</label></dt>
+       <dd>
+         @Html.TextBox("field_control_sub_title", ViewBag.Action as string == "Edit" && m.fields.ContainsKey(findItem.name) ? m.fields[findItem.name] : findItem.default_value, new { @class = "input normal", datatype = "*0-255", sucmsg = " " })
+         <label id="div_sub_title_tip" class="Validform_checktip">@findItem.valid_tip_msg</label>
+       </dd>
+     </dl>
+     }
+  }
+  <dl>
+    <dt>Tags标签</dt>
+    <dd>
+      @Html.TextBox("txtTags", m.tags, new { @class ="input normal", datatype = "*0-500", sucmsg = " "})
+      <span class="Validform_checktip">多个可用英文逗号分隔开，如：a,b</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>封面图片</dt>
+    <dd>
+      @{
+         //不是相册图片就绑定
+         string filename = m.img_url.Substring(m.img_url.LastIndexOf("/") + 1);
+         @Html.TextBox("txtImgUrl", !filename.StartsWith("thumb_") ? m.img_url : "", new { @class = "input normal upload-path" })
+      }
+      <div class="upload-box" id="imagemanager">
+         <div class="upload-btn webuploader-container"><div class="webuploader-pick">浏览...</div></div>
+      </div>
+      <div class="upload-box upload-img" style="display:none;"></div>
+    </dd>
+  </dl>
+
+<!-- 商品货号 -->
+@{
+   findItem = sysFieldList.Find(delegate(DTcms.Model.article_attribute_field item) { return item.name == "goods_no"; });
+   if (findItem != null) {
+   <dl ID="div_goods_no">
+      <dt><label id="div_goods_no_title">商品货号</label></dt>
+      <dd>
+      @Html.TextBox("field_control_goods_no", "", new { @class = "input normal", datatype = "*0-100", sucmsg = " " })
+      <label id="div_goods_no_tip" class="Validform_checktip"></label>
+      </dd>
+   </dl>
+   }
+}
+<!-- /商品货号 -->
+
+<!-- 库存数量 -->
+@{
+   findItem = sysFieldList.Find(delegate(DTcms.Model.article_attribute_field item) { return item.name == "stock_quantity"; });
+   if (findItem != null) {
+  <dl ID="div_stock_quantity">
+    <dt><label id="div_stock_quantity_title">库存数量</label></dt>
+    <dd>
+      @Html.TextBox("field_control_stock_quantity", ViewBag.Action as string == "Edit" && m.fields.ContainsKey(findItem.name) ? m.fields[findItem.name] : "0", new { @class = "input small", datatype = "n", sucmsg = " " })
+      <label id="div_stock_quantity_tip" class="Validform_checktip"></label>
+    </dd>
+  </dl>
+   }
+}
+<!-- /库存数量 -->
+
+<!-- 市场价格 -->
+@{
+   findItem = sysFieldList.Find(delegate(DTcms.Model.article_attribute_field item) { return item.name == "market_price"; });
+   if (findItem != null) {
+  <dl ID="div_market_price">
+    <dt><label id="div_market_price_title">市场价格</label></dt>
+    <dd>
+      @Html.TextBox("field_control_market_price", ViewBag.Action as string == "Edit" && m.fields.ContainsKey(findItem.name) ? m.fields[findItem.name] : "0", new { @class = "input small", datatype = @"/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/", sucmsg = " " }) 元
+      <label id="div_market_price_tip" class="Validform_checktip"></label>
+    </dd>
+  </dl>
+   }
+}
+<!-- /市场价格 -->
+
+<!-- 销售价格 -->
+@{
+   findItem = sysFieldList.Find(delegate(DTcms.Model.article_attribute_field item) { return item.name == "sell_price"; });
+   if (findItem != null) {
+  <dl ID="div_sell_price">
+    <dt><label id="div_sell_price_title">销售价格</label></dt>
+    <dd>
+      @Html.TextBox("field_control_sell_price", ViewBag.Action as string == "Edit" && m.fields.ContainsKey(findItem.name) ? m.fields[findItem.name] : "0", new { @class = "input small", datatype = @"/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/", sucmsg = " " }) 元
+      <label id="div_sell_price_tip" class="Validform_checktip"></label>
+    </dd>
+  </dl>
+   }
+}
+<!-- /销售价格 -->
+
+<!-- 积分 -->
+@{
+   findItem = sysFieldList.Find(delegate(DTcms.Model.article_attribute_field item) { return item.name == "point"; });
+   if (findItem != null) {
+  <dl ID="div_point">
+    <dt><label id="div_point_title">@findItem.title</label></dt>
+    <dd>
+      @Html.TextBox("field_control_point", ViewBag.Action as string == "Edit" && m.fields.ContainsKey(findItem.name) ? m.fields[findItem.name] : findItem.default_value, new { @class = "input small", datatype = @"/^-?\d+$/", sucmsg = " " })
+      <label id="div_point_tip" class="Validform_checktip">@findItem.valid_tip_msg</label>
+    </dd>
+  </dl>
+   }
+}
+<!-- /积分 -->
+
+<!-- 商品规格 -->
+@if(channelModel.is_spec == 1){
+   <dl id="div_spec__container">
+      <dt>商品规格</dt>
+      <dd>
+         <a class="icon-btn add spec-btn"><span>设置规格</span></a>
+         <div class="table-container" style="padding-top:10px;">
+            @Html.Hidden("hide_goods_spec_list", ViewBag.GoodsSpecJson as string)
+           <table border="0" cellspacing="0" cellpadding="0" class="border-table" width="82%">
+             <thead>
+             <tr>
+               <th align="center" width="15%">货号</th>
+               <th width="8%">市场价(元)</th>
+               <th width="8%">销售价(元)</th>
+               <th width="8%">库存(件)</th>
+               <th width="35%">规格</th>
+               <th width="8%">会员价</th>
+             </tr>
+             </thead>
+            <tbody id="item_box">
+               @if(m.goods != null){
+               foreach (DTcms.Model.article_goods item in m.goods) {
+                  <tr>
+                     <td align="center">
+                       <input type="hidden" name="hide_goods_id" value="@item.id" />
+                       <input type="text" name="spec_goods_no" class="td-input" value="@item.goods_no" />
+                     </td>
+                     <td align="center"><input type="text" name="spec_market_price" maxlength="10" class="td-input" value="@item.market_price" onkeydown="return checkForFloat(this,event);" onblur="countMarketPrice(this);" /></td>
+                     <td align="center"><input type="text" name="spec_sell_price" maxlength="10" class="td-input" value="@item.sell_price" onkeydown="return checkForFloat(this,event);" onblur="countSellPrice(this);" /></td>
+                     <td align="center"><input type="text" name="spec_stock_quantity" maxlength="10" class="td-input" value="@item.stock_quantity" onkeydown="return checkNumber(event);" onblur="countStockQuantity(this);" /></td>
+                     <td style="white-space:inherit;word-break:break-all;">
+                       <input type="hidden" name="hide_spec_ids" value="@item.spec_ids" />
+                       <input type="hidden" name="hide_spec_text" value="@item.spec_text" />
+                       <p>@item.spec_text</p>
+                     </td>
+                     <td align="center">
+                       <input name="hide_group_price" type="hidden" value='@JsonHelper.ObjectToJSON(item.group_prices))' />
+                       <a href="javascript:;" onclick="showPriceDialog(this);">设置</a>
+                     </td>
+                   </tr>                  
+                  }
+               }
+            </tbody>
+            </table>
+         </div>
+      </dd>
+   </dl>
+}
+<!-- /商品规格-->
+
+  <dl>
+    <dt>排序数字</dt>
+    <dd>
+      @Html.TextBox("txtSortId", m.sort_id.ToString(), new { @class = "input small", datatype = "n", sucmsg = " " })
+      <span class="Validform_checktip">*数字，越小越向前</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>浏览次数</dt>
+    <dd>
+      @Html.TextBox("txtClick", m.click, new { @class = "input small", datatype = "n", sucmsg = " " })
+      <span class="Validform_checktip">点击浏览该信息自动+1</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>发布时间</dt>
+    <dd>
+      @Html.TextBox("txtAddTime", m.add_time.ToString("yyyy-MM-dd HH:mm:ss"), new { @class = "input rule-date-input", onfocus = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})", datatype = @"/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}\s{1}(\d{1,2}:){2}\d{1,2}$/", errormsg = "请选择正确的日期", sucmsg = " " })
+       <span class="Validform_checktip">不选择默认当前发布时间</span>
+    </dd>
+  </dl>
+  @if (channelModel != null && channelModel.is_albums == 1) {
+  <dl ID="div_albums_container">
+    <dt>图片相册</dt>
+    <dd>
+      <div class="upload-box upload-album"></div>
+      <input type="hidden" name="hidFocusPhoto" id="hidFocusPhoto" class="focus-photo" />
+      <div class="photo-list">
+        <ul>
+            @if (m.albums != null) {
+               foreach (DTcms.Model.article_albums item in m.albums) {
+               <li>
+                  <input type="hidden" name="hid_photo_name" value="@item.id|@item.original_path|@item.thumb_path" />
+                  <input type="hidden" name="hid_photo_remark" value="@item.remark" />
+                  <div class="img-box" onclick="setFocusImg(this);">
+                     <img src="@item.thumb_path" bigsrc="@item.original_path" />
+                     <span class="remark">
+                        <i>@(item.remark == "" ? "暂无描述..." : item.remark)</i>
+                     </span>
+                  </div>
+                  <a href="javascript:;" onclick="setRemark(this);">描述</a>
+                  <a href="javascript:;" onclick="delImg(this);">删除</a>
+               </li>
+               }
+            }
+        </ul>
+      </div>
+    </dd>
+  </dl>
+  }
+  @if (channelModel != null && channelModel.is_attach == 1) {
+  <dl ID="div_attach_container">
+    <dt>上传附件</dt>
+    <dd>
+      <a class="icon-btn add attach-btn"><span>添加附件</span></a>
+      <div id="showAttachList" class="attach-list">
+        <ul>
+              @if (m.attach != null) {
+                 foreach (DTcms.Model.article_attach item in m.attach) {
+              <li>
+                <input name="hid_attach_id" type="hidden" value="@item.id" />
+                <input name="hid_attach_filename" type="hidden" value="@item.file_name" />
+                <input name="hid_attach_filepath" type="hidden" value="@item.file_path" />
+                <input name="hid_attach_filesize" type="hidden" value="@item.file_size" />
+                <i class="icon"></i>
+                <a href="javascript:;" onclick="delAttachNode(this);" title="删除附件"></a>
+                <a href="javascript:;" onclick="showAttachDialog(this);" class="edit" title="更新附件"></a>
+                <div class="title">@item.file_name</div>
+                <div class="info">类型：<span class="ext">@item.file_ext</span> 大小：
+                   <span class="size">
+                   @(item.file_size > 1024 ? (Convert.ToDouble(item.file_size) / 1024f).ToString("0.00") + "MB" : item.file_size + "KB")
+                   </span> 下载：<span class="down">@item.down_num</span>次</div>
+                <div class="btns">下载积分：<input type="text" name="txt_attach_point" onkeydown="return checkNumber(event);" value="@item.point" /></div>
+              </li>
+                 }
+              }
+        </ul>
+      </div>
+    </dd>
+  </dl>
+  }
+</div>
+<!-- /基本信息 -->
+
+<!-- 扩展选项 -->
+@if (otherFieldList.Count > 0) {
+<div id="field_tab_content" class="tab-content" style="display:none">
+@foreach (DTcms.Model.article_attribute_field item in otherFieldList) {
+   switch (item.control_type) {
+      case "single-text"://单行文本
+         <dl>
+            <dt>@item.title</dt>
+            <dd>
+               @{
+         IDictionary<string, object> attr1 = new Dictionary<string, object>();
+         attr1.Add("class", "input normal");
+         if (!string.IsNullOrEmpty(item.valid_tip_msg)) {
+            attr1.Add("tipmsg", item.valid_tip_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_error_msg)) {
+            attr1.Add("errormag", item.valid_error_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_pattern)) {
+            attr1.Add("datatype", item.valid_pattern);
+            attr1.Add("sucmsg", " ");
+         }
+         if (item.is_password == 1) {
+                     @Html.Password("field_contorl_" + item.name, ViewBag.Action == "Edit" ? m.fields[item.name] : item.default_value, attr1)
+         }
+         else {
+                     @Html.TextBox("field_control_" + item.name, ViewBag.Action == "Edit" ? m.fields[item.name] : item.default_value, attr1)
+         }
+               }
+               <span class="Validform_checktip">@item.valid_tip_msg</span>
+            </dd>
+         </dl>
+         break;
+      case "multi-text"://多行文本
+         <dl>
+            <dt>@item.title</dt>
+            <dd>
+               @{
+         IDictionary<string, object> attr2 = new Dictionary<string, object>();
+         attr2.Add("class", "input");
+         if (!string.IsNullOrEmpty(item.valid_tip_msg)) {
+            attr2.Add("tipmsg", item.valid_tip_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_error_msg)) {
+            attr2.Add("errormag", item.valid_error_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_pattern)) {
+            attr2.Add("datatype", item.valid_pattern);
+            attr2.Add("sucmsg", " ");
+         }
+                  @Html.TextArea("field_control_" + item.name, ViewBag.Action == "Edit" ? m.fields[item.name] : item.default_value, attr2)
+               }
+               <span class="Validform_checktip">@item.valid_tip_msg</span>
+            </dd>
+         </dl>        
+         break;
+      case "editor"://编辑器
+      <dl>
+         <dt>@item.title</dt>
+         <dd>
+            @{
+         IDictionary<string, object> attr3 = new Dictionary<string, object>();
+         attr3.Add("style", "visibility:hidden");
+         if (item.editor_type == 1) {
+            attr3.Add("class", "editor-mini");
+         }
+         else {
+            attr3.Add("class", "editor");
+         }
+         if (!string.IsNullOrEmpty(item.valid_tip_msg)) {
+            attr3.Add("tipmsg", item.valid_tip_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_error_msg)) {
+            attr3.Add("errormag", item.valid_error_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_pattern)) {
+            attr3.Add("datatype", item.valid_pattern);
+            attr3.Add("sucmsg", " ");
+         }
+               @Html.TextArea("field_control_" + item.name, ViewBag.Action == "Edit" ? m.fields[item.name] : item.default_value, attr3)
+            }
+            <span class="Validform_checktip">@item.valid_tip_msg</span>
+         </dd>
+      </dl>
+         break;
+      case "images"://图片上传
+         <dl>
+            <dt>@item.title</dt>
+            <dd>
+               @{
+         IDictionary<string, object> attr4 = new Dictionary<string, object>();
+         attr4.Add("class", "input normal upload-path");
+         if (!string.IsNullOrEmpty(item.valid_tip_msg)) {
+            attr4.Add("tipmsg", item.valid_tip_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_error_msg)) {
+            attr4.Add("errormag", item.valid_error_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_pattern)) {
+            attr4.Add("datatype", item.valid_pattern);
+            attr4.Add("sucmsg", " ");
+         }
+                  @Html.TextBox("field_control_" + item.name, ViewBag.Action == "Edit" ? m.fields[item.name] : item.default_value, attr4)
+               }
+               <div class="upload-box" id="exp_imagemanager">
+                  <div class="upload-btn webuploader-container"><div class="webuploader-pick">图片空间</div></div>
+               </div>
+               <div class="upload-box upload-img" style="margin-left:4px;"></div>
+               <span class="Validform_checktip">@item.valid_tip_msg</span>
+            </dd>
+         </dl>      
+         break;
+      case "video"://视频上传
+         <dl>
+            <dt>@item.title</dt>
+            <dd>
+               @{
+         IDictionary<string, object> attr5 = new Dictionary<string, object>();
+         attr5.Add("class", "input normal upload-path");
+         if (!string.IsNullOrEmpty(item.valid_tip_msg)) {
+            attr5.Add("tipmsg", item.valid_tip_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_error_msg)) {
+            attr5.Add("errormag", item.valid_error_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_pattern)) {
+            attr5.Add("datatype", item.valid_pattern);
+            attr5.Add("sucmsg", " ");
+         }
+                  @Html.TextBox("field_control_" + item.name, ViewBag.Action == "Edit" ? m.fields[item.name] : item.default_value, attr5)
+               }
+               <div class="upload-box upload-video" style="margin-left:4px;"></div>
+               <span class="Validform_checktip">@item.valid_tip_msg</span>
+            </dd>
+         </dl> 
+         break;
+      case "number"://数字
+         <dl>
+            <dt>@item.title</dt>
+            <dd>
+               @{
+         IDictionary<string, object> attr6 = new Dictionary<string, object>();
+         attr6.Add("class", "input small");
+         if (!string.IsNullOrEmpty(item.valid_tip_msg)) {
+            attr6.Add("tipmsg", item.valid_tip_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_error_msg)) {
+            attr6.Add("errormag", item.valid_error_msg);
+         }
+         if (!string.IsNullOrEmpty(item.valid_pattern)) {
+            attr6.Add("datatype", item.valid_pattern);
+            attr6.Add("sucmsg", " ");
+         }
+                  @Html.TextBox("field_control_" + item.name, ViewBag.Action == "Edit" ? m.fields[item.name] : item.default_value, attr6)
+               }
+               <span class="Validform_checktip">@item.valid_tip_msg</span>
+            </dd>
+         </dl>        
+         break;
+      case "checkbox"://复选框
+         <dl>
+            <dt>@item.title</dt>
+            <dd>
+               <div class="rule-single-checkbox">
+                  @Html.CheckBox("field_control_" + item.name, (ViewBag.Action == "Edit" ? m.fields[item.name] : item.default_value) == "1")
+               </div>
+               @if (!string.IsNullOrEmpty(item.valid_tip_msg)) {
+                  <span class="Validform_checktip">@item.valid_tip_msg</span>
+               }
+            </dd>
+         </dl>      
+               break;
+      case "multi-radio"://多项单选
+         <dl>
+            <dt>@item.title</dt>
+            <dd>
+               <div class="rule-multi-radio">
+               @{
+               string[] valArr = item.item_option.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+               string selValArr = m.fields[item.name];
+               for (int i = 0; i < valArr.Length; i++) {
+                  string[] valItemArr = valArr[i].Split('|');
+                  if (valItemArr.Length == 2) {
+                     bool selected = false;
+                     if (ViewBag.Action == "Edit") {
+                        selected = valItemArr[1] == m.fields[item.name];
+                     }
+                     Html.RadioButton("field_control_" + item.name + "_" + i, selected, new { id = "field_control_" + item.name + "_" + i.ToString() });
+                        <label for="@("field_control_" + item.name + "_" + i)">@valItemArr[0]</label>
+                  }
+               }
+               }
+               </div>
+               <span class="Validform_checktip">@item.valid_tip_msg</span>
+            </dd>
+         </dl>
+               break;
+      case "multi-checkbox"://多项多选
+         <dl>
+            <dt>@item.title</dt>
+            <dd>
+               <div class="rule-multi-checkbox">
+               @{
+               string[] valArr2 = item.item_option.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+               string[] selValArr2 = m.fields[item.name].Split(',');
+               for (int i = 0; i < valArr2.Length; i++) {
+                  string[] valItemArr2 = valArr2[i].Split('|');
+                  if (valItemArr2.Length == 2) {
+                     bool selected2 = false;
+                     if (ViewBag.Action == "Edit") {
+                        selected2 = selValArr2.Contains(valItemArr2[1]);
+                     }
+                        @Html.CheckBox("field_control_" + item.name + "_" + i, selected2, new { id = "field_control_" + item.name + "_" + i.ToString() });
+                        <label for="@("field_control_" + item.name + "_" + i.ToString())">@valItemArr2[0]</label>
+                  }
+               }
+               }
+               </div>
+               <span class="Validform_checktip">@item.valid_tip_msg</span>
+            </dd>
+         </dl>      
+               break;
+   }
+}
+</div>
+}
+<!-- /扩展选项 -->
+
+<!-- 详细描述 -->
+<div class="tab-content" style="display:none">
+  <dl>
+    <dt>调用别名</dt>
+    <dd>
+      @Html.TextBox("txtCallIndex", m.call_index, new { @class = "input normal", datatype = @"/^\s*$|^[a-zA-Z0-9\-\_]{2,50}$/", sucmsg = " " })
+      <span class="Validform_checktip">*别名访问，非必填，不可重复</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>URL链接</dt>
+    <dd>
+      @Html.TextBox("txtLinkUrl", m.link_url, new { @class = "input normal", maxlength = "255" })
+      <span class="Validform_checktip">填写后直接跳转到该网址</span>
+    </dd>
+  </dl>
+
+<!-- 信息来源 -->
+@{
+   findItem = sysFieldList.Find(delegate(DTcms.Model.article_attribute_field item) { return item.name == "source"; });
+   if (findItem != null) {
+  <dl ID="div_source">
+    <dt><label id="div_source_title">@findItem.title</label></dt>
+    <dd>
+      @Html.TextBox("field_control_source", ViewBag.Action as string == "Edit" && m.fields.ContainsKey(findItem.name) ? m.fields[findItem.name] : findItem.default_value, new { @class = "input normal" })
+      <label id="div_source_tip" class="Validform_checktip">@findItem.valid_tip_msg</label>
+    </dd>
+  </dl>
+   }
+}
+<!-- /信息来源 -->
+
+<!-- 文章作者 -->
+@{
+   findItem = sysFieldList.Find(delegate(DTcms.Model.article_attribute_field item) { return item.name == "author"; });
+   if (findItem != null) {
+  <dl ID="div_author">
+    <dt><label id="div_author_title">@findItem.title</label></dt>
+    <dd>
+      @Html.TextBox("field_control_author", ViewBag.Action as string == "Edit" && m.fields.ContainsKey(findItem.name) ? m.fields[findItem.name] : findItem.default_value, new { @class = "input normal", datatype = "s0-50", sucmsg = " " })
+      <label id="div_author_tip" class="Validform_checktip">@findItem.valid_tip_msg</label>
+    </dd>
+  </dl>
+   }
+}
+<!-- /文章作者 -->
+
+  <dl>
+    <dt>内容摘要</dt>
+    <dd>
+      @Html.TextArea("txtZhaiyao", m.zhaiyao, new { @class = "input", datatype = "*0-255", sucmsg = " " })
+       <span class="Validform_checktip">不填写则自动截取内容前255字符</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>内容描述</dt>
+    <dd>
+      @Html.TextArea("txtContent", m.content, new { @class = "editor" })
+    </dd>
+  </dl>
+</div>
+<!-- /详细描述 -->
+
+<!-- SEO选项 -->
+<div class="tab-content" style="display:none">
+  <dl>
+    <dt>SEO标题</dt>
+    <dd>
+      @Html.TextBox("txtSeoTitle", m.seo_title, new { @class = "input normal", maxlength = "255", datatype = "*0-100", sucmsg = " " })
+      <span class="Validform_checktip">255个字符以内</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>SEO关健字</dt>
+    <dd>
+      @Html.TextArea("txtSeoKeywords", m.seo_keywords, new { @class = "input normal", datatype = "*0-255", sucmsg = " " })
+      <span class="Validform_checktip">以“,”逗号区分开，255个字符以内</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>SEO描述</dt>
+    <dd>
+      @Html.TextArea("txtSeoDescription", m.seo_description, new { @class = "input", datatype = "*0-255", sucmsg = " " })
+      <span class="Validform_checktip">255个字符以内</span>
+    </dd>
+  </dl>
+</div>
+<!-- /SEO选项 -->
+
+<!-- 关联内容 -->
+<div class="tab-content" style="padding-top:0;display:none;">
+<!--关联内容工具栏-->
+<div class="toolbar-wrap" style="padding-top:0;margin-top:0;">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="javascript:showArticleListDialog('@channelModel.name',@m.id);"><i class="iconfont icon-close"></i><span>新增关联</span></a></li>
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a href="javascript:;" id="btnDelete" onclick="ExePostBack('btnDelete');"><i class="iconfont icon-delete"></i><span>取消关联</span></a></li>
+        </ul>
+      </div>
+      <div class="r-list">
+        <a href="javascript:setView('Img');" id="lbtnViewImg" class="img-view" title="图像列表视图"></a>
+        <a href="javascript:setView('Txt');" id="lbtnViewTxt" class="txt-view" title="文字列表视图"></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/关联内容工具栏-->
+
+<div id="link-article">
+   <div class="loading"><span></span></div>
+</div><!-- /table-container/ -->
+</div>
+<!-- 关联内容/ -->
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+</form>

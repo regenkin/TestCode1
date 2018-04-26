@@ -1,0 +1,158 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/_LayoutShow.cshtml";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   DTcms.Model.userconfig uconfig = ViewData["uconfig"] as DTcms.Model.userconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   UserController c = ViewBag.This as UserController;
+   DTcms.Model.users userModel = c.userModel;
+   ViewBag.Title = "我的积分 - " + site.name;
+   string action = ViewBag.Action as string;
+   int page = int.Parse(ViewBag.Page as string);
+   int totalcount;
+}
+
+@section HeaderContent{
+@if(action=="convert"){//积分兑换
+   <script type="text/javascript" src="@(config.webpath)scripts/jquery/Validform_v5.3.2_min.js"></script>
+   <script type="text/javascript">
+      $(function () {
+         //初始化表单
+         AjaxInitForm('#point_form', '#btnSubmit', 1, '#turl');
+      });
+    </script>   
+}
+@if(action == "list"){//积分明细
+   <script>
+      function ExecPostBack(checkValue) {
+         if (arguments.length == 1) {
+            ExecDelete('@(config.webpath)tools/submit_ajax.ashx?action=user_point_delete', checkValue, '#turl');
+         } else {
+            var valueArr = '';
+            $("input[name='checkId']:checked").each(function (i) {
+               valueArr += $(this).val();
+               if (i < $("input[name='checkId']:checked").length - 1) {
+                  valueArr += ","
+               }
+            });
+            ExecDelete('@(config.webpath)tools/submit_ajax.ashx?action=user_point_delete', valueArr, '#turl');
+         }
+      }
+	</script>   
+}
+<script>
+	$(document).ready(function(e) {
+        $(".page-list a").attr("data-ignore",true);
+    });
+</script>
+}
+
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel">
+    @if(action=="convert"){
+    <!--积分兑换-->
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>积分兑换</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      <form id="point_form" name="point_form" url="@(config.webpath)tools/submit_ajax.ashx?action=user_point_convert">
+        <div class="form-box">
+          <dl>
+            <dt>账户余额</dt>
+            <dd>￥@userModel.amount</dd>
+          </dl>
+          <dl>
+            <dt>账户积分</dt>
+            <dd>@userModel.point 分</dd>
+          </dl>
+          <dl>
+            <dt>兑换说明</dt>
+            <dd>积分兑换最少金额为1元，兑换比例为：1元等于@(uconfig.pointcashrate)个积分</dd>
+          </dl>
+          <div><input name="txtAmount" id="txtAmount" type="text" placeholder="请输入兑换积分金额(元)" datatype="n"  nullmsg="请输入金额" sucmsg=" " /></div>
+          <div><input name="txtPassword" id="txtPassword" type="password" placeholder="请输入登录密码" datatype="*6-20" nullmsg="请输入密码" sucmsg=" "></div>
+          <div><input id="btnSubmit" name="btnSubmit" type="submit" value="确认兑换" class="btn orange full" /></div>
+        </div>
+      </form>
+      <input id="turl" name="turl" type="hidden" value="@bc.linkurl("userpoint","convert")" />
+      
+      <!--版权信息-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_copyright.cshtml")
+      <!--/版权信息-->
+      
+      <footer>
+        <a href="@bc.linkurl("userpoint","convert")" data-ignore="true" class="icon tag pressed">积分兑换</a>
+        <a href="@bc.linkurl("userpoint","list")" data-ignore="true" class="icon clock">积分明细</a>
+      </footer>
+    <!--/积分兑换-->
+    }
+
+    @if(action=="list"){
+      DataTable list=bc.get_user_point_list(10, page, "user_id="+userModel.id, out totalcount); <!--取得一个DataTable-->
+      string pagelist=bc.get_page_link(10, page, totalcount, "userpoint", action, "__id__"); <!--取得分页页码列表-->       
+    <!--积分明细-->
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>积分明细</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      
+      <!--操作按钮-->
+      <div class="select-bar">
+        <div class="col">
+          <a href="javascript:;" onclick="checkAll(this);" class="icon-check">全选</a>
+        </div>
+        <div class="col">
+          <a href="javascript:;" onclick="ExecPostBack();" class="icon-trash">删除</a>
+        </div>
+      </div>
+      <!--/操作按钮-->
+      
+      <div>
+        <ul class="detail-list">
+          @foreach(DataRow dr in list.Rows){
+          <li>
+            <input id="checkId-@dr["id"]" name="checkId" class="checkall" type="checkbox" value="@dr["id"]" >
+            <label for="checkId-@dr["id"]">
+              <h4><span>
+              @((int)dr["value"] > 0 ? "+" + dr["value"] : dr["value"])
+              </span>@dr["remark"]</h4>
+              <p>@dr["add_time"]</p>
+            </label>
+          </li>
+           }
+        </ul>
+      </div>
+      <input id="turl" type="hidden" value="@bc.linkurl("userpoint","list")" />
+      
+      <!--分页页码-->
+      <div class="page-list">@Html.Raw(pagelist)</div>
+      <!--/分页页码-->
+      
+      <!--版权信息-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_copyright.cshtml")
+      <!--/版权信息-->
+      
+      <footer>
+        <a href="@bc.linkurl("userpoint","convert")" data-ignore="true" class="icon tag">积分兑换</a>
+        <a href="@bc.linkurl("userpoint","list")" data-ignore="true" class="icon clock pressed">积分明细</a>
+      </footer>
+      
+    <!--/积分明细-->
+    }
+	</div>
+	
+    <!--左侧导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_nav.cshtml")
+    <!--/左侧导航-->
+      
+  </div>
+</div>

@@ -1,0 +1,44 @@
+﻿
+.header {
+    height: 60px;
+    overflow: hidden;
+    min-width: 990px;
+    background: #2076C3 url(/Images/Main/headbg.png) repeat-x;
+    line-height: 60px;
+    color: #fff;
+    font-family: Verdana, 微软雅黑,黑体;
+}
+
+.header-right {
+    float: right;
+    padding-right: 10px;
+    margin-top: 14px;
+}
+
+    .header-right a {
+        color: white;
+    }
+
+.head-left {
+    /*background: url(/Images/Main/logo48.png) no-repeat left;*/
+    margin-left: 10px;
+    width: 310px;
+    height: 58px;
+    float: left;
+    padding-left: 70px;
+    font-size: 29px;
+    font-weight: bolder;
+    font-family: 'Microsoft YaHei' !important;
+}
+
+.bottom-south {
+    width: 100%;
+    text-align: left;
+    padding-left: 10px;
+    height: 25px;
+    line-height: 25px;
+    overflow: hidden;
+    /*background: url(../images/bottom_bg.gif) repeat-x;*/
+}
+.tabs-tool {height:auto !important;}
+.tabs-tool{border-right:0 !important;}

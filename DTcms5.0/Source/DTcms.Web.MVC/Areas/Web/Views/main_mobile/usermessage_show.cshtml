@@ -1,0 +1,62 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/_LayoutShow.cshtml";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   DTcms.Model.user_message m = ViewData["userModel"] as DTcms.Model.user_message;
+   ViewBag.Title = "查看站内短信息 - " + site.name;
+}
+
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-footer="main_footer">
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>查看消息</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      
+      <!--消息详细-->
+      <div class="meta">
+        <h1 class="meta-tit">@m.title</h1>
+        <p class="meta-info">
+          <span class="time">时间：@m.post_time</span>
+          @if(m.type==1){
+          <span class="comm">系统消息</span>
+          }else if(m.type==2){
+          <span class="comm">发件人：@m.post_user_name</span>
+          }else if(m.type==3){
+          <span class="comm">收件人：@m.accept_user_name</span>
+          }
+        </p>
+      </div>
+      
+      <div class="entry">
+        <p>@Html.Raw(m.content)</p>
+      </div>
+      <!--/消息详细-->
+      
+      <!--版权信息-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_copyright.cshtml")
+      <!--/版权信息-->
+      
+      <footer>
+        <a href="@bc.linkurl("usermessage","add")" data-ignore="true" class="icon pencil">写消息</a>
+        <a href="@bc.linkurl("usermessage","system")" data-ignore="true" class="icon mail @(m.type==1?"pressed":"")">系统消息</a>
+        <a href="@bc.linkurl("usermessage","accept")" data-ignore="true" class="icon message @(m.type==2?"pressed":"")">收件箱</a>
+        <a href="@bc.linkurl("usermessage","send")" data-ignore="true" class="icon target @(m.type==3?"pressed":"")">发件箱</a>
+      </footer>
+	</div>
+	
+    <!--左侧导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_nav.cshtml")
+    <!--/左侧导航-->
+      
+  </div>
+</div>

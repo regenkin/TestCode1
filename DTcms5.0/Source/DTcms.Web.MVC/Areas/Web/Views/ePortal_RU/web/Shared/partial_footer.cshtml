@@ -1,0 +1,104 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+}
+
+<div id="footer">
+   <div id="reference">
+      <div class="g-wrap">
+         <div class="left">
+            <p>您来访的目的是了解：</p>
+            <a class="a1" href="@bc.linkurl("content","ePortal_house")">佳天地产</a>
+            <a class="a2" href="@bc.linkurl("content","ePortal_service")">佳天农贸中心 </a>
+            <a class="a3" href="http://www.jtdy.net/" target="_blank">佳天农商网</a>
+            <a class="a3" href="https://shop205944900.taobao.com/index.htm?spm=a1z10.1-c.w5002-16212478189.2.6QJYPk" target="_blank">汇佳美农淘宝店</a>
+         </div>
+         <div class="right">
+            <a target="_blank" href="@bc.linkurl("index")">佳天国际</a>&nbsp;&nbsp;/&nbsp;&nbsp;<a target="_blank" href="@bc.linkurl("content","ePortal_service4")">产品检测</a>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="@bc.linkurl("content","contact")">联系佳天</a>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="@bc.linkurl("content","ePortal_about")">关注佳天</a>
+         </div>
+      </div>
+   </div>
+   <div id="copyright">
+      <div class="g-wrap">
+         <div>
+            @Html.Raw(site.copyright)
+            <div id="ebsgovicon-box" style="width: 50px; margin-top: -20px; border-left: none">
+               <a href="http://www.jmsaic.gov.cn/" target="_blank">
+                  <img src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/gswj.jpg" title="" alt="" width="44" height="44" border="0" style="border-width: 0px; border: hidden; border: none;">
+               </a>
+            </div>
+            <br>
+            <a target="_blank" href="http://hlcainfo.miitbeian.gov.cn/">@site.crod</a><br />
+            <a class="legal" href="javascript:void(0);">法律声明</a>&nbsp;<a class="sitemap" href="javascript:void(0);">网站地图</a>
+         </div>
+      </div>
+   </div>
+</div>
+<div style="display: none">
+   <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://"); document.write(unescape("%3Cspan id='cnzz_stat_icon_1254929906'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1254929906' type='text/javascript'%3E%3C/script%3E"));</script>
+   <span id="cnzz_stat_icon_1254929906"><a href="http://www.cnzz.com/stat/website.php?web_id=1254929906" target="_blank" title="站长统计">站长统计</a></span><script src=" http://s11.cnzz.com/stat.php?id=1254929906" type="text/javascript"></script><script src="http://c.cnzz.com/core.php?web_id=1254929906&amp;t=z" charset="utf-8" type="text/javascript"></script>
+</div>
+
+<div id="mask">
+   <div id="legal" class="wrap">
+      <p>
+         <span class="tit">版权声明</span>
+         <br>
+         <br>
+         本网站(www.jtdygs.com)上为版权人所有的文件，在此并未作任何授权。本网站上的文件仅限于为信息和非商业或个人之目的使用，并且不得在任何网络计算机上复制或公布，也不得在任何媒体上传播。
+                <br>
+         未经版权人许可，任何人不得擅自(包括但不限于：以非法的方式复制、传播、展示、镜像、上载、下载)使用。否则版权人将依法追究其法律责任。
+                <br>
+         <br>
+         <span>免责声明</span>
+         <br>
+         <br>
+         版权人拥有对本网站的内容进行随时更改之权利，是前将不会另行通知。版权人不保证或声明本网站展示的资料是否正确、全面或是最新数据。
+                <br>
+         <br>
+         本网站内的所有图片(包括但不限于插图、透视图、设计图等)、模型、文字描述等，仅作为参考信息，非开发商的任何承诺或要约。
+                <br>
+         <br>
+         <span>开发商声明</span>
+         <br>
+         <br>
+         网站有关其开发项目信息的介绍，均以政府最后审批文件为准。商品房买卖双方之间的关系以当事人签订的买卖双方之间的关系以当事人签订买卖合同为准。
+                <br>
+         <br>
+         任何人因本网站或依赖其内容进行交易所引致的损失，版权人和开发商均不承担任何责任。
+      </p>
+   </div>
+   <div id="sitemap" class="wrap">
+      <p>
+         <span class="tit">网站地图</span>
+         <br>
+         <br>
+         <a href="index.aspx">首页</a>
+         <br>
+         <br>
+         <a href="@bc.linkurl("content","ePortal_about")">关于佳天</a>
+         <br>
+         <br>
+         <span class="column">新闻</span>
+
+         <a href="#">佳天动态</a> | <a href="#">行业新闻</a> | <a href="#">市场资讯</a>
+         <br>
+         <br>
+         <span class="column">园区功能</span>
+         <a href="#">交易中心</a> | <a href="#">对俄贸易</a> | <a href="#">海关监管</a> | <a href="#">产品检测</a> | <a href="#">农商网</a> | <a href="#">冷链物流</a> | <a href="#">金融服务</a>
+         <br>
+         <br>
+         <a href="#">园区招商</a>
+         <br>
+         <br>
+         <a href="@bc.linkurl("content","ePortal_contact")">联系我们</a>
+         <br>
+         <br>
+         <span style="color: white; font-weight: bold;">佳天德颐实业有限公司</span>
+         <a class="reenoo" style="color: white;" href="www.jtdy.net" target="_blank">佳天农商网</a>
+      </p>
+   </div>
+</div>

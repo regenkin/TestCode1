@@ -1,0 +1,122 @@
+﻿@using DTcms.Web.MVC;
+@using DTcms.Model;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   UserController bc = ViewBag.This as UserController;
+   DTcms.Model.users m = bc.userModel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Model.user_groups groupModel = ViewData["groupModel"] as DTcms.Model.user_groups;
+}
+
+<div class="shaixuan_box">
+   <div class="shaixuan_title">
+      <h1>会员导航</h1>
+   </div>
+   <div class="user_nav_list w">
+      <ul>
+         <li>
+            <a href="@bc.linkurl("userorder", "list")" class="waves-effect waves-button">
+               <div class="u_nav_icon dingdan"></div>
+               <div class="u_nav_name">订单管理</div>
+               <div class="nt_icon"></div>
+               <div class="u_money"><i>0 笔</i></div>
+            </a>
+         </li>
+         <li>
+            <a href="@bc.linkurl("cart")" class="waves-effect waves-button">
+               <div class="u_nav_icon tixian"></div>
+               <div class="u_nav_name">购物车</div>
+               <div class="nt_icon"></div>
+               <div class="u_money"><i>￥0.00 元</i></div>
+            </a>
+         </li>
+         <li>
+            <a href="@bc.linkurl("useramount", "recharge")" class="waves-effect waves-button">
+               <div class="u_nav_icon money"></div>
+               <div class="u_nav_name">账户余额</div>
+               <div class="nt_icon"></div>
+               <div class="u_money"><i>￥@m.amount 元</i></div>
+            </a>
+         </li>
+         <li>
+            <a href="@bc.linkurl("userpoint", "convert")" class="waves-effect waves-button">
+               <div class="u_nav_icon huibi"></div>
+               <div class="u_nav_name">我的积分</div>
+               <div class="nt_icon"></div>
+               <div class="u_money"><i>@m.point 分</i></div>
+            </a>
+         </li>
+         <li style="display:none">
+            <a href="http://m.178hui.com/huibi/log.html" class="waves-effect waves-button">
+               <div class="u_nav_icon duihuan"></div>
+               <div class="u_nav_name">兑换记录</div>
+               <div class="nt_icon"></div>
+               <div class="u_money"><i>0 个</i></div>
+            </a>
+         </li>
+
+         <li style="display:none">
+            <a href="http://m.178hui.com/order/taobao.html" class="waves-effect waves-button">
+               <div class="u_nav_icon dingdan"></div>
+               <div class="u_nav_name">淘宝订单</div>
+               <div class="nt_icon"></div>
+               <div class="u_money"><i>? 笔</i></div>
+            </a>
+         </li>
+         <li>
+            <a href="@bc.linkurl("usermessage", "system")" class="waves-effect waves-button">
+               <div class="u_nav_icon znx"></div>
+               <div class="u_nav_name">站内消息</div>
+               <div class="nt_icon"></div>
+               <div class="u_money"><i>? 条未读</i></div>
+            </a>
+         </li>
+         <li>
+            <a href="@bc.linkurl("usercenter", "password")" class="waves-effect waves-button">
+               <div class="u_nav_icon qiandao"></div>
+               <div class="u_nav_name">修改密码</div>
+               <div class="nt_icon"></div>
+               <div class="u_money"><i></i></div>
+            </a>
+         </li>
+         <li>
+            <a href="@bc.linkurl("usercenter", "proinfo")" class="waves-effect waves-button">
+               <div class="u_nav_icon anquan"></div>
+               <div class="u_nav_name">个人资料</div>
+               <div class="nt_icon"></div>
+            </a>
+         </li>
+      </ul>
+   </div>
+	<div class="top w">
+      <div class="m_nav">
+         <a href="@bc.linkurl("cart")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_22.png"><span>购物车</span></a>
+         <a href="@bc.linkurl("userpoint", "index")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_24.png"><span>我的积分</span></a>
+         <a href="@bc.linkurl("userorder","list")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_26.png"><span>订单管理</span></a>
+         <a href="@bc.linkurl("usercenter", "index")" class="waves-effect waves-button"><img src="~/templates/@ViewBag.TemplateSkin/mobile/images/m-index_27.png"><span>会员中心</span></a>
+      </div>
+  </div>
+   <div class="shaixuan_title">
+      <p><a href="javascript:void(0);" class="shaixuan_close waves-effect waves-button">关闭</a></p>
+   </div>
+</div>
+<script>
+   $(document).ready(function () {
+      $(".shaixuan").click(function (event) {
+         event.stopPropagation();
+         $(".shaixuan_box").show();
+         $(".shaixuan_box").animate({ right: '100%' });
+         $("body,html").css("overflow", "hidden");
+         $(".shaixuan_box").css("overflow", "auto");
+         $('body').bind("touchmove", function (e) {
+            e.preventDefault();
+         });
+      });
+      $(".shaixuan_box a").click(function (event) {
+         $("body,html").css("overflow", "auto");
+         $(".shaixuan_box").animate({ right: '-100%' });
+         $(".shaixuan_box").hide(5);
+         $("body").unbind("touchmove");
+      });
+   });
+</script>

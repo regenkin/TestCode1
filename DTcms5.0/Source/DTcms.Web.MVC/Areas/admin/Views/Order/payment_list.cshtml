@@ -1,0 +1,164 @@
+﻿@using System.Data;
+@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+   ViewBag.Title = "支付平台";
+   DataTable list = ViewData["list"] as DataTable;
+}
+ <script>
+     function getQueryParam() {
+         var text = $("#txtKeywords").val();
+         var pageNum = $("#txtPageNum").val();
+         return "keywords=" + text + "&pageNum=" + pageNum;
+     }
+     //查询数据
+     function search() {
+         document.location = "index?" + getQueryParam();
+     }
+
+     //ExePostBack回调函数
+     function __doPostBack(objId) {
+         if (objId == "btnDelete") {
+             submitDelete();
+         }
+     }
+
+     //批量删除
+     function submitDelete() {
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+             if ($(item).find("input:checkbox").prop("checked")) {
+                 var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+                 var obj = { id: id };
+                 json.list.push(obj);
+             }
+         });
+         $.ajax({
+             url: "SubmitDelete?" + getQueryParam(),
+             type: "POST",
+             dataType: "html",
+             data: "json=" + JSON.stringify(json),
+             success: function (data) {
+                 eval(data);
+             },
+             error: function () {
+                 alert("删除数据失败!");
+             }
+         });
+     }
+
+     //保存排序
+     function submitSave() {
+         //遍历表格行设置Json数据
+         var $tr = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($tr).each(function (i, item) {
+             var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+             var sortId = $(item).find(".sort").val();
+             var obj = { id: id, sortId: sortId };
+             json.list.push(obj);
+         });
+         // 提交保存排序字段
+         $.ajax({
+             url: "SubmitSave?" + getQueryParam(),
+             type: "POST",
+             dataType: "html",
+             data: "json=" + JSON.stringify(json),
+             success: function (data) {
+                 eval(data);
+             },
+             error: function () {
+                 alert("保存排序失败!");
+             }
+         });
+     }
+   </script>
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>订单设置</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>支付平台</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="../site_payment_list/index"><i class="iconfont icon-return"></i><span>返回</span></a></li>
+          @*<li><a href="../payment_edit/index?action=@DTEnums.ActionEnum.Add"><i class="iconfont icon-close"></i><span>新增</span></a></li>*@
+          <li><a href="javascript:;" onclick="submitSave();"><i class="iconfont icon-save"></i><span>保存</span></a></li>
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+        </ul>
+      </div>
+      <div class="r-list">
+        <input type="text" id="txtKeywords" class="keyword" value="@ViewBag.Keywords" />
+        <a href="javascript:search();" id="lbtnSearch" class="btn-search"><i class="iconfont icon-search"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+  <tr>
+    <th width="8%">序号</th>
+    <th align="left" width="15%">名称</th>
+    <th align="left" width="15%">图标</th>
+    <th align="left">平台描述</th>
+    <th align="left" width="8%">排序</th>
+    <th width="8%">是否启用</th>
+    <th width="10%">操作</th>
+  </tr>
+@foreach(DataRow dr in list.Rows){
+  <tr>
+    <td align="center">
+       <label>@dr["id"]</label>
+    </td>
+    <td><a href="../payment_edit/index?id=@dr["id"]">@dr["title"]</a></td>
+    <td>
+       @if(dr["img_url"].ToString() == ""){
+          @:-
+       }
+       else{
+          <img width="120" src="@dr["img_url"]" />
+       }
+    </td>
+    <td>@dr["remark"]</td>
+    <td>
+       <input type="text" id="txtSortId" class="sort" onkeydown="return checkNumber(event);" value="@dr["sort_id"]" />
+    </td>
+    <td align="center">@(Convert.ToInt32(dr["is_lock"]) == 0 ? "√" : "×")</td>
+    <td align="center"><a href="../payment_edit/index?action=@DTEnums.ActionEnum.Edit&id=@dr["id"]">修改</a></td>
+  </tr>
+}
+@if (list.Rows.Count == 0) {
+   <tr><td align="center" colspan="7">暂无记录</td></tr>
+}
+</table>
+</div>
+<!--/列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span>
+    <input type="text" id="txtPageNum" class="pagenum" value="@ViewBag.PageSize" onkeydown="return checkNumber(event);" onchange="search();" />
+    <span>条/页</span>
+  </div>
+  <div class="default">@Html.Raw(ViewBag.PageContent)</div>
+</div>
+<!--/内容底部-->
+
+</form>

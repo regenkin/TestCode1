@@ -1,0 +1,169 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_Layout.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Model.userconfig uconfig = ViewData["uconfig"] as DTcms.Model.userconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   UserController c = ViewBag.This as UserController;
+   DTcms.Model.users m = c.userModel;
+   ViewBag.Title = "我的积分 - " + site.name;
+   string action = ViewBag.Action as string;
+   DataTable list = null;
+   int page = int.Parse(ViewBag.Page as string);
+   int totalcount;
+   string pagelist;
+}
+@section HeaderContent{
+   @switch(action){
+      case "list":
+         <link rel="stylesheet" href="@(config.webpath)Content/pagination.css" />
+         <script>
+            function ExecPostBack(checkValue) {
+               if (arguments.length == 1) {
+                  ExecDelete('@(config.webpath)tools/submit_ajax.ashx?action=user_point_delete', checkValue, '#turl');
+			   } else {
+			      var valueArr = '';
+			      $("input[name='checkId']:checked").each(function (i) {
+			         valueArr += $(this).val();
+			         if (i < $("input[name='checkId']:checked").length - 1) {
+			            valueArr += ","
+			         }
+			      });
+			      ExecDelete('@(config.webpath)tools/submit_ajax.ashx?action=user_point_delete', valueArr, '#turl');
+            }
+         }
+	     </script>         
+         break;
+   }
+}
+<div class="section clearfix">
+  <div class="line30"></div>
+
+  <div class="info-wrap">
+    <!--左侧导航-->
+    @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_ucenter_nav.cshtml")
+    <!--/左侧导航-->
+    
+    <!--右侧内容-->
+    <div class="home-box">
+      @if(action=="convert"){
+      <!--积分兑换-->
+      <div class="u-tab-head">
+        <p>
+          <a class="selected" href="@bc.linkurl("userpoint","convert")">积分兑换</a>
+          <a href="@bc.linkurl("userpoint","list")">积分明细</a>
+        </p>
+      </div>
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>积分兑换</strong>
+        </div>
+        
+        @if(@uconfig.pointcashrate==0){
+          <p style="text-align:center;">目前的积分兑换功能已被关闭！</p>
+        }else if(m.amount<1){
+          <p style="text-align:center;">目前您的余额不足，不能使用积分兑换功能！</p>
+        }else{
+          <link rel="stylesheet" href="@(config.webpath)css/validate.css" />
+          <script type="text/javascript" src="@(config.webpath)scripts/jquery/jquery.form.min.js"></script>
+          <script type="text/javascript" src="@(config.webpath)scripts/jquery/Validform_v5.3.2_min.js"></script>
+          <script type="text/javascript">
+			$(function(){
+			  //初始化表单
+			  AjaxInitForm('#pointForm', '#btnSubmit', 1, '#turl');
+			});
+		  </script>
+          <input id="hideAmount" name="hideAmount" type="hidden" value="@c.userModel.amount" />
+          <input id="hideCashrate" name="hideCashrate" type="hidden" value="@uconfig.pointcashrate" />
+          <form id="pointForm" name="pointform" url="@(config.webpath)tools/submit_ajax.ashx?action=user_point_convert">
+          <div class="form-box">
+            <dl>
+              <dt>账户余额：</dt>
+              <dd>目前账户积分:<b class="red">@m.point</b>分，可用金额：<b class="red">@m.amount</b>元</dd>
+            </dl>
+            <dl>
+              <dt>兑换说明：</dt>
+              <dd>积分兑换最少金额为1元，兑换比例为：1元等于@(uconfig.pointcashrate)个积分</dd>
+            </dl>
+            <dl>
+              <dt>积分兑换：</dt>
+              <dd>
+                <input name="txtAmount" id="txtAmount" type="text" class="input small" onkeydown="return checkNumber(event);" onchange="numConvert(this);" datatype="n"  nullmsg="请输入金额" sucmsg=" " />
+              金额转换成 <strong class="red" id="convertPoint">0</strong> 积分
+              </dd>
+            </dl>
+            <dl>
+              <dt>验证用户密码：</dt>
+              <dd>
+                <input name="txtPassword" id="txtPassword" type="password" class="input txt" datatype="*6-20" nullmsg="请输入密码" sucmsg=" " />
+              </dd>
+            </dl>
+            <dl>
+              <dt></dt>
+              <dd><input name="btnSubmit" id="btnSubmit" type="submit" class="btn btn-success" value="确认兑换" /></dd>
+            </dl>
+          </div>
+          </form>
+          <input id="turl" name="turl" type="hidden" value="@bc.linkurl("userpoint","convert")" />
+        }
+      </div>
+      <!--/积分兑换-->
+      
+      }else if(action=="list"){
+      <!--积分明细-->
+      <div class="u-tab-head">
+        <p>
+          <a href="@bc.linkurl("userpoint","convert")">积分兑换</a>
+          <a class="selected" href="@bc.linkurl("userpoint","list")">积分明细</a>
+        </p>
+      </div>
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>积分明细</strong>
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mtable">
+          @{ 
+          list = bc.get_user_point_list(20, page, "user_id="+m.id, out totalcount); <!--取得一个DataTable-->
+          pagelist = bc.get_page_link(20, page, totalcount, "userpoint", action, "__id__"); <!--取得分页页码列表-->
+          foreach(DataRow dr in list.Rows){
+            <tr>
+              <td width="20" align="center"><input name="checkId" class="checkall" type="checkbox" value="@dr["id"]" ></td>
+              <td width="150">@dr["add_time"]</td>
+              <td>@dr["remark"]</td>
+              <td width="50">
+                @if(Convert.ToInt32(dr["value"])>0){
+                  @:+ @dr["value"]
+                }else{
+                  @dr["value"]
+                }
+              </td>
+              <td width="35"><a onclick="ExecPostBack('@dr["id"]');" href="javascript:;">删除</a></td>
+            </tr>
+          }
+          }
+          if(list.Rows.Count==0)
+            <tr><td colspan="5" align="center">暂无记录...</td></tr>
+          }
+        </table>
+        <div class="page-foot">
+          <div class="flickr right">{pagelist}</div><!--放置页码列表-->
+          <div class="page-btns">
+            <a onclick="checkAll(this);" href="javascript:;">全选</a>
+            <span class="pipe">|</span>
+            <a onclick="ExecPostBack();" href="javascript:;">删除</a>
+          </div>
+        </div>
+      </div>
+      <input id="turl" type="hidden" value="@bc.linkurl("userpoint","list")" /><!--存在跳转的URL值-->
+      <!--/积分明细-->
+      }
+      
+    </div>
+    <!--/右侧内容-->
+  </div>
+</div>

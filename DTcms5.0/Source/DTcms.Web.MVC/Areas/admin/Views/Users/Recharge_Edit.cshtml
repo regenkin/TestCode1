@@ -1,0 +1,93 @@
+﻿@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+    ViewBag.Title = "Recharge_Edit";
+    DTcms.Model.user_recharge m = ViewData["model"] as DTcms.Model.user_recharge;
+    if(m == null){
+       m = new DTcms.Model.user_recharge();
+       m.user_name = ViewBag.UserName as string;
+       m.recharge_no = ViewBag.RechargeNo as string;
+    }
+    List<SelectListItem> list = ViewData["list"] as List<SelectListItem>;
+}
+@section HeaderContent{
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+      });
+   </script>
+}
+<form id="form1" method="post" action="SubmitSave">
+<!--导航栏-->
+<div class="location">
+  <a href="../recharge_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../recharge_list/index"><span>充值记录</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>会员充值</span>
+  <div class="clipboard">
+     <span><label id="clipMess"></label></span>
+     <a href="javascript:;" class="copy" onclick="copy();"><i class="iconfont icon-copy"></i><span>复制</span></a>
+     <a href="javascript:;" class="paste disable" onclick="paste();"><i class="iconfont icon-log"></i><span>粘贴</span></a>
+  </div>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">充值信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>用户名</dt>
+    <dd>
+      @Html.TextBox("txtUserName", @m.user_name, new { @class="input normal", datatype="*2-100", sucmsg=" "})
+      <span class="Validform_checktip">*需要充值的会员用户名</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>支付方式</dt>
+    <dd>
+      <div class="rule-single-select">
+        @Html.DropDownList("ddlPaymentId", new SelectList(list,"Value", "Text", m.payment_id.ToString()), new {datatype="*", errormsg="请选择支付方式", sucmsg=" "})
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>订单号</dt>
+    <dd>
+      @Html.TextBox("txtRechargeNo", m.recharge_no, new { @class="input normal", datatype="*2-100", sucmsg=" "})
+      <span class="Validform_checktip">*系统随机生成订单号</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>充值金额</dt>
+    <dd>
+      @Html.TextBox("txtAmount", m.amount, new { @class="input small", datatype=@"/^-?(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/", sucmsg=" "})
+       <span class="Validform_checktip">*给该会员充值的金额，负数则扣减。</span>
+    </dd>
+  </dl>
+
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" value="提交保存" class="btn" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+
+</form>

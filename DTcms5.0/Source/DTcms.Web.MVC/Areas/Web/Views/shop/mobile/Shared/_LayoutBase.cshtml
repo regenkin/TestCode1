@@ -1,0 +1,41 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+   DTcms.Model.users userModel = bc.GetUserInfo();
+}
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>@ViewBag.Title</title>
+   <meta name="keywords" content="@site.seo_keyword" />
+   <meta name="discription" content="@site.seo_description" />
+   <link href="~/Content/waves.css" rel="stylesheet" />
+   <link href="~/templates/shop/mobile/css/main.css" rel="stylesheet" />
+   <link href="~/templates/shop/mobile/css/distr_shop_show.css" rel="stylesheet" />
+   <script src="~/Scripts/jquery/jquery-1.11.2.min.js"></script>
+   <script src="~/templates/shop/mobile/js/distr_shop_show.js"></script>
+   <script src="~/Scripts/waves.min.js"></script>
+   @RenderSection("HeaderContent",false)
+   <script>
+      $(function () {
+         //设置点击效果
+         Waves.displayEffect();
+      });
+   </script>
+</head>
+<body>
+   <header>
+
+   </header>
+   @RenderBody()
+   <footer>
+
+   </footer>
+   @RenderSection("Scripts", required: false)
+</body>
+</html>

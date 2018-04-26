@@ -1,0 +1,165 @@
+﻿@using DTcms.Common;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+    ViewBag.Title = "Message_Edit";
+    DTcms.Model.user_message m = ViewData["model"] as DTcms.Model.user_message;
+}
+@section HeaderContent{
+<script src="~/editor/ueditor.config.js"></script>
+<script src="~/editor/ueditor.all.min.js"></script>
+<script src="~/editor/lang/zh-cn/zh-cn.js"></script>
+   <script>
+      $(function () {
+         //初始化表单验证
+         $("#form1").initValidform();
+         //初始化编辑器
+         var ue = UE.getEditor('txtContent', {
+            serverUrl: '/tools/upload_ajax.ashx',
+            toolbars: [[
+                'fullscreen', 'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'strikethrough', 'removeformat', 'pasteplain', '|', 'forecolor', 'insertorderedlist', 'insertunorderedlist', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+                'link', 'unlink', 'anchor', '|',
+                'simpleupload', 'insertimage', 'scrawl', 'insertvideo', 'music', 'attachment'
+            ]]
+         });
+      });
+   </script>
+}
+
+<form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id">
+<!--导航栏-->
+<div class="location">
+  <a href="../message_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <a href="../message_list/index"><span>站内消息</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>编辑短消息</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">编辑消息内容</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <div id="div_view" style="display:@ViewBag.div_view_visible">
+      <dl>
+        <dt>短信类型</dt>
+        <dd>
+           <span id="labType">
+              @switch (m.type) {
+                 case 1:
+                    @:系统消息
+                    break;
+                 case 2:
+                    @:收件箱
+                    break;
+                 case 3:
+                    @:发件箱
+                    break;
+              }
+           </span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>发件人</dt>
+        <dd>
+           <span id="labPostUserName">
+              @if (string.IsNullOrEmpty(m.post_user_name)) {
+                 @:-
+              }
+              else {
+                @:m.post_user_name
+              }
+           </span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>收件人</dt>
+        <dd><span id="labAcceptUserName">@m.accept_user_name</span></dd>
+      </dl>
+      <dl>
+        <dt>发送时间</dt>
+        <dd><span id="labPostTime">@m.post_time</span></dd>
+      </dl>
+      <dl>
+        <dt>阅读状态</dt>
+        <dd>
+           <span id="labIsRead">
+              @if (m.is_read == 1) {
+                 @:已阅读
+              }
+              else {
+                 @:未阅读
+              }
+           </span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>阅读时间</dt>
+        <dd>
+           <span id="labReadTime">
+              @if (m.read_time != null) {
+                 @:m.read_time
+              }
+              else {
+                 @:-
+              }
+           </span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>标题</dt>
+        <dd><span id="labTitle">@m.title</span></dd>
+      </dl>
+      <dl>
+        <dt>内容</dt>
+        <dd>@Html.Raw(m.content)</dd>
+      </dl>
+  </div>
+
+  <div id="div_add" style="display:@ViewBag.div_add_visible">
+      <dl>
+        <dt>收件人</dt>
+        <dd>
+          @Html.TextBox("txtUserName", "", new {@class="input normal", datatype="*", sucmsg=" "})
+          <span class="Validform_checktip">*输入用户名，以英文逗号“,”分隔开</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>标题</dt>
+        <dd>
+          @Html.TextBox("txtTitle", "", new {@class="input normal", datatype="*1-100", sucmsg=" "})
+          <span class="Validform_checktip">*100个字符以内</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>短信内容</dt>
+        <dd>
+          @Html.TextArea("txtContent", "", new { style = "width:100%;height:320px;" })
+        </dd>
+      </dl>
+  </div>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" visible="@ViewBag.btnSubmit_visible" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+</form>

@@ -1,0 +1,109 @@
+﻿@using DTcms.Common;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "编辑Oauth列表";
+   DTcms.Model.site_oauth m = ViewData["model"] as DTcms.Model.site_oauth;
+   List<SelectListItem> siteListItems = ViewData["siteListItems"] as List<SelectListItem>;
+   List<SelectListItem> appListItems = ViewData["appListItems"] as List<SelectListItem>;
+}
+@section HeaderContent{
+<script>
+   $(function () {
+      //初始化表单验证
+      $("#form1").initValidform();
+   });
+</script>
+}
+
+<form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@m.id">
+<!--导航栏-->
+<div class="location">
+  <a href="../site_oauth_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>会员设置</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>OAuth列表</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>编辑OAuth信息</span>
+  <div class="clipboard">
+     <span><label id="clipMess"></label></span>
+     <a href="javascript:;" class="copy" onclick="copy();"><i class="iconfont icon-copy"></i><span>复制</span></a>
+     <a href="javascript:;" class="paste disable" onclick="paste();"><i class="iconfont icon-log"></i><span>粘贴</span></a>
+  </div>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">编辑OAuth信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>所属站点</dt>
+    <dd>
+      <div class="rule-single-select">
+        @Html.DropDownList("ddlSiteId", new SelectList(siteListItems, "Value", "Text", m.site_id.ToString()), new {  datatype="*", errormsg="请选择所属站点！", sucmsg=" " })
+      </div>
+      <span class="Validform_checktip">*选择站点后查询未安装应用</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>所属应用</dt>
+    <dd>
+      <div class="rule-single-select">
+        @Html.DropDownList("ddlOauthId", new SelectList(appListItems, "Value", "Text", m.oauth_id.ToString()), new { datatype="*" })
+      </div>
+      <span class="Validform_checktip">*请先选择站点后显示应用</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>排序数字</dt>
+    <dd>
+      @Html.TextBox("txtSortId", m.sort_id.ToString(), new {@class="input small", datatype="n", sucmsg=" "})
+      <span class="Validform_checktip">*数字，越小越向前</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>标题名称</dt>
+    <dd>
+      @Html.TextBox("txtTitle", m.title, new { @class="input normal", datatype="*2-100", sucmsg=" "})
+      <span class="Validform_checktip">*网站上面显示的标题，100字符内</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>API Key</dt>
+    <dd>
+      @Html.TextBox("txtAppId", m.app_id, new { @class="input normal", datatype="*", sucmsg=" "})
+      <span class="Validform_checktip">*QQ互联请填写APP ID</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>Secret Key</dt>
+    <dd>
+      @Html.TextBox("txtAppKey", m.app_key, new { @class="input normal", datatype="*", sucmsg=" "})
+      <span class="Validform_checktip">*QQ互联请填写KEY</span>
+    </dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" value="提交保存" class="btn" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript: history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+
+</form>

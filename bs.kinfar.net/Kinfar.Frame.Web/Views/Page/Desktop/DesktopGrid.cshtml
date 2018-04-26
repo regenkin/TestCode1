@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "DesktopGrid";
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid moduleId = UIOperate.GetModuleIdByRequest(Request);
+   int top = Request["top"].ObjToInt();
+   string sortName = Request["sort"].ObjToStr();
+   bool isDesc = Request["order"].ObjToStr() == "desc";}
+@Html.Raw(frameFactory.GetDesktopGridHTML(moduleId, top, sortName, isDesc))

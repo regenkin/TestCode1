@@ -1,0 +1,278 @@
+﻿@using System.Data;
+@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+   ViewBag.Title = "会员管理";
+   List<SelectListItem> siteListItems = ViewData["siteListItems"] as List<SelectListItem>;
+   List<SelectListItem> groupListItems = ViewData["groupListItems"] as List<SelectListItem>;
+   DataTable list = ViewData["list"] as DataTable;
+}
+
+@section HeaderContent{
+   <script>
+      //发送短信
+      function PostSMS(mobile) {
+         var mobiles = "";
+         if (arguments.length == 1) { //如果有传入值
+            mobiles = mobile;
+         } else {
+            lenNum = $(".checkall input:checked").length;
+            $(".checkall input:checked").each(function (i) {
+               if ($(this).parent().siblings('input[name="hidMobile"]').val() != "") {
+                  mobiles += $(this).parent().siblings('input[name="hidMobile"]').val();
+                  if (i < lenNum - 1) {
+                     mobiles += ',';
+                  }
+               }
+            });
+         }
+         if (mobiles == "") {
+            top.dialog({
+               title: '提示',
+               content: '对不起，手机号码不能为空！',
+               okValue: '确定',
+               ok: function () { }
+            }).showModal();
+            return false;
+         }
+         var smsdialog = parent.dialog({
+            title: '发送手机短信',
+            content: '<textarea id="txtSmsContent" name="txtSmsContent" rows="2" cols="20" class="input"></textarea>',
+            okValue: '确定',
+            ok: function () {
+               var remark = $("#txtSmsContent", parent.document).val();
+               if (remark == "") {
+                  top.dialog({
+                     title: '提示',
+                     content: '对不起，请输入手机短信内容！',
+                     okValue: '确定',
+                     ok: function () { }
+                  }).showModal(smsdialog);
+                  return false;
+               }
+               var postData = { "mobiles": mobiles, "content": remark };
+               //发送AJAX请求
+               $.ajax({
+                  type: "post",
+                  url: "/tools/admin_ajax.ashx?action=sms_message_post",
+                  data: postData,
+                  dataType: "json",
+                  error: function (XMLHttpRequest, textStatus, errorThrown) {
+                     top.dialog({
+                        title: '提示',
+                        content: '尝试发送失败，错误信息：' + errorThrown,
+                        okValue: '确定',
+                        ok: function () { }
+                     }).showModal(smsdialog);
+                  },
+                  success: function (data, textStatus) {
+                     if (data.status == 1) {
+                        smsdialog.close().remove();
+                        var d = top.dialog({ content: data.msg }).show();
+                        setTimeout(function () {
+                           d.close().remove();
+                           location.reload();
+                        }, 2000);
+                     } else {
+                        top.dialog({
+                           title: '提示',
+                           content: '错误提示：' + data.msg,
+                           okValue: '确定',
+                           ok: function () { }
+                        }).showModal(smsdialog);
+                     }
+                  }
+               });
+               return false;
+            },
+            cancelValue: '取消',
+            cancel: function () { }
+         }).showModal();
+      }
+
+      function getQueryParam() {
+         var text = $("#txtKeywords").val();
+         var pageCount = $("#txtPageNum").val();
+         var groupId = $("#ddlGroupId").val();
+         var siteId = $("#ddlSiteId").val();
+         var startTime = $("#txtStartTime").val();
+         var endTime = $("txtEndTime").val();
+         return "keywords=" + text + "&pagesize=" + pageCount + "&group_id=" + groupId + "&site_id=" + siteId + "&start_time=" + startTime + "&end_time=" + endTime;
+      }
+
+      //查询数据
+      function search() {
+         document.location = "index?" + getQueryParam();
+      }
+
+      //ExePostBack回调函数
+      function __doPostBack(objId) {
+         if (objId == "btnDelete") {
+            submitDelete();
+         }
+      }
+
+      //删除数据
+      function submitDelete() {
+         var text = $("#txtKeywords").val();
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:gt(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitDelete?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("error");
+            }
+         });
+      }
+   </script>
+}
+
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>会员管理</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>会员列表</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="../user_edit/index?action=@DTEnums.ActionEnum.Add"><i class="iconfont icon-close"></i><span>新增</span></a></li>
+          <li><a class="msg" href="javascript:;" onclick="PostSMS();"><i></i><span>短信</span></a></li>
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a href="javascript:;" onclick="ExePostBack('btnDelete');"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+        </ul>
+        <div class="menu-list">
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlSiteId", new SelectList(siteListItems, "Value", "Text", ViewBag.SiteId), new { onchange = "search();" })
+          </div>
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlGroupId", new SelectList(groupListItems, "Value", "Text", ViewBag.GroupId), new { onchange = "search();" })
+          </div>
+          <input type="text" id="txtStartTime" class="input rule-date-input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="@ViewBag.StartTime"/>
+           -
+          <input type="tel" id="txtEndTime" class="input rule-date-input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="@ViewBag.EndTime" />
+        </div>
+      </div>
+      <div class="r-list">
+        <input id ="txtKeywords" type="text" class="keyword" value="@ViewBag.Keywords" />
+        <a href="javascript:search();" id="lbtnSearch" class="btn-search"><i class="iconfont icon-search"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" id="ltable" class="ltable">
+  <tr>
+    <th width="8%">选择</th>
+    <th align="left" colspan="2">用户名</th>
+    <th align="left" width="12%">会员组</th>
+    <th align="left" width="12%">邮箱</th>
+    <th width="8%">余额</th>
+    <th width="8%">积分</th>
+    <th width="8%">状态</th>
+    <th width="8%">操作</th>
+  </tr>
+  @foreach(DataRow dr in list.Rows){
+  <tr>
+    <td align="center">
+      <span class="checkall" style="vertical-align:middle;">
+         <input type="checkbox"/>
+      </span>
+      <label name="hidId" style="display:none">@dr["id"]</label>
+      <label name="hidMobile" style="display:none">@dr["mobile"]</label>
+    </td>
+    <td width="64">
+      <a class="user-avatar" href="../user_edit/index?action=@DTEnums.ActionEnum.Edit&id=@dr["id"]">
+        @if (dr["avatar"].ToString() != "") {
+           <img width="64" height="64" src="@dr["avatar"]" />
+        }
+        else {
+           <i class="iconfont icon-user-full"></i>
+        }
+      </a>
+    </td>
+    <td>
+      <div class="user-box">
+        <h4><b>@dr["user_name"]</b> (昵称：@dr["nick_name"])</h4>
+        <i>注册时间：@string.Format("{0:g}",dr["reg_time"])</i>
+        <span>
+          <a class="amount" href="../amount_log/index?keywords=@dr["user_name"]" title="消费记录"><i class="iconfont icon-count"></i></a>
+          <a class="card" href="../recharge_list/index?keywords=@dr["user_name"]" title="充值记录"><i class="iconfont icon-order"></i></a>
+          <a class="point" href="../point_log/index?keywords=@dr["user_name"]" title="积分记录"><i class="iconfont icon-star"></i></a>
+          <a class="msg" href="../message_list/index?keywords=@dr["user_name"]" title="消息记录"><i class="iconfont icon-comment"></i></a>
+          @if (dr["mobile"].ToString() != "") {
+             <a class="sms" href="javascript:;" onclick="PostSMS('@dr["mobile"]');" title="发送手机短信通知"><i class="iconfont icon-mail"></i></a>
+          }
+        </span>
+      </div>
+    </td>
+    <td>@(new DTcms.BLL.user_groups().GetTitle(Convert.ToInt32(dr["group_id"])))</td>
+    <td>@dr["email"]</td>
+    <td align="center">@dr["amount"]</td>
+    <td align="center">@dr["point"]</td>
+    <td align="center">
+       @switch(Convert.ToInt32(dr["status"])){
+              case 0:
+                 @:正常
+                 break;
+              case 1:
+                 @:待验证
+                 break;
+              case 2:
+                 @:待审核
+                 break;
+              case 3:
+                 @:已禁用
+                 break;          
+       }
+    </td>
+    <td align="center">
+       <a href="../user_edit/index?action=@DTEnums.ActionEnum.Edit&id=@dr["id"]">修改</a>
+    </td>
+  </tr>
+  }
+   @if(list.Rows.Count == 0){
+      <tr><td align="center" colspan="9">暂无记录</td></tr>
+   }
+</table>
+</div>
+<!--/列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span>
+     <input type="text" id="txtPageNum" class="pagenum" value="@ViewBag.PageSize" onkeydown="return checkNumber(event);" onchange="search();" />
+     <span>条/页</span>
+  </div>
+  <div class="default">@Html.Raw(ViewBag.PageContent)</div>
+</div>
+<!--/内容底部-->
+</form>

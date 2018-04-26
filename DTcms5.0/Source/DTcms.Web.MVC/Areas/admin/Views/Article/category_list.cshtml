@@ -1,0 +1,153 @@
+﻿@using System.Data;
+@using DTcms.Common;
+@{
+    Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+    ViewBag.Title = "栏目分类";
+    DataTable list = ViewData["list"] as DataTable;
+}
+@section HeaderContent{
+   <style>
+      .tree-list .col-1{ width:6%;text-align:center; }
+      .tree-list .col-2{ width:6%; }
+      .tree-list .col-3{ width:52%; }
+      .tree-list .col-4{ width:12%; }
+      .tree-list .col-5{ width:12%; }
+      .tree-list .col-6{ width:12%; text-align:center; }
+   </style>
+
+   <script>
+      $(function () {
+         initCategoryHtml('.tree-list', 1); //初始化分类的结构
+         $('.tree-list').initCategoryTree(true); //初始化分类的事件
+      });
+
+      //删除数据
+      function __doPostBack(objId) {
+         if(objId == "btnDelete")
+            submitDelete();
+      }
+
+      //删除数据
+      function submitDelete() {
+         var $row = $("#ltable li");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("label:eq(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitDelete?channel_id=@ViewBag.ChannelId",
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("error");
+            }
+         });
+      }
+
+      //保存排序
+      function submitSave() {
+         var $row = $("#ltable li");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            var id = $(item).find("label:eq(0)").text();
+            var sortId = $(item).find(".sort").val();
+            var obj = { id: id, sortId: sortId };
+            json.list.push(obj);
+         });
+         $.ajax({
+            url: "SubmitSave?channel_id=@ViewBag.ChannelId",
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("error");
+            }
+         });
+      }
+   </script>
+}
+<form id="form1"  method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>内容管理</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>栏目类别</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li><a href="../category_edit/index?action=@DTEnums.ActionEnum.Add&channel_id=@ViewBag.ChannelId"><i class="iconfont icon-close"></i><span>新增</span></a></li>
+          <li><a href="javascript:submitSave();" id="btnSave"><i class="iconfont icon-save"></i><span>保存</span></a></li>
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          <li><a href ="javascript:;" id="btnDelete" onclick="ExePostBack('btnDelete','本操作会删除本类别及下属子类别，是否继续？');"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+  <div class="tree-list">
+    <div class="thead">
+      <div class="col col-1">选择</div>
+      <div class="col col-2">编号</div>
+      <div class="col col-3">类别名称</div>
+      <div class="col col-4">调用别名</div>
+      <div class="col col-5">排序</div>
+      <div class="col col-6">操作</div>
+    </div>
+    <ul id="ltable">
+      @foreach(DataRow dr in list.Rows){
+      <li class="layer-@dr["class_layer"]">
+        <div class="tbody">
+          <div class="col col-1">
+           <span class="checkall" style="vertical-align:middle"><input type="checkbox" /></span>
+           <label style="display:none">@dr["id"]</label>
+          </div>
+          <div class="col col-2">
+            @dr["id"]
+          </div>
+          <div class="col index col-3">
+            <a href="../category_edit/index?action=@DTEnums.ActionEnum.Edit&channel_id=@ViewBag.ChannelId&id=@dr["id"]">@dr["title"]</a>
+          </div>
+          <div class="col col-4">
+            @dr["call_index"]
+          </div>
+          <div class="col col-5">
+            @Html.TextBox("txtSortId", dr["sort_id"], new { @class="sort", onkeydown="return checkNumber(event);"})
+          </div>
+          <div class="col col-6">
+            <a href="../category_edit/index?action=@DTEnums.ActionEnum.Add&channel_id=@ViewBag.ChannelId&id=@dr["id"]">添加子类</a>
+            <a href="../category_edit/index?action=@DTEnums.ActionEnum.Edit&channel_id=@ViewBag.ChannelId&id=@dr["id"]">修改</a>
+          </div>
+        </div>  
+      </li>
+      }
+    </ul>
+  </div>
+</div>
+<!--/列表-->
+
+</form>

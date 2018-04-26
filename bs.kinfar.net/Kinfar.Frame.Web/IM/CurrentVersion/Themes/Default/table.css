@@ -1,0 +1,51 @@
+﻿
+.table_blue
+{
+}
+
+.table_blue table
+{
+	border-width: 0px;
+	border-style: solid;
+	border-color: #C4D6EC;
+	width: 100%;
+}
+
+.table_blue td
+{
+	font-size: 12px;
+	font-family: SimSun;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.table_blue tr td
+{
+	border-width: 0px 0px 1px 0px;
+	border-style: solid;
+	border-color: #C4D6EC;
+	background-color: #F8FCFF;
+	color:#074977;
+}
+
+.table_blue tr.header td
+{
+	border-width: 1px 0px 1px 0px;
+	background-color: #F3F7FA;
+	font-weight: bold;
+}
+
+.table_blue td a
+{
+	color:Blue;
+	text-decoration:none;
+	cursor:pointer;
+}
+
+.table_blue td a:hover
+{
+	color:Blue;
+	text-decoration:underline;
+}

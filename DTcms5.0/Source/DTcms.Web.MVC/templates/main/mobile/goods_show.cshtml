@@ -1,0 +1,96 @@
+﻿@using System.Data;
+@using DTcms.BLL;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/_LayoutShow.cshtml";
+   DTcms.Model.channel_site site = ViewData["site"] as DTcms.Model.channel_site;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   Article_ShowController bc = ViewBag.BasePage as Article_ShowController;
+   SearchController c = ViewBag.This as SearchController;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   DTcms.BLL.article bll_article = new DTcms.BLL.article();
+   DTcms.BLL.article_comment bll_article_comment = new DTcms.BLL.article_comment();
+   string category_title = bc.get_category_title(m.category_id, "商品详情");
+   ViewBag.Title = m.title + " - " + category_title;   
+}
+@section HeaderContent{
+   <script src="~/templates/@ViewBag.TemplateSkin/mobile/js/cart.js"></script>
+   <script src="~/templates/@ViewBag.TemplateSkin/mobile/js/owl.carousel.min.js"></script>
+   <link href="~/templates/@ViewBag.TemplateSkin/mobile/css/owl.theme.css" rel="stylesheet" />
+   <link href="~/templates/@ViewBag.TemplateSkin/mobile/css/owl.transitions.css" rel="stylesheet" />
+   <link href="~/templates/@ViewBag.TemplateSkin/mobile/css/owl.carousel.css" rel="stylesheet" />
+   <script>
+      $(function () {
+         //设置幻灯片
+         $("#owl").owlCarousel({
+            singleItems: true,
+            paginationSpeed: 400
+         });
+      });
+   </script>
+}
+<div class="view w">
+   <div class="bl_view_img" id="owl">
+      @if (m.albums == null) {
+         <img src="@m.img_url" />
+      }
+      else {
+         foreach (DTcms.Model.article_albums modelt in m.albums) {
+            <img src="@modelt.original_path" />
+         }
+      }
+   </div>
+   <div class="bl_view_title">@m.title</div>
+   <div class="bl_view_note">@m.fields["sub_title"]</div>
+   <div class="bl_view_tag">
+      <div class="bl_view_price">现价：￥@m.fields["sell_price"]</div>
+      <div class="bl_view_oprice">原价：￥@m.fields["market_price"]</div>
+      <div class="bl_view_mall">货号：@m.fields["goods_no"]</div>
+   </div>
+   <div class="bl_view_tag">
+      <div class="bl_view_user">库存：@m.fields["stock_quantity"]</div>
+      <div class="bl_view_time">浏览：@(bll_article.GetClick(m.id))次</div>
+   </div>
+   <div class="bl_view_tag">
+      <div class="bl_view_user">评论：<span class="niu_pin">@(bll_article_comment.GetCount("is_lock=0 and article_id=" + m.id.ToString()))</span>条</div>
+      <div class="bl_view_time">时间：@bc.GetTimeSpan(m.add_time)</div>
+   </div>
+   <div class="go_buy">
+      <dl>
+         <dt>购买数量</dt>
+         <dd>
+            <div class="stock-box">
+               <input id="commodityArticleId" type="hidden" value="@m.id" />
+               <input id="commodityGoodsId" type="hidden" value="0" />
+               <a class="remove" onclick="addCartNum(-1);">-</a>
+               <input id="commoditySelectNum" type="text" maxlength="9" value="1" maxValue="@m.fields["stock_quantity"]" onkeydown="return checkNumber(event);">
+               <a class="add" onclick="addCartNum(1);">+</a>
+            </div>
+            <div class="stock-txt">
+               库存<label id="commodityStockNum">@m.fields["stock_quantity"]</label>件
+            </div>
+         </dd>
+      </dl>
+      <div style="clear: both;"></div>
+      <div id="buyButton" class="btn-buy">
+         <button class="buy" onclick="cartAdd(this,'@(config.webpath)',1,'@bc.linkurl("shopping")');">立即购买</button>
+         <button class="add" onclick="cartAdd(this,'@(config.webpath)',0,'@bc.linkurl("cart")');">加入购物车</button>
+      </div>
+   </div>
+</div>
+<div style="clear: both;"></div>
+<div class="bl_view_content w">
+   <h1>商品详情<span></span></h1>
+   <div class="bl_view_word">
+      <p style="text-indent: 2em;">
+         @Html.Raw(m.content)
+      </p>
+   </div>
+   <div class="bl_view_tag">
+      <div class="bl_view_user">上一篇：@Html.Raw(bc.get_prevandnext_article("goods_show", -1, "没有了", 0))</div>
+      <div class="bl_view_time">下一篇：@Html.Raw(bc.get_prevandnext_article("goods_show", 1, "没有了", 0))</div>
+   </div>
+</div>
+@RenderPage("~/Areas/Web/Views/" + @ViewBag.TemplateSkin + "/mobile/Shared/partial_comment.cshtml")

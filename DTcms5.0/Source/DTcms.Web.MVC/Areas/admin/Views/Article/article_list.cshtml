@@ -1,0 +1,375 @@
+﻿@using System.Data;
+@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
+   ViewBag.Title = "内容管理";
+   List<SelectListItem> categoryListItems = ViewData["categoryListItems"] as List<SelectListItem>;
+   List<SelectListItem> moveListItems = ViewData["moveListItems"] as List<SelectListItem>;
+   List<SelectListItem> weixinListItems = ViewData["weixinListItems"] as List<SelectListItem>;
+   List<SelectListItem> propertyList = ViewData["propertyList"] as List<SelectListItem>;
+   DataTable list = ViewData["list"] as DataTable;
+   int channel_id = int.Parse(ViewBag.ChannelId as string);
+}
+@section HeaderContent{
+   <link href="~/Content/pagination.css" rel="stylesheet" />
+   <script src="~/Scripts/jquery/jquery.lazyload.min.js"></script>
+   <script>
+      $(function () {
+         //图片延迟加载
+         $(".pic img").lazyload({ effect: "fadeIn" });
+         //点击图片链接
+         $(".pic img").click(function () {
+            var linkUrl = $(this).parent().parent().find(".foot a").attr("href");
+            if (linkUrl != "") {
+               location.href = linkUrl; //跳转到修改页面
+            }
+         });
+      });
+
+      function getQueryParam() {
+         var text = $("#txtKeywords").val();
+         var pagesize = $("#txtPageNum").val();
+         var property = $("#ddlProperty").val();
+         var categoryId = $("#ddlCategoryId").val();
+         return "channel_id=@ViewBag.ChannelId&keywords=" + text + "&pagesize=" + pagesize + "&property=" + property + "&category_id=" + categoryId;
+      }
+      //查询数据
+      function search() {
+         document.location = "index?" + getQueryParam();
+      }
+
+      //设置视图样式
+      function setView(viewStyle) {
+         document.location = "index?channel_id=@ViewBag.ChannelId&category_id=@ViewBag.CategoryId&keywords=@ViewBag.Keywords&property=@ViewBag.Property&page=@ViewBag.Page&prolistview=" + viewStyle;
+      }
+
+      //ExePostBack回调函数
+      function __doPostBack(objId) {
+         if (objId == "btnAudit") {
+            submitAudit();
+         }
+         if (objId == "btnDelete") {
+            submitdelete();
+         }
+      }
+      
+      //批量删除
+      function submitdelete() {
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitDelete?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("删除数据失败!");
+            }
+         });
+      }
+
+      //批量审核
+      function submitAudit() {
+         var $row = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($row).each(function (i, item) {
+            if ($(item).find("input:checkbox").prop("checked")) {
+               var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+               var obj = { id: id };
+               json.list.push(obj);
+            }
+         });
+         $.ajax({
+            url: "SubmitAudit?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function () {
+               alert("审核数据失败!");
+            }
+         });
+      }
+
+      //保存排序
+      function submitSave() {
+         //遍历表格行设置Json数据
+         var $tr = $("#ltable tr:gt(0)");
+         var json = { list: [] };
+         $($tr).each(function (i, item) {
+            var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
+            var sortId = $(item).find(".sort").val();
+            var obj = { id: id, sortId: sortId };
+            json.list.push(obj);
+         });
+         // 提交保存排序字段
+         $.ajax({
+            url: "SubmitSave?" + getQueryParam(),
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+               eval(data);
+            },
+            error: function(){
+               alert("保存排序失败!");
+            }
+         });
+      }
+
+      //设置状态
+      function setStatus(id, objId, obj) {
+         $.ajax({
+            url: "SetStatus?" + getQueryParam(),
+            cache: false,
+            type: "POST",
+            dataType: "text",
+            data: "id=" + id + "&cmdName=" + objId,
+            success: function (data) {
+               if (data == "1") {
+                  if ($(obj).hasClass("selected")) {
+                     $(obj).removeClass("selected");
+                  }
+                  else {
+                     $(obj).addClass("selected");
+                  }
+               }
+            },
+            error: function () {
+               alert("保存新闻状态失败!");
+            }
+         });
+      }
+   </script>
+}
+<form id="form1" method="post" action="#">
+<!--导航栏-->
+<div class="location">
+  <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
+  <a href="../../center/index"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>内容列表</span>
+</div>
+<!--/导航栏-->
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
+    <div class="box-wrap">
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a>
+      <div class="l-list">
+        <ul class="icon-list">
+          <li>
+             <a href="../article_edit/index?action=@DTEnums.ActionEnum.Add&channel_id=@ViewBag.ChannelId"><i class="iconfont icon-close"></i><span>新增</span></a>
+          </li>
+          <li>
+             <a href="javascript:;" id="btnSave" onclick="submitSave();"><i class="iconfont icon-save"></i><span>保存</span></a>
+          </li>
+          <li>
+             <a href="javascript:;" id="btnAudit" class="lock" onclick="ExePostBack('btnAudit','审核后前台将显示该信息，确定继续吗？');"><i class="iconfont icon-survey"></i><span>审核</span></a>
+          </li>
+          <li>
+             <a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a>
+          </li>
+          <li>
+             <a href="javascript:;" id="btnDelete" onclick="ExePostBack('btnDelete');"><i class="iconfont icon-delete"></i><span>删除</span></a>
+          </li>
+        </ul>
+        <div class="menu-list">
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlWXPost", new SelectList(weixinListItems, "Value", "Text", ""), new { onchange = "search();" })
+          </div>
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlMoveId", new SelectList(moveListItems, "Value", "Text", ""), new { onchange = "search();" })
+          </div>
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlCategoryId", new SelectList(categoryListItems, "Value", "Text", ViewBag.CategoryId as string), new { onchange = "search();" })
+          </div>
+          <div class="rule-single-select">
+            @Html.DropDownList("ddlProperty", new SelectList( propertyList, "Value", "Text", ViewBag.Property as string), new { onchange="search();"})
+          </div>
+        </div>
+      </div>
+      <div class="r-list">
+        <input type="text" id="txtKeywords" class="keyword" value="@ViewBag.Keywords" />
+        <a href="javascript:search();" id="lbtnSearch" class="btn-search"><i class="iconfont icon-search"></i></a>
+        <a href="javascript:setView('Img');" id="lbtnViewImg" class="img-view" title="图像列表视图"><i class="iconfont icon-list-img"></i></a>
+        <a href="javascript:setView('Txt');" id="lbtnViewTxt" class="txt-view" title="文字列表视图"><i class="iconfont icon-list-txt"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/工具栏-->
+
+<!--列表-->
+<div class="table-container">
+@if(ViewBag.ProListView == "Txt"){
+  <!--文字列表-->
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" id="ltable">
+    <tr>
+      <th width="6%">选择</th>
+      <th align="left">标题</th>
+      <th align="left" width="12%">所属类别</th>
+      <th align="left" width="16%">发布时间</th>
+      <th align="left" width="65">排序</th>
+      <th align="left" width="120">属性</th>
+      <th width="10%">操作</th>
+    </tr>
+   @foreach(DataRow dr in list.Rows){
+    <tr>
+      <td align="center">
+        <span class="checkall" style="vertical-align:middle"><input type="checkbox" /></span>
+        <label style="display:none">@dr["id"]</label>
+      </td>
+      <td><a href="../article_edit/index?action=@DTEnums.ActionEnum.Edit&channel_id=@ViewBag.ChannelId&id=@dr["id"]">@dr["title"]</a></td>
+      <td>@(new DTcms.BLL.article_category().GetTitle(Convert.ToInt32(dr["category_id"])))</td>
+      <td>@string.Format("{0:g}",dr["add_time"])</td>
+      <td>
+         <input type="text" class="sort" value="@dr["sort_id"]" onkeydown="return checkNumber(event);" />
+      </td>
+      <td>
+        <div class="btn-tools">
+          @if(Convert.ToInt32(dr["is_msg"]) == 1){
+             <a href="javascript:;" class="msg selected" title="取消评论" onclick="setStatus(@dr["id"], 'lbtnIsMsg', this);"><i class="iconfont icon-comment"></i></a>
+          }
+           else{
+             <a href="javascript:;" class="msg" title="设置评论" onclick="setStatus(@dr["id"], 'lbtnIsMsg', this);"><i class="iconfont icon-comment"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_top"]) == 1) {
+             <a href="javascript:;" class="top selected" title="取消置顶" onclick="setStatus(@dr["id"], 'lbtnIsTop', this);"><i class="iconfont icon-top"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="top" title="设置置顶" onclick="setStatus(@dr["id"], 'lbtnIsTop', this);"><i class="iconfont icon-top"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_red"]) == 1) {
+             <a href="javascript:;" class="red selected" title="取消推荐" onclick="setStatus(@dr["id"], 'lbtnIsRed', this);"><i class="iconfont icon-good"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="red" title="设置推荐" onclick="setStatus(@dr["id"], 'lbtnIsRed', this);"><i class="iconfont icon-good"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_hot"]) == 1) {
+             <a href="javascript:;" class="hot selected" title="取消热门" onclick="setStatus(@dr["id"], 'lbtnIsHot', this)"><i class="iconfont icon-hot"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="hot" title="设置热门" onclick="setStatus(@dr["id"], 'lbtnIsHot', this);"><i class="iconfont icon-hot"></i></a>
+          }
+          @if (Convert.ToInt32(dr["is_slide"]) == 1) {
+             <a href="javascript:;" class="pic selected" title="取消幻灯片" onclick="setStatus(@dr["id"], 'lbtnIsSlide', this);"><i class="iconfont icon-pic"></i></a>
+          }
+          else {
+             <a href="javascript:;" class="pic" title="设置幻灯片" onclick="setStatus(@dr["id"], 'lbtnIsSlide', this);"><i class="iconfont icon-pic"></i></a>
+          }
+        </div>
+      </td>
+      <td align="center">
+        <a href="../article_edit/index?action=@DTEnums.ActionEnum.Copy&channel_id=@channel_id&id=@dr["id"]">复制</a>
+        <a href="../article_edit/index?action=@DTEnums.ActionEnum.Edit&channel_id=@channel_id&id=@dr["id"]">修改</a>
+      </td>
+    </tr>
+   }
+   @if (list.Rows.Count == 0) {
+      <tr><td align="center" colspan="7">暂无记录</td></tr>
+   }
+  </table>
+}<!-- end if -->
+  <!--/文字列表-->
+
+  <!--图片列表-->
+@if(ViewBag.ProListView == "Img"){
+  <div class="imglist">
+    <ul>
+    @foreach(DataRow dr in list.Rows){
+      <li>
+        <div class="details @(dr["img_url"].ToString() == "" ? "nopic" : "")">
+          <div class="check">
+            <span class="checkall">
+               <input type="checkbox" />
+            </span>
+            <label style="display:none">@dr["id"]</label>
+          </div>
+          @if (dr["img_url"].ToString() != "") {
+             <div class="pic"><img src="/Areas/admin/Content/default/loadimg.gif" data-original="@dr["img_url"]" /></div><i class="absbg"></i>
+          }
+          <h1><span><a href="../article_edit/index?action=@DTEnums.ActionEnum.Edit&channel_id=@ViewBag.ChannelId&id=@dr["id"]">@dr["title"]</a></span></h1>
+          <div class="remark">
+             @if (dr["zhaiyao"].ToString() == "") {
+                @:暂无内容摘要说明...
+             }
+            @Html.Raw(dr["zhaiyao"].ToString())
+          </div>
+          <div class="tools">
+          @if(Convert.ToInt32(dr["is_msg"]) == 1){
+             <a href="javascript:;" class="msg selected" title="取消评论" onclick="setStatus(@dr["id"], 'lbtnIsMsg', this);"></a>
+          }
+           else{
+             <a href="javascript:;" class="msg" title="设置评论" onclick="setStatus(@dr["id"], 'lbtnIsMsg', this);"></a>
+          }
+          @if (Convert.ToInt32(dr["is_top"]) == 1) {
+             <a href="javascript:;" class="top selected" title="取消置顶" onclick="setStatus(@dr["id"], 'lbtnIsTop', this);"></a>
+          }
+          else {
+             <a href="javascript:;" class="top" title="设置置顶" onclick="setStatus(@dr["id"], 'lbtnIsTop', this);"></a>
+          }
+          @if (Convert.ToInt32(dr["is_red"]) == 1) {
+             <a href="javascript:;" class="red selected" title="取消推荐" onclick="setStatus(@dr["id"], 'lbtnIsRed', this);"></a>
+          }
+          else {
+             <a href="javascript:;" class="red" title="设置推荐" onclick="setStatus(@dr["id"], 'lbtnIsRed', this);"></a>
+          }
+          @if (Convert.ToInt32(dr["is_hot"]) == 1) {
+             <a href="javascript:;" class="hot selected" title="取消热门" onclick="setStatus(@dr["id"], 'lbtnIsHot', this)"></a>
+          }
+          else {
+             <a href="javascript:;" class="hot" title="设置热门" onclick="setStatus(@dr["id"], 'lbtnIsHot', this);"></a>
+          }
+          @if (Convert.ToInt32(dr["is_slide"]) == 1) {
+             <a href="javascript:;" class="pic selected" title="取消幻灯片" onclick="setStatus(@dr["id"], 'lbtnIsSlide', this);"></a>
+          }
+          else {
+             <a href="javascript:;" class="pic" title="设置幻灯片" onclick="setStatus(@dr["id"], 'lbtnIsSlide', this);"></a>
+          }          
+          <input type="text" class="sort" value="@dr["sort_id"]" onkeydown="return (/[\d]/.test(String.fromCharCode(event.keyCode)));" />
+          </div>
+          <div class="foot">
+            <p class="time">@string.Format("{0:yyyy-MM-dd HH:mm:ss}", dr["add_time"])</p>
+            <a href="../article_edit/index?action=@DTEnums.ActionEnum.Edit&channel_id=@channel_id&id=@dr["id"]" title="编辑"><i class="iconfont icon-pencil"></i>编辑</a>
+            <a href="../article_edit/index?action=@DTEnums.ActionEnum.Copy&channel_id=@channel_id&id=@dr["id"]" title="复制"><i class="iconfont icon-copy"></i></a>
+          </div>
+        </div>
+      </li>
+    }
+   @if (list.Rows.Count == 0) {
+      <div align="center" style="font-size:12px;line-height:30px;color:#666;">暂无记录</div>
+   }
+    </ul>
+  </div>
+}<!-- end Txt -->
+  <!--/图片列表-->
+</div>
+<!--/列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span>
+    <input type="text" id="txtPageNum" class="pagenum" value="@ViewBag.PageSize" onkeydown="return checkNumber(event);" onchange="search();" />
+    <span>条/页</span>
+  </div>
+  <div class="default">@Html.Raw(ViewBag.PageContent)</div>
+</div>
+<!--/内容底部-->
+
+</form>

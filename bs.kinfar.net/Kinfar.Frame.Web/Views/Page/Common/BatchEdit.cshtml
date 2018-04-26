@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "BatchEdit";
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid moduleId = UIOperate.GetModuleIdByRequest(Request);
+   int selectRecords = Request["selectRecords"].ObjToInt();
+   int pageRecords = Request["pageRecords"].ObjToInt();}
+@Html.Raw(frameFactory.GetBatchEditHTML(moduleId,selectRecords,pageRecords))

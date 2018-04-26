@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "ExportModel";
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid moduleId = UIOperate.GetModuleIdByRequest(Request);
+   int cc = Request["cc"].ObjToInt();}
+@Html.Raw(frameFactory.GetExportModelHTML(moduleId, cc))

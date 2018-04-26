@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>@ViewBag.Title</title>
+   <link href="~/Areas/admin/Content/icon/iconfont.css" rel="stylesheet" />
+   <link href="~/Areas/admin/Content/default/style.css" rel="stylesheet" />
+   <link href="~/Scripts/artdialog/ui-dialog.css" rel="stylesheet" />
+   <script src="~/Scripts/jquery/jquery-1.11.2.min.js"></script>
+   <script src="~/Scripts/Validform_v5.3.2_min.js"></script>
+   <script src="~/Scripts/datepicker/WdatePicker.js"></script>
+   <script src="~/Scripts/artdialog/dialog-plus-min.js"></script>
+   <script src="~/Scripts/webuploader/webuploader.min.js"></script>
+   <script src="~/Areas/admin/Scripts/uploader.js"></script>
+   <script src="~/Areas/admin/Scripts/laymain.js"></script>
+   <script src="~/Areas/admin/Scripts/common.js"></script>
+   <link href="~/Scripts/layer/mobile/need/layer.css" rel="stylesheet" />
+   <script src="~/Scripts/layer/mobile/layer.js"></script>
+   @RenderSection("HeaderContent",false)
+   <script>
+      function copy() {
+         var url = document.location.href.split("?")[0];
+         var json = { "url": url, "title": "无标题", "add_tiem": new Date().getTime(), "id": "@ViewBag.Id", "pastecount": 0, items: [] };
+         var find = false;
+         var count = 0;
+         $("select").each(function () {
+            var obj = { "id": $(this).attr("id"), "type": "select", "value": $(this).val() };
+            json["items"].push(obj);
+            count++;
+         });
+         $("input:checkbox").each(function () {
+            var obj = { "id": $(this).attr("id"), "type": "checkbox", "value": $(this).prop("checked") };
+            json["items"].push(obj);
+            count++;
+         });
+         $("input:radio").each(function () {
+            if ($(this).prop("checked")) {
+               var obj = { "id": $(this).attr("id"), "type": "radio", "value": $(this).prop("checked") };
+               json["items"].push(obj);
+               count++;
+            }
+         });
+         $("input:text").each(function () {
+            var obj = { "id": $(this).attr("id"), "type": $(this).attr("type"), "value": $(this).val() };
+            json["items"].push(obj);
+            count++;
+            if (!find && (obj["id"].indexOf("txtName") >= 0 || obj["id"].indexOf("txtTitle") >= 0)) {
+               find = true;
+               if (obj["value"] != "")
+                  json["title"] = obj["value"];
+            }
+         });
+         $("textarea").each(function () {
+            var obj = { "id": $(this).attr("id"), "type": "textarea", "value": $(this).text() };
+            if (!$(this).hasClass("editor")) {
+               json["items"].push(obj);
+            }
+            count++;
+         });
+         $(".editor").each(function () {
+            var obj = { "id": $(this).attr("id"), "type": "textarea", "value": $(this).val() };
+            //json["items"].push(obj);
+            count++;
+         });
+         //window.clipboardData.setData("Text", JSON.stringify(json));
+         //将表单Json数据保存到Cookie
+         var jsontext = JSON.stringify(json);
+         //var str = compressText(jsontext);
+         var str = jsontext;
+         addCookie("clipboard", str, 1);
+         //设置粘贴按钮状态
+         $(".paste").removeClass("disable").find("span").text("粘贴 " + document.title + "(" + json["title"] + ")");
+         //alert(JSON.stringify(json));
+         layer.open({
+            content: '已复制'+ count +'条表单数据',
+            skin: 'msg',
+            style: 'top:0px;',
+            time: 2
+         });
+      }
+
+      function paste() {
+         //从Cookie读取表单Json字符串
+         var str = getCookie("clipboard");
+         if (str == "") {
+            return;
+         }
+         //var jsontext = uncompressText(str);
+         var jsontext = str;
+         //转换为Json对象
+         var json = JSON.parse(jsontext);
+         //判断是否为相同页面
+         var url = document.location.href.split("?")[0];
+         if (json["url"] != url) {
+            parent.dialog({
+               title: '提示',
+               content: '对不起，相同页面才可以进行粘贴操作！',
+               okValue: '确定',
+               ok: function () { }
+            }).showModal();
+            return;
+         }
+         var find = false;
+         //遍历Json对象为表单输入项赋值
+         $.each(json["items"], function (index, item) {
+            switch (item["type"]) {
+               case "select":
+                  $("#" + item["id"]).find("option[value='" + item["value"] + "']").attr("selected", true);
+                  break;
+               case "checkbox":
+                  $("#" + item["id"]).prop("checked", item["value"]);
+                  break;
+               case "radio":
+                  $("#" + item["id"]).prop("checked", item["value"]);
+                  break;
+               case "text":
+                  if (!find && (item["id"].indexOf("Name") >= 0 || item["id"].indexOf("Title") >= 0)) {
+                     if (item["value"] != "") {
+                        find = true;
+                        //粘贴计数递增
+                        json["pastecount"] = json["pastecount"] + 1;
+                        $("#" + item["id"]).val(item["value"] + "_" + json["pastecount"]);
+                     }
+                  }
+                  else {
+                     if (item["id"] != "txtAddTime") {
+                        $("#" + item["id"]).val(item["value"]);
+                     }
+                  }
+                  break;
+               case "textarea":
+                  //KindEditor.html("#" + item["id"], item["value"]);
+                  $("#" + item["id"]).text(item["value"]);
+                  break;
+            }
+         });
+         
+         //将表单Json数据保存到Cookie(更新粘贴计数值)
+         addCookie("clipboard", JSON.stringify(json), 1);
+         //更新标签样式状态
+         $(".rule-single-checkbox").ruleSingleCheckbox();
+         $(".rule-multi-checkbox").ruleMultiCheckbox();
+         $(".rule-multi-radio").ruleMultiRadio();
+         $(".rule-single-select").ruleSingleSelect();
+         $(".rule-multi-porp").ruleMultiPorp();
+         $(".rule-date-input").ruleDateInput();
+         layer.open({
+            content: '已处理' + json["items"].length + '条表单数据',
+            skin: 'msg',
+            style: 'top:0px',
+            time: 2
+         });
+      }
+      $(function () {
+         //尝试从Cookie获取表单数据
+         var str = getCookie("clipboard");
+         if (str != "") {
+            //var jsontext = uncompressText(str);
+            var json = JSON.parse(str);
+            var url = document.location.href.split("?")[0];
+            if (json["url"] == url)
+               $(".paste").removeClass("disable").find("span").text("粘贴 " + document.title + "(" + json["title"] + ")");
+         }
+         else {
+            $(".paste").find("span").text("粘贴(无内容)")
+         }
+
+         @Html.Raw(ViewBag.ClientScript as string)
+      });
+
+      function compressText(str) {
+         var result = "";
+         var channel_id = 1;
+         $.ajax({
+            alync: false,
+            type: "POST",
+            data: "text=" + str,
+            url: "CompressText?action=dellink&channel_id=" + channel_id,
+            success: function (data) {
+               result = data;
+            }
+         });
+         return result;
+      }
+
+      function uncompressText(str) {
+         var result = "";
+         var channel_id = 1;
+         $.ajax({
+            async: false,
+            type: "POST",
+            data: "text=" + str,
+            url: "UncompressText?action=dellink&channel_id=" + channel_id,
+            success: function (data) {
+               alert(data);
+            }
+         });
+         return result;
+      }
+   </script>
+</head>
+<body class="mainbody">
+   <header>
+   </header>
+   @RenderBody()
+   <footer>
+   </footer>
+   @RenderSection("Scripts", required: false)
+</body>
+</html>

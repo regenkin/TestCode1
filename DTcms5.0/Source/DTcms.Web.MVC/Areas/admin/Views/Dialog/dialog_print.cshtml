@@ -1,0 +1,120 @@
+﻿@using DTcms.Model;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutDialog.cshtml";
+   ViewBag.Title = "打印订单窗口";
+   sysconfig sysConfig = ViewData["sysConfig"] as sysconfig;
+   DTcms.Model.manager adminModel = ViewData["adminModel"] as DTcms.Model.manager;
+   DTcms.Model.orders m = ViewData["model"] as DTcms.Model.orders;
+}
+
+@section HeaderContent{
+<script>
+   var api = top.dialog.get(window); //获取父窗体对象
+   //页面加载完成执行
+   $(function () {
+      //设置按钮及事件
+      api.button([{
+         value: '确认打印',
+         callback: function () {
+            printWin();
+         },
+         autofocus: true
+      }, {
+         value: '取消',
+         callback: function () { }
+      }]);
+   });
+   //打印方法
+   function printWin() {
+      var oWin = window.open("", "_blank");
+      oWin.document.write(document.getElementById("content").innerHTML);
+      oWin.focus();
+      oWin.document.close();
+      oWin.print();
+      oWin.close();
+      return false;
+   }
+</script>
+}
+
+<div id="content">
+<table width="800" border="0" align="center" cellpadding="3" cellspacing="0" style="font-size:12px; font-family:'微软雅黑'; background:#fff;">
+<tr>
+  <td width="346" height="50" style="font-size:20px;">@(sysConfig.webname)商品订单</td>
+  <td width="216">订单号：@m.order_no<br />
+日&nbsp;&nbsp; 期：@m.add_time.ToString("yyyy-MM-dd")</td>
+  <td width="220">操&nbsp; 作 人：@adminModel.user_name<br />打印时间：@DateTime.Now</td>
+</tr>
+<tr>
+  <td colspan="3" style="padding:10px 0; border-top:1px solid #000;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="5" style="font-size:12px; font-family:'微软雅黑'; background:#fff;">
+          <tr>
+            <td align="left" style="background:#ccc;">商品信息</th>
+            <td width="12%" align="left" style="background:#ccc;">销售价</td>
+            <td width="12%" align="left" style="background:#ccc;">优惠价</td>
+            <td width="10%" align="left" style="background:#ccc;">数量</td>
+            <td width="10%" align="left" style="background:#ccc;">积分</td>
+            <td width="12%" align="left" style="background:#ccc;">金额合计</td>
+          </tr>
+          @foreach(DTcms.Model.order_goods item in m.order_goods){
+          <tr>
+            <td>
+              @item.goods_title
+              @if (item.spec_text.ToString() != "") {
+                <br />@item.spec_text
+              }
+            </td>
+            <td>@item.goods_price</td>
+            <td>@item.real_price</td>
+            <td>@item.quantity</td>
+            <td>@(item.point * item.quantity)</td>
+            <td>@(item.real_price * item.quantity)</td>
+          </tr>
+          }
+          @if (m.order_goods.Count == 0) {
+            <tr><td align="center" colspan="7">暂无记录</td></tr>
+          }
+          </table>
+
+  </td>
+  </tr>
+<tr>
+  <td colspan="3" style="border-top:1px solid #000;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="5" style="margin:5px auto; font-size:12px; font-family:'微软雅黑'; background:#fff;">
+    <tr>
+      <td width="44%">
+        会员账户：@(m.user_id > 0 ? m.user_name : "匿名用户")
+      </td>
+      <td width="56%">客户姓名：@m.accept_name<br /></td>
+    </tr>
+    <tr>
+      <td>开具发票：@(m.is_invoice == 1 ? "是" : "否")</td>
+      <td>送货地址：@m.area @m.address<br /></td>
+    </tr>
+    <tr>
+      <td>发票抬头：@m.invoice_title</td>
+      <td>邮政编码：@m.post_code</td>
+    </tr>
+    <tr>
+      <td valign="top">支付方式：@(new DTcms.BLL.site_payment().GetTitle(m.payment_id))</td>
+      <td valign="top">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 机：@m.mobile</td>
+    </tr>
+    <tr>
+      <td>配送方式：@(new DTcms.BLL.express().GetTitle(m.express_id))</td>
+      <td valign="top">固定电话：@m.telphone</td>
+    </tr>
+    <tr>
+      <td valign="top">订单备注：@m.remark</td>
+      <td valign="top">
+        用户留言：@m.message
+      </td>
+    </tr>
+  </table>
+    <table width="100%" border="0" align="center" cellpadding="5" cellspacing="0" style="border-top:1px solid #000; font-size:12px; font-family:'微软雅黑'; background:#fff;">
+      <tr>
+        <td align="right">商品金额：￥@m.real_amount + 配送费：￥@m.express_fee + 支付手续费：￥@m.payment_fee + 税金：￥@m.invoice_taxes = 订单总额：@m.order_amount</td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</div>

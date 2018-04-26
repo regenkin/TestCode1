@@ -1,0 +1,8 @@
+﻿@{
+    ViewBag.Title = "SetUserRole";
+}
+@using Kinfar.Frame.Common;
+@using Kinfar.Frame.UIOperate;
+@{ UIFrameFactory frameFactory = UIFrameFactory.GetInstance();
+   Guid userId = Request["userId"].ObjToGuid();}
+@Html.Raw(frameFactory.GetSetUserRoleHTML(userId))
