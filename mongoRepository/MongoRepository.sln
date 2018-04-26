@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoRepository.Net40", "MongoRepository\MongoRepository.Net40.csproj", "{E2C4A7F9-4B14-46CB-BFCE-AFABFACB3390}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D62DDBAF-08C6-4130-890A-888910785B65}"
+	ProjectSection(SolutionItems) = preProject
+		buildnugetpackage.cmd = buildnugetpackage.cmd
+		LICENSE = LICENSE
+		MongoRepository.nuspec = MongoRepository.nuspec
+		mongorepositorylogo.png = mongorepositorylogo.png
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{288E6547-DDFC-459F-8BF8-5225F06085FC}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2C4A7F9-4B14-46CB-BFCE-AFABFACB3390}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2C4A7F9-4B14-46CB-BFCE-AFABFACB3390}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2C4A7F9-4B14-46CB-BFCE-AFABFACB3390}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2C4A7F9-4B14-46CB-BFCE-AFABFACB3390}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
