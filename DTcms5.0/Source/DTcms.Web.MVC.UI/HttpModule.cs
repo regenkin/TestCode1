@@ -168,6 +168,8 @@ namespace DTcms.Web.MVC.UI
       private string GetSitePath(string webPath, string requestPath, string requestDomain) {
          //获取当前域名包含的站点目录
          string domainPath = GetCurrDomainPath(requestDomain);
+          //有端口还要考滤没用端口的情况
+         if (string.IsNullOrWhiteSpace(domainPath)) domainPath = GetCurrDomainPath(requestDomain.Split(':')[0]);
          if (domainPath != string.Empty) {
             return domainPath;
          }
