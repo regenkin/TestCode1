@@ -60,12 +60,14 @@
   <ItemGroup>
     <Compile Include="admin\index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="admin\index.aspx.designer.cs">
       <DependentUpon>index.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="admin\link_edit.aspx.cs">
       <DependentUpon>link_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="admin\link_edit.aspx.designer.cs">
       <DependentUpon>link_edit.aspx.cs</DependentUpon>
@@ -75,7 +77,9 @@
     </Compile>
     <Compile Include="bll.cs" />
     <Compile Include="dal.cs" />
-    <Compile Include="link.cs" />
+    <Compile Include="link.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

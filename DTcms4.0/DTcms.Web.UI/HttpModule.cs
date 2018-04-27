@@ -50,10 +50,13 @@ namespace DTcms.Web.UI
                 return;
             }
 
-            string requestDomain = context.Request.Url.Authority.ToLower(); //获得当前域名(含端口号)
+            string requestDomain = context.Request.Url.Authority.ToLower(); //获得当前域名(含端口号)          
             string sitePath = GetSitePath(siteConfig.webpath, requestPath, requestDomain); //获取当前站点目录
             string requestPage = CutStringPath(siteConfig.webpath, sitePath, requestPath); //截取除安装、站点目录部分
-
+            //context.Response.Write(requestDomain + "___");
+            //context.Response.Write(sitePath + "___");
+            //context.Response.Write(requestPage + "___");
+            //context.Response.End();
             //检查网站重写状态0表示不开启重写、1开启重写、2生成静态
             if (siteConfig.staticstatus == 0)
             {
@@ -208,6 +211,7 @@ namespace DTcms.Web.UI
         {
             //获取当前域名包含的站点目录
             string domainPath = GetCurrDomainPath(requestDomain);
+            if (string.IsNullOrWhiteSpace(domainPath)) domainPath = GetCurrDomainPath(requestDomain.Split(':')[0]);
             if (domainPath != string.Empty)
             {
                 return domainPath;
@@ -436,4 +440,5 @@ namespace DTcms.Web.UI
         }
     }
     #endregion
+
 }
