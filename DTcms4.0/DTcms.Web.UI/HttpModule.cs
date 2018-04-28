@@ -121,11 +121,13 @@ namespace DTcms.Web.UI
                             if (siteConfig.staticstatus == 2 && !SiteDomains.GetSiteDomains().MobilePaths.Contains(sitePath) && 
                                 (model.channel.Length > 0 || model.page.ToLower() == "index.aspx")) //频道页
                             {
-                                context.RewritePath(siteConfig.webpath + DTKeys.DIRECTORY_REWRITE_HTML + "/" + sitePath +
-                                        Utils.GetUrlExtension(requestPage, siteConfig.staticextension, true));
-                                return;
+                                string swebpath = siteConfig.webpath + DTKeys.DIRECTORY_REWRITE_HTML + "/" + sitePath +
+                                        Utils.GetUrlExtension(requestPage, siteConfig.staticextension, true);
+                                string DiskPath = context.Server.MapPath(swebpath);
+                                if(File.Exists(DiskPath))
+                                    {context.RewritePath(swebpath);return;}                                   
                             }
-                            else if (model.type == DTKeys.DIRECTORY_REWRITE_PLUGIN) //插件页
+                            if (model.type == DTKeys.DIRECTORY_REWRITE_PLUGIN) //插件页
                             {
                                 string queryString = Regex.Replace(requestPage, string.Format("/{0}", newPattern), item.querystring, RegexOptions.None | RegexOptions.IgnoreCase);
                                 context.RewritePath(string.Format("{0}{1}/{2}/{3}", 
