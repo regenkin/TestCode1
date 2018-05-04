@@ -1,0 +1,51 @@
+﻿<div class="header">
+    <div class="rowFluid">
+        <div class="span2 col-md-12">
+            <div class="logo">
+                <a href="/" title="返回首页">
+                    <img src="{site.logo}" alt="{site.seo_title}" />
+                </a>
+            </div>
+        </div>
+        <div class="span8">
+            <div class="mobileMenuBtn">
+                <span class="span1"></span><span class="span2"></span><span class="span3"></span>
+            </div>
+            <div class="mobileMenuBtn_shad">
+            </div>
+            <div class="header_menu">
+                <ul id="menu">
+				<%set DTcms.Model.channel_site channelobj = GetSiteModel()%>
+                    <li><a href="/" class='active' title="首页">首页</a></li>
+                    <!--li><a href="/solution.aspx" title="解决方案">解决方案</a></li-->
+                    <li><a href="<%linkurl("www_about_show","www_about_gywm")%>" title="关于我们">关于我们</a></li>
+                    <li><a href="<%linkurl("www_product")%>" title="产品介绍">产品介绍</a></li>
+                    <li><a href="<%linkurl("news")%>" title="新闻资讯">新闻资讯</a></li>
+					<li><a href="<%linkurl("www_blog")%>" title="技术博客" target="_blank">技术博客</a></li>
+                    <li><a href="<%linkurl("www_help")%>" title="帮助中心" target="_blank">帮助中心</a></li>
+                    <li><a href="<%linkurl("www_about_show","www_about_lxwm")%>" title="联系我们">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+          <div class="span2">
+          <ui class="menu"></ui>
+          <script type="text/javascript">
+              $.ajax({
+                  type: "POST",
+                  url: "{config.webpath}tools/submit_ajax.ashx?action=user_check_login",
+                  dataType: "json",
+                  timeout: 20000,
+                  success: function (data, textStatus) {
+                      if (data.status == 1) {
+                          $("div.span2 .menu").prepend('<li class="top_line"><a href="<%linkurl("usercenter","index")%>">会员中心</a></li>');
+                          $("div.span2 .menu").prepend('<li class="top_login"><em></em><a href="<%linkurl("www","exit")%>">退出</a></li>');
+                      } else {
+                          $("div.span2 .menu").prepend('<li class="top_line"><a href="<%linkurl("register")%>">注册</a></li>');
+                          $("div.span2 .menu").prepend('<li class="top_login"><em></em><a href="<%linkurl("login")%>">登录</a></li>');
+                      }
+                  }
+              });
+		    </script>
+        </div>
+    </div>
+</div>

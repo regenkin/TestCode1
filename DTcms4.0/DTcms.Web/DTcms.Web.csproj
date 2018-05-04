@@ -652,6 +652,10 @@
     <Content Include="templates\mobile\_footer.html" />
     <Content Include="templates\mobile\_header.html" />
     <Content Include="templates\mobile\_nav.html" />
+    <Content Include="templates\xhsj\css\flexslider.css" />
+    <Content Include="templates\xhsj\css\lightbox.css" />
+    <Content Include="templates\xhsj\_header.html" />
+    <Content Include="templates\xhsj\_header_login.html" />
     <Content Include="watermark.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

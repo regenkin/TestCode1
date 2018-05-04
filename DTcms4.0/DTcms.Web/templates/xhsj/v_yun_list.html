@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zn">
+    <head>
+    	<!-- meta -->
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, minimumscale=1.0, maximum-scale=1.0" />
+        <meta name="language" content="zh-cn" />
+        <meta name="renderer" content="webkit" />
+        <title>{site.seo_title}</title>
+        <meta name="keywords" content="{site.seo_keyword}" />
+        <meta name="description" content="{site.seo_description}" />
+        <!-- stylesheet -->
+        <link rel="stylesheet" href="{config.webpath}templates/v/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{config.webpath}templates/v/css/main.css">
+        <link rel="stylesheet" href="{config.webpath}templates/v/css/pagination.css" rel="stylesheet" />
+        <script src="{config.webpath}templates/v/js/jquery-2.1.3.min.js"></script>
+        <script src="{config.webpath}templates/v/js/jquery.cookie.js"></script>
+        <script src="{config.webpath}templates/v/js/main.js"></script>
+    </head>
+    <body>
+        <div id="header" class="content-block">
+                <header id="site-header" class="clearfix">
+                    <div class="pull-left">
+                        <h1><a href="http://v.kinfar.net">卡夫视频</a></h1>
+                    </div>
+                    <div class="pull-right">
+                        <nav class="navbar site-nav" role="navigation">
+                            <!-- Brand and toggle get grouped for better mobile display -->
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                                    <i class="glyphicon glyphicon-list"></i>
+                                </button>
+                            </div>
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="http://jx.sozhi.cc/" target="_blank"><i class="fa fa-home"></i>搜值</a></li>
+									<li><a href="http://www.5ifxw.com/vip/" target="_blank"><i class="fa fa-home"></i>解析站</a></li>
+                                    <li><a href="http://www.360kan.com" target="_blank"><i class="fa fa-bookmark"></i> 360影视</a></li>
+                                    <li><a href="http://www.youku.com" target="_blank"><i class="fa fa-thumbs-up"></i>优酷</a></li>
+                                    <li><a href="http://v.qq.com" target="_blank"><i class="fa fa-phone-square"></i>腾讯</a></li>
+									<li><a href="http://www.iqiyi.com" target="_blank"><i class="fa fa-wifi"></i>爱奇艺</a></li>
+                                    <li><a href="http://v.sohu.com" target="_blank"><i class="fa fa-user"></i>搜狐</a></li>
+                                    <li><a href="<%linkurl("V_WFL",64)%>"><i class="fa fa-user"></i>君飞</a></li>
+                                </ul>
+                            </div>  <!-- /.navbar-collapse -->
+                        </nav>
+                    </div>
+                </header>	<!-- site-header -->
+        </div>  <!-- content-block -->
+        	<div  id="urlcontainer" class="container" style="padding-top:100px">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="input-group">
+						  <div class="input-group-addon">视频网址:</div>
+						  <input class="form-control" id="vurl" type="text" placeholder="(例:https://v.qq.com)或 C值" value="" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+						<select class="form-control input-lg" id="jk">
+<option value="http://player.jidiaose.com/supapi/iframe.php?v="  selected="selected">万能选择接口</option>
+<option value="http://jx.aeidu.cn/index.php?url=">万能接口1</option>
+<option value="http://y.mt2t.com/lines?url=">万能接口2</option>	
+<option value="http://jiexi.071811.cc/jx2.php?url=">万能接口3</option>
+<option value="http://www.662820.com/xnflv/index.php?url=">万能接口4</option>
+<option value="http://api.91exp.com/svip/?url=">万能接口5</option>
+<option value="http://vip.thxcw.com/index.php?url=">万能接口6</option>
+<option value="http://www.82190555.com/index/qqvod.php?url=">腾讯视频接口1</option>	
+<option value="http://api.pucms.com/?url=">爱奇艺超清接口1</option>
+<option value="http://api.baiyug.cn/vip/index.php?url=">爱奇艺超清接口2</option>
+<option value="https://api.flvsp.com/?url=">爱奇艺超清接口3</option>
+<option value="http://api.xfsub.com/index.php?url=">芒果TV超清接口</option>
+<option value="http://65yw.2m.vc/chaojikan.php?url=">芒果TV手机接口</option>
+<option value="http://www.82190555.com/index/qqvod.php?url=">优酷超清接口</option>
+<option value="http://vip.jlsprh.com/index.php?url=">搜狐视频接口</option>
+<option value="http://2gty.com/apiurl/yun.php?url=">乐视视频接口</option>
+<option value="http://www.wmxz.wang/video.php?url=" >①号通用vip引擎系统【稳定通用】</option> 
+<option value="https://api.47ks.com/webcloud/?v=">②号通用vip引擎系统【稳定通用】</option>
+<option value="http://doudiapi.duapp.com/letv.php?url=">③号vip引擎系统【乐视推荐】</option>
+<option value="http://minevideo.sxl.me/qq.php?vid=" >④号vip引擎系统【腾讯推荐】</option>
+<option value="http://v.72du.com/api/?url=" >⑤号vip引擎系统【腾讯超清】</option>
+<option value="http://aikan-tv.com/tong.php?url=">⑥号vip引擎系统【腾讯稳定】</option>
+<option value="http://qtzr.net/s/?qt=" >⑦号vip引擎系统【搜狐、乐视】</option>
+<option value="http://player.gakui.top/?url=">⑧vip引擎系统【维护中】</option>
+<option value="http://www.vipjiexi.com/yun.php?url=">⑩vip引擎系统【稳定通用】</option>
+						 </select>
+						</div>  
+						<div class="row"><button type="button" title="播放" class="btn btn-primary btn-lg btn-block btn-face" >播放</button></div>
+			</div>                                                                                                                                           
+
+            <div class="container">
+			<div class="row">
+            <%set DataTable dlist=get_article_list("v_viduo", 64, pagesize, page, "", out totalcount, out pagelist, "v_yun_list", category_id, "__id__")%><!--取得一个分页DataTable-->
+            <!--使用foreach循环输出-->
+            <%foreach(DataRow dr in dlist.Rows)%>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2 colIface"><a href="#urlcontainer" title="{dr[title]}" class="btnsel" data-jiexi="{dr[img_url]}">{dr[title]}<a></div>
+            <%/foreach%>
+			</div>                                                                                                                                            
+		</div>
+        <%if totalcount>1 %>
+        <div class="m-bg">
+            <div class="badoo">{pagelist}</div>
+        </div>
+        <%/if%>
+        </form>                                                                                                                                               
+	</body>                                                                                                                                                   
+</html>                                                                                                                                                       
+<script src="{config.webpath}templates/v/js/bootstrap.min.js"></script>                                         

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, minimumscale=1.0, maximum-scale=1.0" />
+<meta name="language" content="zh-cn" />
+<meta name="renderer" content="webkit" />
+<title>{model.title},{site.seo_title}</title>
+<meta name="keywords" content="{model.title},{site.seo_keyword}" />
+<meta name="description" content="{model.title},{site.seo_description}" />
+<script src="{config.webpath}templates/help/js/jquery.min.js" type="text/javascript"></script>
+<link rel="shortcut icon" href="/favicon.ico" />
+<link href="{config.webpath}templates/help/css/main.css" rel="stylesheet" type="text/css" >
+<link href="{config.webpath}templates/help/css/pagination.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="{config.webpath}templates/help/css/bootstrap.min.css">
+<!--[if lt IE 9]>
+<link rel="stylesheet" type="text/css" href="{config.webpath}templates/help/css/bootstrap.min_1.css" />
+<script src="{config.webpath}templates/help/js/respond.min.js"></script>
+<script src="{config.webpath}templates/help/js/html5shiv.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="{config.webpath}templates/help/css/love.css" />
+<script src="{config.webpath}templates/help/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!--Header-->
+<%template src="_header_blog.html"%>
+<!--/Header-->
+    <div class="container main">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="m-bg">
+                    <div class="text-center border-dotted-b">
+                        <h1>{model.title}</h1>
+                    </div>
+                    <div class="border-dotted-b padding-10">
+                        <span class="g-bg glyphicon glyphicon-user margin-r-5" aria-hidden="true"></span><%=get_article_field({model.id}, "author")%>
+                        <span class="g-bg glyphicon glyphicon-calendar margin-l-10 margin-r-5" aria-hidden="true"></span>{model.add_time}
+                        <span class="g-bg glyphicon glyphicon-folder-close margin-l-10 margin-r-5" aria-hidden="true"></span><%=get_category_title(model.category_id, "未分类")%>
+                         <span class="g-bg glyphicon glyphicon-eye-open margin-l-10 margin-r-5" aria-hidden="true"></span><script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_article_click&id={model.id}&click=1"></script>次阅读
+                    </div>
+                    <div class="padding-10">
+                        <div class="miaoshu">&nbsp;{model.zhaiyao}</div>
+                        {model.content}
+                   </div>
+                    <div class="border-dotted-t padding-10 text-right">
+                        <span class="g-bg glyphicon glyphicon-tags margin-r-5" aria-hidden="true"></span>
+                        <a class="btn btn-xs btn-default margin-2" href="#">{model.tags}</a></div>
+                    <ul class="pager border-dotted-b padding-b-10">
+                        <li class="previous"><%=get_prevandnext_article("www_help_content", -1, "<a href='javascript:'>无</a>", 0)%></li>
+                        <li class="next"><%=get_prevandnext_article("www_help_content", 1, "<a href='javascript:'>无</a>", 0)%></li>
+                    </ul>
+<%set int totalcount=0%>
+<%set DataTable dtcomment=get_comment_list(model.id, 10, 1, "is_lock=0", out totalcount)%>
+<%loop dr dtcomment%>
+  第{dr__loop__id}楼：{dr[content]}
+<%/loop%>
+                    <div class="bdsharebuttonbox bdshare-button-style0-24">
+                        <a class="bds_more" data-cmd="more"></a>
+                        <a title="分享到QQ空间" class="bds_qzone" data-cmd="qzone"></a>
+                        <a title="分享到新浪微博" class="bds_tsina" data-cmd="tsina"></a>
+                        <a title="分享到腾讯微博" class="bds_tqq" data-cmd="tqq"></a>
+                        <a title="分享到人人网" class="bds_renren" data-cmd="renren"></a>
+                        <a title="分享到微信" class="bds_weixin" data-cmd="weixin"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <!-- 右边栏开始 -->
+                <div class="post-sidebar margin-t-10">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title"><span aria-hidden="true" class="g-bg glyphicon glyphicon-list margin-r-5"></span>目录</h4>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item b-t-r">
+<a href="<%linkurl("www_help_list",0)%>" class="btn btn-default width-80 btn-sm margin-b-5" title="全部">全部</a> 
+<%set DataTable dt=get_category_list("www_help", 0)%>
+<%foreach(DataRow dr in dt.Rows)%>
+<a href="<%linkurl("www_help_list",{dr[id]})%>" class="btn btn-default width-80 btn-sm margin-b-5" title="{dr[title]}">{dr[title]}</a> 
+<%/foreach%>
+                             </li>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <span aria-hidden="true" class="g-bg glyphicon glyphicon-list margin-r-5"></span>
+                                推荐博文</h4>
+                        </div>
+                        <ul class="list-group">
+<%set DataTable nlist=get_article_list("www_help", model.category_id,9, "is_red=1","add_time desc")%>
+<%foreach(DataRow dr in nlist.Rows)%>
+ <li class="list-group-item b-t-r item-h clearfix">
+          <div class="col-md-12">
+               <a href="<%linkurl("www_help_content",{dr[id]})%>" target="_blank" title="{dr[title]}">{dr[title]}</a>
+          </div>
+</li>
+<%/foreach%>
+                        </ul>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <span aria-hidden="true" class="g-bg glyphicon glyphicon-list margin-r-5"></span>最新文章</h4>
+                        </div>
+<%set DataTable lastlist=get_article_list("www_help", model.category_id,9, "","add_time desc")%>
+<%foreach(DataRow dr in lastlist.Rows)%>
+<ul class="list-group">
+     <li class="list-group-item b-t-r item-h"><span class="badge">新</span><a href="<%linkurl("www_help_content",{dr[id]})%>" target="_blank" title="{dr[title]}">{dr[title]}</a></li>
+</ul>
+<%/foreach%>
+                    </div>
+                </div>
+                <!-- 右边栏结束 -->
+            </div>
+        </div>
+    </div>
+<!--Footer-->
+<%template src="_footer_blog.html"%>
+<!--/Footer-->
+<div class="top_scroll" id="top_scroll">
+<div id="_top"><span aria-hidden="true" class="glyphicon glyphicon-plane"></span></div>
+<div id="_bottom"><span aria-hidden="true" class="glyphicon glyphicon-chevron-down"></span></div>
+</div>
+</body>
+<script type="text/javascript">
+$(function(){
+	//禁止无效链接
+	$('.disabled a').removeAttr('href');
+	//返回顶部
+	showScroll();
+	function showScroll(){
+		$(window).scroll( function() {
+			var scrollValue=$(window).scrollTop();
+			scrollValue > 100 ? $('div[class=top_scroll]').fadeIn():$('div[class=top_scroll]').fadeOut();
+		} );
+		$('#_top').click(function(){
+			$("html,body").animate({scrollTop:0},200);
+		});
+		$('#_bottom').click(function(){
+			$("html,body").animate({scrollTop:$('body').height()},200);
+		});
+	};
+	//右侧菜单
+	 if($('li').hasClass('li_bg')){
+	 	$('#accordion .in').removeClass('in');
+   		$('.li_bg').parent().parent().addClass('in');
+	}
+	//美化上传组件
+	$('input[type=file]').change(function() {
+		$('#tmp_file').val($(this).val());
+	});
+	//导航点击变色
+	$('.navbar-nav a[href$="post/index"]').parent().addClass('active');
+	//TAB
+	$("#myTab a").mouseover(function() {
+		$('#myTab .active').removeClass('active');
+		$("#myTabContent .active").removeClass('active');
+		var data_id=$(this).attr('data-id');
+		$(this).parent().addClass('active');
+		$('#'+data_id).addClass('in active');
+	});
+});
+</script>
+</html>

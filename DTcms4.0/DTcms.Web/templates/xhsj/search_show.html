@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=yes">
+    <%set string category_title=get_category_title(model.category_id,"新闻资讯")%>
+    <title>{model.title} - {category_title} - {site.name}</title>
+    <meta name="keywords" content="{model.seo_keywords}" />
+    <meta name="description" content="{model.seo_description}" />
+    <meta name="author" content="order by xhsjfood.com" />
+    <meta name="renderer" content="webkit">
+    <!--ico-->
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/owl.carousel.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/responsive.css" />
+    <script src="<%templateskin%>/js/jquery-1.11.0.min.js"></script>
+    <script src="<%templateskin%>/js/wow.min_1.js"></script>
+    <script src="<%templateskin%>/js/owl.carousel.min.js"></script>
+    <script src="<%templateskin%>/js/page.js"></script>
+</head>
+<body>
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    <!--右侧漂浮客服-->
+    <%template src="_rightfloat.html"%>
+    <!--/右侧漂浮客服-->
+    <div class="page">
+        <div class="rowFluid">
+            <div class="span12">
+                <div class="main">
+                    <div class="z_banner news_banner">
+                    </div>
+                    <div class="technical_support">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <div class="wow fadeInRight">
+                                        <div class="technical_support_list" style="margin: 0 auto">
+                                            <div class="technical_support_box_z">
+                                                <div class="technical_support_box_z_header">
+                                                    <div class="title">
+                                                        {model.title}</div>
+                                                    <ul>
+                                                        <li><i class="iconfont icon-date"></i>{model.add_time}</li>
+                                                        <li><i class="iconfont icon-view"></i><script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_article_click&channel_id={model.channel_id}&id={model.id}&click=1"></script>次</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="technical_support_box_z_info_box">
+                                                    <div class="technical_support_box_z_info">
+                                                        {model.content}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--页面底部-->
+                        <%template src="_footer.html"%>
+                        <!--/页面底部-->
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>

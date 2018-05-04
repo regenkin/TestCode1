@@ -1,0 +1,27 @@
+﻿<div class="header">
+    <div class="rowFluid">
+        <div class="span2 col-md-12">
+            <div class="logo">
+                <a href="/" title="返回首页">
+                    <img src="{site.logo}" alt="{site.seo_title}" />
+                </a>
+            </div>
+        </div>
+        <div class="span8">
+            <div class="mobileMenuBtn">
+                <span class="span1"></span><span class="span2"></span><span class="span3"></span>
+            </div>
+            <div class="mobileMenuBtn_shad">
+            </div>
+            <div class="header_menu">
+                <ul id="menu">
+				<%set DTcms.Model.channel_site channelobj = GetSiteModel()%>
+                    <li><a href="/" class='active' title="首页">首页</a></li>
+                    <li><a href="<%linkurl("news")%>" title="新闻资讯">新闻资讯</a></li>
+					<li><a href="<%linkurl("www_blog")%>" title="技术博客" target="_blank">技术博客</a></li>
+                    <li><a href="<%linkurl("www_help")%>" title="帮助中心" target="_blank">帮助中心</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

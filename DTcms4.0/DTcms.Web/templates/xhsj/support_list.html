@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=yes">
+    <title>技术支持 - {site.name}</title>
+    <meta name="keywords" content="{site.seo_keyword}" />
+    <meta name="description" content="{site.seo_description}" />
+    <meta name="author" content="order by xhsjfood.com" />
+    <meta name="renderer" content="webkit">
+    <!--ico-->
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/owl.carousel.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/responsive.css" />
+    <script src="<%templateskin%>/js/jquery-1.11.0.min.js"></script>
+    <script src="<%templateskin%>/js/wow.min_1.js"></script>
+    <script src="<%templateskin%>/js/owl.carousel.min.js"></script>
+    <script src="<%templateskin%>/js/page.js"></script>
+    <script src="<%templateskin%>/js/common.js"></script>
+</head>
+<body>
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    <!--右侧漂浮客服-->
+    <%template src="_rightfloat.html"%>
+    <!--/右侧漂浮客服-->
+    <div class="page">
+        <div class="rowFluid">
+            <div class="span12">
+                <div class="main">
+                    <div class="z_banner support_z_banner">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <h3 class="z_banner_title">
+                                        技术支持</h3>
+                                    <!--查询模块-->
+                                    <%template src="_search.html"%>
+                                    <!--/查询模块-->
+                                </div>
+                                <ul class="platform_advantage_bg_z">
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="support_type">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <div class="support_type_content">
+                                        <%set DataTable categoryList=get_category_child_list("support",0)%>
+                                        <%foreach(DataRow cdr in categoryList.Rows)%>
+                                        <div class="span2 col-xs-4">
+                                            <%if(category_id.ToString()=={cdr[id]})%>
+                                            <a href="<%linkurl("support_list",{cdr[id]})%>" class="support_type_list active"
+                                                title="{cdr[title]}">{cdr[title]}</a>
+                                            <%else %>
+                                            <a href="<%linkurl("support_list",{cdr[id]})%>" class="support_type_list normal"
+                                                title="{cdr[title]}">{cdr[title]}</a>
+                                            <%/if %>
+                                        </div>
+                                        <%/foreach%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="technical_support">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <div class="technical_support_content">
+                                        <div class="span3 col-sm-12 wow fadeInLeft">
+                                            <div class="technical_support_list">
+                                                <div class="technical_support_type">
+                                                    <div class="title">
+                                                        技术支持分类<span><img src="<%templateskin%>/picture/page_right1.png" alt="" /></span></div>
+                                                    <ul id="left_menu">
+                                                        <%set DataTable categoryList1=get_category_child_list("support",0)%>
+                                                        <%foreach(DataRow cdr1 in categoryList1.Rows)%>
+                                                        <li class=""><a href="<%linkurl("support_list",{cdr1[id]})%>" title="{cdr1[title]}">
+                                                            {cdr1[title]}</a> </li>
+                                                        <%/foreach%>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span9 col-sm-12 wow fadeInRight">
+                                            <div class="technical_support_list">
+                                                <div class="technical_support_box">
+                                                    <div class="title">
+                                                        技术支持</div>
+                                                    <ul>
+                                                        <%set DataTable supportList=get_article_list("support", category_id, pagesize, page, "status=0", out totalcount, out pagelist, "support_list", category_id, "__id__")%>
+                                                        <%foreach(DataRow dr in supportList.Rows)%>
+                                                        <li><a title="{dr[title]}" href="<%linkurl("support_show",{dr[id]})%>">
+                                                            <div class="text">
+                                                                {dr[title]}
+                                                                <div style="float: right">
+                                                                    <%datetostr({dr[add_time]},yyyy-MM-dd)%></div>
+                                                            </div>
+                                                        </a></li>
+                                                        <%/foreach%>
+                                                    </ul>
+                                                    <div class="user_base">
+                                                        <div class="rowFluid">
+                                                            <div class="pagess">
+                                                                {pagelist}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--页面底部-->
+                        <%template src="_footer.html"%>
+                        <!--/页面底部-->
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>

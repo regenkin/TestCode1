@@ -1,0 +1,7 @@
+﻿<div class="z_banner_input">
+    <input type="hidden" name="kwtype" value="0" />
+    <input id="keywords" name="keywords" type="text" onkeydown="if(event.keyCode==13){SiteSearch('<%linkurl("search")%>', '#keywords');return false};"
+        placeholder="输入关健字" x-webkit-speech="" />
+    <button type="submit" class="search-submit" onclick="SiteSearch('<%linkurl("search")%>', '#keywords');">
+        <img src="<%templateskin%>/picture/search.png" alt="查询"></button>
+</div>

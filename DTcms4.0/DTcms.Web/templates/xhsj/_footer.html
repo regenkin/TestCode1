@@ -1,0 +1,69 @@
+﻿<div class="footer wow fadeInUp">
+    <div class="rowFluid">
+        <div class="span12">
+            <div class="container">
+                <div class="footer_content">
+                    <div class="span4 col-xm-12">
+                        <div class="footer_list">
+                            <div class="span6">
+                                <div class="bottom_logo">
+                                    <img src="<%templateskin%>/picture/ma.jpg" alt="微信服务号二维码" />
+                                </div>
+                            </div>
+                            <div class="span6 col-xm-12">
+                                <div class="quick_navigation">
+                                    <div class="quick_navigation_title">
+                                        快速导航</div>
+                                    <ul>
+									    <li><a href="/" class='active' title="首页">首页</a></li>
+										<!--li><a href="/solution.aspx" title="解决方案">解决方案</a></li-->
+										<li><a href="<%linkurl("www_about_show","www_about_gywm")%>" title="关于我们">关于我们</a></li>
+										<li><a href="<%linkurl("www_pruduct")%>" title="产品介绍">产品介绍</a></li>
+										<li><a href="<%linkurl("news")%>" title="新闻资讯">新闻资讯</a></li>
+										<li><a href="http://help.kinfar.net" title="技术支持">技术支持</a></li>
+										<li><a href="<%linkurl("www_about_show","www_about_lxwm")%>" title="联系我们">联系我们</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span4 col-xm-6 col-xs-12">
+                        <div class="footer_list">
+                            <div class="footer_link">
+                                <div class="footer_link_title">
+                                    友情链接</div>
+                                <ul id="frientLinks">
+                                    <%set DataTable linkTxt=get_plugin_method("DTcms.Web.Plugin.Link", "link", "get_link_list", 0, "site_id="+site.id+" and is_lock=0 and is_image=0 and is_red=1")%>
+                                    <%foreach(DataRow dr in linkTxt.Rows)%>
+                                    <li><a href="{dr[site_url]}" target="_blank">{dr[title]}</a> </li>
+                                    <%/foreach%>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span4 col-xm-6 col-xs-12">
+                        <div class="footer_list">
+                            <div class="footer_cotact">
+                                <div class="footer_cotact_title">
+                                    联系方式</div>
+                                <ul>
+                                    <li><span class="footer_cotact_type">地址：</span><span class="footer_cotact_content">{site.address}</span></li>
+                                    <li><span class="footer_cotact_type">电话：</span><span class="footer_cotact_content"><a
+                                        href="tel:{site.tel}" class="call">{site.tel}</a></span></li>
+                                    <li><span class="footer_cotact_type">网址：</span><span class="footer_cotact_content"><a
+                                        href="http://{site.domain}" title="官网">{site.domain}</a></span></li>
+                                    <li><span class="footer_cotact_type">邮箱：</span><span class="footer_cotact_content">{site.email}</span></li>
+									<li><span class="footer_cotact_type">QQ：</span><span class="footer_cotact_content"><a
+                                        href="http://wpa.qq.com/msgrd?v=3&uin=3133119519&site=qq&menu=yes" class="call">3133119519</a></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                {site.copyright}
+            </div>
+        </div>
+    </div>
+</div>

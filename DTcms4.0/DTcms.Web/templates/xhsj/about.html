@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=yes">
+    <title>{site.seo_title}</title>
+    <meta name="keywords" content="{site.seo_keyword}" />
+    <meta name="description" content="{site.seo_description}" />
+    <meta name="author" content="order by xhsjfood.com" />
+    <meta name="renderer" content="webkit">
+    <!--ico-->
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/owl.carousel.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/responsive.css" />
+    <script src="<%templateskin%>/js/jquery-1.11.0.min.js"></script>
+    <script src="<%templateskin%>/js/wow.min_1.js"></script>
+    <script src="<%templateskin%>/js/owl.carousel.min.js"></script>
+    <script src="<%templateskin%>/js/page.js"></script>
+</head>
+<body>
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    <!--右侧漂浮客服-->
+    <%template src="_rightfloat.html"%>
+    <!--/右侧漂浮客服-->
+    <div class="page">
+        <div class="rowFluid">
+            <div class="span12">
+                <div class="main">
+                    <%if(page=="about2") %>
+                    <div class="z_banner support_z_banner">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <h3 class="z_banner_title">
+                                        联系我们</h3>
+                                    <div class="z_banner_text">
+                                        快速联系我们及时沟通--获得更多互联网完美方案
+                                    </div>
+                                </div>
+                                <ul class="platform_advantage_bg_z">
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kzf-mod-product">
+                        <div class="rowFluid">
+                            <div class="container">
+                                <div class="kzf-mod-product-header wow fadeInUp">
+                                 {model.content}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--页面底部-->
+                    <%template src="_footer1.html"%>
+                    <!--/页面底部-->
+                    <%else %>
+                    <div class="z_banner">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <h3 class="z_banner_title">
+                                        手持尚方宝剑 横扫千亿市场</h3>
+                                    <div class="z_banner_text">
+                                        技术有我们有，专业建站团队助你迈向互联网+！</div>
+                                </div>
+                                <ul class="platform_advantage_bg_z">
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="introduce wow fadeInUp">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <div class="all_title1">
+                                        <h3 class="title">
+                                            公司简介</h3>
+                                        <div class="text">
+                                            COMPANY PROFILE</div>
+                                    </div>
+                                    <div class="rowFluid">
+                                        <div class="introduce_content">
+                                            <%=get_article_content("about","about1") %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cloud_platform wow fadeInUp">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <div class="all_title2">
+                                        <h3 class="title">
+                                            云平台</h3>
+                                        <div class="text">
+                                            CLOUD PLATFORM</div>
+                                    </div>
+                                    <div class="cloud_platform_content">
+                                        <%set DataTable aboutList1=get_article_list("about", 58, 3, "status=0 and is_red=1")%>
+                                        <%loop aboutdr1 aboutList1%>
+                                        <div class="span4 col-xs-12">
+                                            <div class="cloud_platform_list">
+                                                <div class="cloud_platform_list_title">
+                                                    {aboutdr1[title]}</div>
+                                                <div class="cloud_platform_list_text">
+                                                    {aboutdr1[tags]}</div>
+                                            </div>
+                                        </div>
+                                        <%/loop%>
+                                    </div>
+                                    <div class="all_title2">
+                                        <h3 class="title">
+                                            生态级“互联网+”解决方案</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--联系客服-->
+                    <%template src="_about_join_in.html"%>
+                    <!--/联系客服-->
+                    <div class="advantage_project wow fadeInUp">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <div class="all_title2">
+                                        <h3 class="title">
+                                            优势</h3>
+                                        <div class="text">
+                                            WANGLUO THE ADVANTAGE OF PROJECT</div>
+                                    </div>
+                                    <div class="advantage_project_content">
+                                        <%set DataTable aboutList2=get_article_list("about", 59, 8, "status=0 and is_red=1")%>
+                                        <%loop aboutdr2 aboutList2%>
+                                        <div class="span3 col-xm-6 col-xs-12">
+                                            <div class="advantage_project_list">
+                                                <div class="span3">
+                                                    <div class="advantage_project_list_img">
+                                                        <img src="{aboutdr2[img_url]}" alt="{aboutdr2[title]}" /></div>
+                                                </div>
+                                                <div class="span9">
+                                                    <div class="advantage_project_list_brief">
+                                                        <div class="title">
+                                                            {aboutdr2[title]}</div>
+                                                        <div class="text">
+                                                            {aboutdr2[tags]}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <%/loop%>
+                                    </div>
+                                    <div class="all_title2">
+                                        <h3 class="title">
+                                            市场优势</h3>
+                                        <div class="text">
+                                            MARKET ADVANTAGE</div>
+                                    </div>
+                                    <div class="advantage_project_content">
+                                        <%set DataTable aboutList3=get_article_list("about", 60, 4, "status=0 and is_red=1")%>
+                                        <%loop aboutdr3 aboutList3%>
+                                        <div class="span3 col-xm-6 col-xs-12">
+                                            <div class="advantage_project_list">
+                                                <div class="span3">
+                                                    <div class="advantage_project_list_img">
+                                                        <img src="{aboutdr3[img_url]}" alt="{aboutdr3[title]}" /></div>
+                                                </div>
+                                                <div class="span9">
+                                                    <div class="advantage_project_list_brief">
+                                                        <div class="title">
+                                                            {aboutdr3[title]}</div>
+                                                        <div class="text">
+                                                            {aboutdr3[tags]}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <%/loop%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--联系客服-->
+                    <%template src="_about_join_in.html"%>
+                    <!--/联系客服-->
+                    <div class="proxy_process">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <div class="all_title2">
+                                        <h3 class="title">
+                                            建站流程</h3>
+                                        <div class="text">
+                                            WEB PROCESS</div>
+                                    </div>
+                                    <div class="rowFluid">
+                                        <div class="proxy_process_line">
+                                        </div>
+                                        <div class="proxy_process_content">
+                                            <%set DataTable aboutList4=get_article_list("about", 61, 0, "status=0 and is_red=1")%>
+                                            <%loop aboutdr4 aboutList4%>
+                                            <div class="span2 col-sm-4 col-xs-6">
+                                                <div class="proxy_process_list">
+                                                    <div class="proxy_process_list_top">
+                                                        {aboutdr4__loop__id}</div>
+                                                    <div class="proxy_process_list_middle">
+                                                    </div>
+                                                    <div class="proxy_process_list_bottom">
+                                                        <div class="title">
+                                                            {aboutdr4[title]}</div>
+                                                        <div class="text">
+                                                            {aboutdr4[content]}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <%/loop%>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--页面底部-->
+                    <%template src="_footer.html"%>
+                    <!--/页面底部-->
+                    <%/if %>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

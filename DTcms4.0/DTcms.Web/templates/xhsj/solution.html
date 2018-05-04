@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=yes">
+    <title>{site.seo_title}</title>
+    <meta name="keywords" content="{site.seo_keyword}" />
+    <meta name="description" content="{site.seo_description}" />
+    <meta name="author" content="order by xhsjfood.com" />
+    <meta name="renderer" content="webkit">
+    <!--ico-->
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/owl.carousel.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/responsive.css" />
+    <script src="<%templateskin%>/js/jquery-1.11.0.min.js"></script>
+    <script src="<%templateskin%>/js/wow.min_1.js"></script>
+    <script src="<%templateskin%>/js/owl.carousel.min.js"></script>
+    <script src="<%templateskin%>/js/page.js"></script>
+</head>
+<body>
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    <!--右侧漂浮客服-->
+    <%template src="_rightfloat.html"%>
+    <!--/右侧漂浮客服-->
+    <div class="page">
+        <div class="rowFluid">
+            <div class="span12">
+                <div class="main">
+                    <link href="<%templateskin%>/css/style_10.css" rel="stylesheet" />
+                    <div class="page">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="main">
+                                    <div class="z_banner support_z_banner">
+                                        <div class="rowFluid">
+                                            <div class="span12">
+                                                <div class="container">
+                                                    <h3 class="z_banner_title">
+                                                        解决方案</h3>
+                                                    <div class="z_banner_text">
+                                                        帮助您快速响应市场变化拓展，布局全渠道，构建生态互联网
+                                                    </div>
+                                                </div>
+                                                <ul class="platform_advantage_bg_z">
+                                                    <li></li>
+                                                    <li></li>
+                                                    <li></li>
+                                                    <li></li>
+                                                    <li></li>
+                                                    <li></li>
+                                                    <li></li>
+                                                    <li></li>
+                                                    <li></li>
+                                                    <li></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="kzf-mod-product">
+                                        <div class="rowFluid">
+                                            <div class="container">
+                                                <div class="kzf-mod-product-header wow fadeInUp">
+                                                    <h1 class="kzf-mod-product-title">
+                                                        产品与服务</h1>
+                                                    <p class="kzf-mod-product-brief">
+                                                        我们提供数字平台建设与数字产品设计运营的全产业链服务，从设计制作到开发运营，一站式帮您搞定。</p>
+                                                </div>
+                                                <div class="kzf-mod-product-content">
+                                                    <%set DataTable solutionList1=get_article_list("solution", 52, 0, "status=0 and is_red=1")%>
+                                                    <%loop solutiondr1 solutionList1%>
+                                                    <div class="span3 col-sm-6">
+                                                        <div class="kzf-mod-product-list wow  {solutiondr1[tags]}">
+                                                            <img src="{solutiondr1[img_url]}" alt="{solutiondr1[title]}" />
+                                                            <div class="kzf-mod-product-list-title">
+                                                                {solutiondr1[title]}</div>
+                                                            {solutiondr1[content]}
+                                                        </div>
+                                                    </div>
+                                                    <%/loop%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="kzf-mod-custom">
+                                        <div class="rowFluid">
+                                            <div class="container">
+                                                <div class="kzf-mod-custom-header wow fadeInUp">
+                                                    <h1 class="kzf-mod-custom-title">
+                                                        高端定制流程</h1>
+                                                    <p class="kzf-mod-custom-brief">
+                                                        用前沿的思维制作交互式用户体验的高端网站，正是我们的优势所在。</p>
+                                                </div>
+                                                <div class="kzf-mod-custom-content">
+                                                    <div class="col-xs-12">
+                                                        <%set DataTable solutionList2=get_article_list("solution", 53, 7, "status=0 and is_red=1")%>
+                                                        <%loop solutiondr2 solutionList2%>
+                                                        <div class="kzf-mod-custom-list wow fadeInUp">
+                                                            <img src="{solutiondr2[img_url]}" alt="{solutiondr2[title]}" />
+                                                            <div class="kzf-mod-custom-list-title">
+                                                                {solutiondr2[title]}</div>
+                                                            <p>
+                                                                {solutiondr2[tags]}</p>
+                                                        </div>
+                                                        <%/loop%>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="kzf-mod-case-container">
+                                        <div class="rowFluid">
+                                            <div class="container">
+                                                <div class="span12">
+                                                    <div class="kzf-mod-case-out">
+                                                        <div class="kzf-mod-so-title-box wow fadeInDown animated" style="visibility: visible;
+                                                            animation-name: fadeInDown;">
+                                                            <h3 class="kzf-so-title">
+                                                                经典案例</h3>
+                                                            <div class="kzf-so-text">
+                                                                精选特殊网站案例，分享创意与智慧</div>
+                                                        </div>
+                                                        <div class="kzf-mod-case-box">
+                                                            <%set DataTable solutionList3=get_article_list("solution", 54, 0, "status=0 and is_red=1")%>
+                                                            <%loop solutiondr3 solutionList3%>
+                                                            <div class="span6 col-sm-12">
+                                                                <a>
+                                                                    <div class="kzf-mod-wrap wow fadeInUp">
+                                                                        <div class="kzf-mod-pic">
+                                                                            <img src="{solutiondr3[img_url]}" alt="{solutiondr3[title]}" />
+                                                                        </div>
+                                                                        <div class="kzf-mod-title">
+                                                                            <p>
+                                                                                {solutiondr3[title]}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <%/loop%>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--页面底部-->
+                                    <%template src="_footer1.html"%>
+                                    <!--/页面底部-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

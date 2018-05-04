@@ -1,0 +1,54 @@
+﻿<div class="aside">
+    <ul>
+        <li><a href="<%linkurl("about","about2")%>" target="_blank" title="合作">
+            <img src="<%templateskin%>/picture/057.png" alt="合作" />合作</a> </li>
+        <li class="consulting"><a href="#this" title="Kinfar在线客服"><span></span><span></span><span>
+        </span>
+            <img src="<%templateskin%>/picture/059.png" class="img1" alt="Kinfar在线客服" /><img src="<%templateskin%>/picture/061.png"
+                class="img2" alt="Kinfar在线客服" />咨询</a></li>
+        <li><a href="http://help.kinfar.net">
+            <img src="<%templateskin%>/picture/060.png" alt="Kinfar帮助中心" />帮助中心</a> </li>
+    </ul>
+</div>
+<div class="consulting_box">
+    <div class="title">
+        <div class="title_t1">
+            RELATEED CONSULTING</div>
+        <div class="title_t2">
+            相关咨询
+        </div>
+    </div>
+    <div class="consulting_type">
+        <div class="consulting_type_title">
+            选择下列产品马上在线沟通</div>
+        <ul>
+            <li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3133119519&site=qq&menu=yes"
+                title="服务咨询">
+                <img src="<%templateskin%>/picture/062.png" class="img1" alt="服务咨询" /><img src="<%templateskin%>/picture/063.png"
+                    class="img2" alt="服务咨询" />服务咨询 </a></li>
+            <li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3133119519&site=qq&menu=yes"
+                title="加盟咨询">
+                <img src="<%templateskin%>/picture/062.png" class="img1" alt="加盟咨询" /><img src="<%templateskin%>/picture/063.png"
+                    class="img2" alt="加盟咨询" />加盟咨询 </a></li>
+            <li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3133119519&site=qq&menu=yes"
+                title="定制咨询">
+                <img src="<%templateskin%>/picture/062.png" class="img1" alt="定制咨询" /><img src="<%templateskin%>/picture/063.png"
+                    class="img2" alt="定制咨询" />定制咨询 </a></li>
+        </ul>
+        <div class="time">
+            服务时间：9:30-18:00</div>
+    </div>
+    <div class="problem">
+        <div class="problem_title">
+            你可能遇到了下面的问题</div>
+        <ul>
+            <%set DataTable focusSupport1=get_article_list("www_help", 0, 5, "status=0 and is_red=1")%>
+            <%foreach(DataRow dr in focusSupport1.Rows)%>
+            <li><span></span><a title="{dr[title]}" href="<%linkurl("www_help_content",{dr[id]})%>">{dr[title]}</a></li>
+            <%/foreach%>
+        </ul>
+    </div>
+    <div class="close">
+        <img src="<%templateskin%>/picture/close.png" alt="关闭右侧工具栏" />
+    </div>
+</div>

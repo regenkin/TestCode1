@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=yes">
+    <title>客户案例 - {site.name}</title>
+    <meta name="keywords" content="{site.seo_keyword}" />
+    <meta name="description" content="{site.seo_description}" />
+    <meta name="author" content="order by xhsjfood.com" />
+    <meta name="renderer" content="webkit">
+    <!--ico-->
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/owl.carousel.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/responsive.css" />
+    <script src="<%templateskin%>/js/jquery-1.11.0.min.js"></script>
+    <script src="<%templateskin%>/js/wow.min_1.js"></script>
+    <script src="<%templateskin%>/js/owl.carousel.min.js"></script>
+    <script src="<%templateskin%>/js/page.js"></script>
+</head>
+<body>
+    <!--页面头部-->
+    <%template src="_header.html"%>
+    <!--/页面头部-->
+    <!--右侧漂浮客服-->
+    <%template src="_rightfloat.html"%>
+    <!--/右侧漂浮客服-->
+    <div class="page">
+        <div class="rowFluid">
+            <div class="span12">
+                <div class="main">
+                    <div class="z_banner">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <h3 class="z_banner_title">
+                                        互联网+时代 你还没准备?</h3>
+                                    <div class="z_banner_text">
+                                        高逼格，你也可以拥有，引领网站新风尚</div>
+                                </div>
+                                <ul class="platform_advantage_bg_z">
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="support_type">
+                        <div class="rowFluid">
+                            <div class="span12">
+                                <div class="container">
+                                    <div class="support_type_content">
+                                        <%set DataTable categoryList=get_category_child_list("cases",0)%>
+                                        <%foreach(DataRow cdr in categoryList.Rows)%>
+                                        <div class="span2 col-xs-4">
+                                            <a href="<%linkurl("cases_list",{cdr[id]})%>" class="support_type_list normal" title="{cdr[title]}">
+                                                {cdr[title]}</a>
+                                        </div>
+                                        <%/foreach%>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="case_show">
+                                <div class="rowFluid">
+                                    <div class="span12">
+                                        <div class="container">
+                                            <div class="case_show_content">
+                                                <%set DataTable focusCases=get_article_list("cases", 0, 5, "status=0 and is_red=1")%>
+                                                <%foreach(DataRow dr in focusCases.Rows)%>
+                                                <div class="case_show_list wow fadeInUp">
+                                                    <div class="span7 col-xm-6 col-sm-12">
+                                                        <div class="case_show_pic">
+                                                            <img src="{dr[img_url]}" alt="{dr[title]}" /></div>
+                                                    </div>
+                                                    <div class="span5 col-xm-6 col-sm-12">
+                                                        <div class="case_show_brief">
+                                                            <h3 class="case_show_brief_title">
+                                                                <span></span>{dr[title]}</h3>
+                                                            <div class="case_show_brief_text">
+                                                                <p>
+                                                                    {dr[zhaiyao]}</p>
+                                                            </div>
+                                                            <div class="case_show_brief_button">
+                                                                <a title="{dr[title]}" href="<%linkurl("cases_show",{dr[id]})%>" class=" all_button" target="_blank">查看详情</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <%/foreach%>
+                                            </div>
+                                            <!--联系客服-->
+                                            <%template src="_about_join_in.html"%>
+                                            <!--/联系客服-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--页面底部-->
+                            <%template src="_footer.html"%>
+                            <!--/页面底部-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
