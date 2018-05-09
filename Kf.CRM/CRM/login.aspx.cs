@@ -13,8 +13,15 @@ namespace XHD.CRM
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(LogOn())
+            if (LogOn())
                 Response.Redirect("main.aspx");
+            else
+            {
+                string appid = System.Configuration.ConfigurationManager.AppSettings["appid"];
+                string ssourl = System.Configuration.ConfigurationManager.AppSettings["ssourl"];
+                UriBuilder returnToBuilder = new UriBuilder(Request.Url);
+                Response.Redirect(ssourl + string.Format("?appid={0}&redirecturl={1}&fail=1", appid, returnToBuilder.Uri.ToString()));
+            }
         }
 
         public bool LogOn()
