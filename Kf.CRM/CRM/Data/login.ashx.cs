@@ -138,7 +138,28 @@ namespace KfCrm.CRM.Data
                     {
                     }
                 }
-
+                
+                #region webapi清除token
+                
+                //string tokenkey = System.Configuration.ConfigurationManager.AppSettings["tokenkey"];
+                //string appid = System.Configuration.ConfigurationManager.AppSettings["appid"];
+                //string appsecret = System.Configuration.ConfigurationManager.AppSettings["appsecret"];
+                //string webapiurl = System.Configuration.ConfigurationManager.AppSettings["webapiurl"];
+                //cookie = context.Request.Cookies[tokenkey];
+                //if (cookie != null)
+                //{
+                //    var ticket = FormsAuthentication.Decrypt(cookie.Value);
+                //    string accesstoken = ticket.UserData;
+                //    System.Collections.Specialized.NameValueCollection postdata = new System.Collections.Specialized.NameValueCollection();
+                //    postdata.Add("token", accesstoken);
+                //    postdata.Add("appid", appid);
+                //    postdata.Add("appsecret", appsecret);
+                //    WebClientHelp webClientHelp = new WebClientHelp();
+                //    string value = webClientHelp.WebClientPOST(webapiurl + "/api/OAth/Account/LoginOut", postdata);
+                //    XHD.CRM.WebClientHelp.ReturnSimple apiReturnObject = Newtonsoft.Json.JsonConvert.DeserializeObject<XHD.CRM.WebClientHelp.ReturnSimple>(value);
+                //    if (apiReturnObject.Status == 1) { }
+                //}
+                #endregion
 
             }
             if (request["Action"] == "checkpwd")
@@ -172,6 +193,138 @@ namespace KfCrm.CRM.Data
             {
                 return false;
             }
+        }
+    }
+
+    public class WebClientHelp
+    {
+        /// <summary>
+        /// 发送Post请求。http://202.104.146.35:9506/api/Account/Test
+        /// </summary>
+        /// <param name="validateCode"></param>
+        /// <param name="publicKey"></param>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public string MyWebClientPOST(string validateCode, string publicKey, string url, string data)
+        {
+            try
+            {
+                System.Net.WebClient wc = new System.Net.WebClient();
+
+                // 采取POST方式必须加的Header
+                //wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+
+                //byte[] value = PFRSACryp.Encrypt(publicKey, validateCode, true);
+
+                //var authString = Convert.ToBase64String(value);
+
+                //wc.Headers.Add("Authorization", "Basic " + authString);
+
+                byte[] postData = System.Text.Encoding.Default.GetBytes(data);
+
+                byte[] responseData = wc.UploadData(url, "POST", postData);
+
+                return System.Text.Encoding.UTF8.GetString(responseData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// 发送Post请求。
+        /// </summary>
+        /// <param name="validateCode"></param>
+        /// <param name="publicKey"></param>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public string MyWebClientPOSTNameValue(string validateCode, string publicKey, string url, System.Collections.Specialized.NameValueCollection data)
+        {
+            try
+            {
+                System.Net.WebClient wc = new System.Net.WebClient();
+
+                // 采取POST方式必须加的Header
+                //wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+
+                //byte[] value = PFRSACryp.Encrypt(publicKey, validateCode, true);
+
+                //var authString = Convert.ToBase64String(value);
+
+                //wc.Headers.Add("Authorization", "Basic " + authString);
+
+                byte[] responseData = wc.UploadValues(url, "POST", data);
+
+                return System.Text.Encoding.UTF8.GetString(responseData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public string WebClientPOST(string url, System.Collections.Specialized.NameValueCollection data)
+        {
+            try
+            {
+                System.Net.WebClient wc = new System.Net.WebClient();
+                byte[] responseData = wc.UploadValues(url, "POST", data);
+                return System.Text.Encoding.UTF8.GetString(responseData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public class ReturnSimple
+        {
+            /// <summary>
+            /// 状态：1-成功，非1-不成功
+            /// </summary>
+            public int Status { get; set; }
+
+            /// <summary>
+            /// 消息
+            /// </summary>
+            public string Message { get; set; }
+
+            /// <summary>
+            /// 数据
+            /// </summary>
+            public object Data { get; set; }
+        }
+
+        public class ApiReturnObject
+        {
+            /// <summary>
+            /// 1:成功 >=0:失败 
+            /// </summary>
+            public int Status;
+            /// <summary>
+            /// 返回信息
+            /// </summary>
+            public string Message;
+            /// <summary>
+            /// 返回内容
+            /// </summary>
+            public object Data;
+        }
+
+        public enum AjaxReturnStatus
+        {
+            Timeout = -2,
+            Error = -1,
+            Success = 1,
         }
     }
 }

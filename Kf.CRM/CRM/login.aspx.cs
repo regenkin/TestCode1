@@ -32,6 +32,7 @@ namespace XHD.CRM
             string appsecret = System.Configuration.ConfigurationManager.AppSettings["appsecret"];
             string webapiurl = System.Configuration.ConfigurationManager.AppSettings["webapiurl"];
             string ssourl = System.Configuration.ConfigurationManager.AppSettings["ssourl"];
+            string tokenkey = System.Configuration.ConfigurationManager.AppSettings["tokenkey"];
             if (string.IsNullOrWhiteSpace(tiecket))
             {
                 UriBuilder returnToBuilder = new UriBuilder(Request.Url);
@@ -111,6 +112,19 @@ namespace XHD.CRM
                     var cookie = new HttpCookie(System.Web.Security.FormsAuthentication.FormsCookieName, System.Web.Security.FormsAuthentication.Encrypt(ticket));
                     cookie.HttpOnly = true;
                     Response.Cookies.Add(cookie);
+                    //cooking存储token
+                    System.Web.Security.FormsAuthenticationTicket ticket_token = new System.Web.Security.FormsAuthenticationTicket(
+                        1,
+                        mEmp.ID.ToString(),
+                        DateTime.Now,
+                        DateTime.Now.AddMinutes(20),
+                        true,
+                        MUserToken.AccessToken.ToString(),
+                        "/"
+                        );
+                    var cookie_token = new HttpCookie(tokenkey, System.Web.Security.FormsAuthentication.Encrypt(ticket_token));
+                    cookie_token.HttpOnly = true;
+                    Response.Cookies.Add(cookie_token);
 
                     //日志
                     KfCrm.BLL.Sys_log log = new KfCrm.BLL.Sys_log();

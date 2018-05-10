@@ -24,109 +24,112 @@ namespace KfCrm.CRM.Data
             BLL.Sys_Menu menu = new BLL.Sys_Menu();
 
             var cookie = context.Request.Cookies[FormsAuthentication.FormsCookieName];
-            var ticket = FormsAuthentication.Decrypt(cookie.Value);
-            string CoockiesID = ticket.UserData;
-
-            BLL.hr_employee emp = new BLL.hr_employee();
-            int emp_id = int.Parse(CoockiesID);
-            DataSet dsemp = emp.GetList("id=" + emp_id);
-            string empname = dsemp.Tables[0].Rows[0]["name"].ToString();
-            string uid = dsemp.Tables[0].Rows[0]["uid"].ToString();
-
-            if (request["Action"] == "GetSysApp")
+            if (cookie != null)
             {
-                DataSet ds = null;
+                var ticket = FormsAuthentication.Decrypt(cookie.Value);
+                string CoockiesID = ticket.UserData;
 
-                int appid = int.Parse(request["appid"]);
+                BLL.hr_employee emp = new BLL.hr_employee();
+                int emp_id = int.Parse(CoockiesID);
+                DataSet dsemp = emp.GetList("id=" + emp_id);
+                string empname = dsemp.Tables[0].Rows[0]["name"].ToString();
+                string uid = dsemp.Tables[0].Rows[0]["uid"].ToString();
 
-                if (dsemp.Tables[0].Rows.Count > 0)
+                if (request["Action"] == "GetSysApp")
                 {
-                    if (dsemp.Tables[0].Rows[0]["uid"].ToString() == "admin")
+                    DataSet ds = null;
+
+                    int appid = int.Parse(request["appid"]);
+
+                    if (dsemp.Tables[0].Rows.Count > 0)
                     {
-                        ds = menu.GetList(0, "App_id=" + appid, "Menu_order");
+                        if (dsemp.Tables[0].Rows[0]["uid"].ToString() == "admin")
+                        {
+                            ds = menu.GetList(0, "App_id=" + appid, "Menu_order");
+                        }
+                        else
+                        {
+                            Data.GetAuthorityByUid getauth = new Data.GetAuthorityByUid();
+                            string menus = getauth.GetAuthority(emp_id.ToString(), "Menus");
+                            ds = menu.GetList(0, "App_id=" + appid + " and Menu_id in " + menus, "Menu_order");
+                        }
+                    }
+
+                    string dt = "[" + GetTasksString(0, ds.Tables[0]) + "]";
+
+                    context.Response.Write(dt);
+                }
+                if (request["Action"] == "getUserTree")
+                {
+                    BLL.Sys_online sol = new BLL.Sys_online();
+                    Model.Sys_online model = new Model.Sys_online();
+
+                    model.UserName = PageValidate.InputText(empname, 250);
+                    model.UserID = emp_id;
+                    model.LastLogTime = DateTime.Now;
+
+                    DataSet ds1 = sol.GetList(" UserID=" + emp_id);
+
+                    //添加当前用户信息
+                    if (ds1.Tables[0].Rows.Count > 0)
+                    {
+                        sol.Update(model, " UserID=" + emp_id);
                     }
                     else
                     {
-                        Data.GetAuthorityByUid getauth = new Data.GetAuthorityByUid();
-                        string menus = getauth.GetAuthority(emp_id.ToString(), "Menus");
-                        ds = menu.GetList(0, "App_id=" + appid + " and Menu_id in " + menus, "Menu_order");
+                        sol.Add(model);
                     }
+
+                    //删除超时用户
+                    sol.Delete(" LastLogTime<DATEADD(MI,-2,getdate())");
+
+                    BLL.hr_department dep = new BLL.hr_department();
+                    BLL.hr_post hp = new BLL.hr_post();
+
+                    DataSet ds = dep.GetList(0, "", "d_order");
+                    StringBuilder str = new StringBuilder();
+                    str.Append("[");
+                    str.Append(GetTreeString(0, ds.Tables[0], 1));
+                    str.Replace(",", "", str.Length - 1, 1);
+                    str.Append("]");
+                    context.Response.Write(str);
+
                 }
-
-                string dt = "[" + GetTasksString(0, ds.Tables[0]) + "]";
-
-                context.Response.Write(dt);
-            }
-            if (request["Action"] == "getUserTree")
-            {
-                BLL.Sys_online sol = new BLL.Sys_online();
-                Model.Sys_online model = new Model.Sys_online();
-
-                model.UserName = PageValidate.InputText(empname, 250);
-                model.UserID = emp_id;
-                model.LastLogTime = DateTime.Now;
-
-                DataSet ds1 = sol.GetList(" UserID=" + emp_id);
-
-                //添加当前用户信息
-                if (ds1.Tables[0].Rows.Count > 0)
+                if (request["Action"] == "GetUserInfo")
                 {
-                    sol.Update(model, " UserID=" + emp_id);
+                    string dt = Common.DataToJson.DataToJSON(dsemp);
+
+                    context.Response.Write(dt);
+
                 }
-                else
+                if (request["Action"] == "GetOnline")
                 {
-                    sol.Add(model);
+                    BLL.Sys_online sol = new BLL.Sys_online();
+                    Model.Sys_online model = new Model.Sys_online();
+
+
+                    model.UserName = empname;
+                    model.UserID = emp_id;
+                    model.LastLogTime = DateTime.Now;
+
+                    DataSet ds1 = sol.GetList(" UserID=" + emp_id);
+
+                    //添加当前用户信息
+                    if (ds1.Tables[0].Rows.Count > 0)
+                    {
+                        sol.Update(model, " UserID=" + emp_id);
+                    }
+                    else
+                    {
+                        sol.Add(model);
+                    }
+                    //}
+
+                    //删除超时用户
+                    sol.Delete(" LastLogTime<DATEADD(MI,-2,getdate())");
+
+                    context.Response.Write(Common.GetGridJSON.DataTableToJSON(sol.GetAllList().Tables[0]));
                 }
-
-                //删除超时用户
-                sol.Delete(" LastLogTime<DATEADD(MI,-2,getdate())");
-
-                BLL.hr_department dep = new BLL.hr_department();
-                BLL.hr_post hp = new BLL.hr_post();
-
-                DataSet ds = dep.GetList(0, "", "d_order");
-                StringBuilder str = new StringBuilder();
-                str.Append("[");
-                str.Append(GetTreeString(0, ds.Tables[0], 1));
-                str.Replace(",", "", str.Length - 1, 1);
-                str.Append("]");
-                context.Response.Write(str);
-
-            }
-            if (request["Action"] == "GetUserInfo")
-            {
-                string dt = Common.DataToJson.DataToJSON(dsemp);
-
-                context.Response.Write(dt);
-
-            }
-            if (request["Action"] == "GetOnline")
-            {
-                BLL.Sys_online sol = new BLL.Sys_online();
-                Model.Sys_online model = new Model.Sys_online();
-
-
-                model.UserName = empname;
-                model.UserID = emp_id;
-                model.LastLogTime = DateTime.Now;
-
-                DataSet ds1 = sol.GetList(" UserID=" + emp_id);
-
-                //添加当前用户信息
-                if (ds1.Tables[0].Rows.Count > 0)
-                {
-                    sol.Update(model, " UserID=" + emp_id);
-                }
-                else
-                {
-                    sol.Add(model);
-                }
-                //}
-
-                //删除超时用户
-                sol.Delete(" LastLogTime<DATEADD(MI,-2,getdate())");
-
-                context.Response.Write(Common.GetGridJSON.DataTableToJSON(sol.GetAllList().Tables[0]));
             }
             if (request["Action"] == "GetIcons")
             {
