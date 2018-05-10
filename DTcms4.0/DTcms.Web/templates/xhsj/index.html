@@ -194,7 +194,7 @@
                                                     </div>
                                                     <div class="rowFluid">
                                                         <div class="partners_content">
-                                                            <%set DataTable linkImg=get_plugin_method("DTcms.Web.Plugin.Link", "link", "get_link_list", 6, "site_id="+site.id+" and is_lock=0 and is_image=1 and is_red=1")%>
+                                                            <%set DataTable linkImg=get_plugin_method("DTcms.Web.Plugin.Link", "link", "get_link_list", 6, "is_lock=0 and is_image=1 and is_red=1")%>
                                                             <%foreach(DataRow dr in linkImg.Rows)%>
                                                             <a title="{dr[title]}" href="{dr[site_url]}" target="_blank" class="partners_content_list wow fadeInUp"
                                                                 data-wow-delay="0.2s">

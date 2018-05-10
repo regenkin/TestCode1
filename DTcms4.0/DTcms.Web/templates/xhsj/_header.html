@@ -37,8 +37,8 @@
                   timeout: 20000,
                   success: function (data, textStatus) {
                       if (data.status == 1) {
-                          $("div.span2 .menu").prepend('<li class="top_line"><a href="<%linkurl("usercenter","index")%>">会员中心</a></li>');
-                          $("div.span2 .menu").prepend('<li class="top_login"><em></em><a href="<%linkurl("www","exit")%>">退出</a></li>');
+                          $("div.span2 .menu").prepend('<li class="top_line"><a href="<%linkurl("usercenter","exit")%>">退出</a></li>');
+                          $("div.span2 .menu").prepend('<li class="top_login"><em></em><a href="<%linkurl("usercenter","index")%>">会员中心</a></li>');
                       } else {
                           $("div.span2 .menu").prepend('<li class="top_line"><a href="<%linkurl("register")%>">注册</a></li>');
                           $("div.span2 .menu").prepend('<li class="top_login"><em></em><a href="<%linkurl("login")%>">登录</a></li>');
