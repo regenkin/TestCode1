@@ -116,6 +116,7 @@
     <Content Include="CSS\xgcalendar\dailog.css" />
     <Content Include="CSS\xgcalendar\dp.css" />
     <Content Include="CSS\xgcalendar\main.css" />
+    <Content Include="exit.aspx" />
     <Content Include="file\view_image.aspx" />
     <Content Include="file\view_office.aspx" />
     <Content Include="HR\Getemp_Auth.aspx" />
@@ -3229,11 +3230,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="lib\ligerUI\skins\ext\image\flexigrid_blue\indicator_waitanim.gif.bak" />
-    <Content Include="lib\ligerUI\skins\ext\image\flexigrid_blue\vssver2.scc" />
-    <Content Include="lib\ligerUI\skins\ext\images\tree\Thumbs.db" />
-    <Content Include="lib\ligerUI\skins\ext-purple\image\flexigrid_blue\indicator_waitanim.gif.bak" />
-    <Content Include="lib\ligerUI\skins\ext-purple\image\flexigrid_blue\vssver2.scc" />
     <Content Include="lib\ligerUI\skins\icons\1.bat" />
   </ItemGroup>
   <ItemGroup>
@@ -3354,6 +3350,13 @@
       <DependentUpon>upload.ashx</DependentUpon>
     </Compile>
     <Compile Include="Data\ZoomImage.cs" />
+    <Compile Include="exit.aspx.cs">
+      <DependentUpon>exit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="exit.aspx.designer.cs">
+      <DependentUpon>exit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -3420,8 +3423,6 @@
     <Content Include="Data\Sys_role_emp.ashx" />
     <Content Include="Data\toolbar.ashx" />
     <Content Include="Data\upload.ashx" />
-    <Content Include="Images\fancybox\img\Thumbs.db" />
-    <Content Include="Images\xgcalendar\Thumbs.db" />
     <Content Include="ueditor1_2_5_1-utf8-net\build\merge.bat" />
     <Content Include="ueditor1_2_5_1-utf8-net\net\fileUp.ashx" />
     <Content Include="ueditor1_2_5_1-utf8-net\net\getContent.ashx" />

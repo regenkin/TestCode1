@@ -33,10 +33,12 @@ namespace XHD.CRM
             string webapiurl = System.Configuration.ConfigurationManager.AppSettings["webapiurl"];
             string ssourl = System.Configuration.ConfigurationManager.AppSettings["ssourl"];
             string tokenkey = System.Configuration.ConfigurationManager.AppSettings["tokenkey"];
+            string weburl = System.Configuration.ConfigurationManager.AppSettings["weburl"];
             if (string.IsNullOrWhiteSpace(tiecket))
             {
-                UriBuilder returnToBuilder = new UriBuilder(Request.Url);
-                Response.Redirect(ssourl + string.Format("?appid={0}&redirecturl={1}", appid, returnToBuilder.Uri.ToString()));
+                //UriBuilder returnToBuilder = new UriBuilder(Request.Url);
+                //Response.Redirect(ssourl + string.Format("?appid={0}&redirecturl={1}", appid, returnToBuilder.Uri.ToString()));
+                Response.Redirect(ssourl + string.Format("?appid={0}&redirecturl={1}", appid, weburl));
             }
             else
             {

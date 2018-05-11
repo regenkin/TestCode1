@@ -128,7 +128,7 @@
             else if (hour < 17) { $("#labelwelcome").html("下午好！") }
             else if (hour < 19) { $("#labelwelcome").html("傍晚好！") }
             else if (hour < 22) { $("#labelwelcome").html("晚上好！") }
-            else { $("#labelwelcome").html("夜深了，注意休息！") }
+            else { $("#labelwelcome").html("夜深注意休息！") }
         }
 
         function f_heightChanged(options) {
@@ -178,7 +178,7 @@
                         url: 'Data/login.ashx',
                         data: [{ name: 'Action', value: 'logout' }],
                         success: function (result) {
-                            javascript: location.replace("http://localhost:50039/Account/LogOff?redirecturl=" + location);
+                            javascript: location.replace("/exit.aspx?redirecturl=" + location);
                         }
                     });
                 }
@@ -343,7 +343,7 @@
                     </a>
                 </div>
 
-                <div style="float: right; width: 220px; height: 47px; margin-right: 65px;">
+                <div style="float: right; width: 320px; height: 47px; margin-right: 65px;">
                     <div style="width: 100%; height: 25px; text-align: right;">
                         <table style="width: 100%;">
                             <tr>
@@ -355,8 +355,8 @@
                     </div>
 
                     <div style="width: 100%; height: 22px; line-height: 22px; vertical-align: bottom;">
-                        <div id="labelwelcome" style="font-size: 12px; padding-right: 5px; width: 115px; margin-right: 80px; position: absolute; text-align: right;"></div>
-                        <div id="Username" style="font-size: 12px; color: Red; padding-left: 18px; background: url(images/user.jpg) no-repeat left center; width: 80px; float: right;"></div>
+                        <div id="labelwelcome" style="font-size: 12px; width: 80px; text-align: right;float: left; "></div>
+                        <div id="Username" style="font-size: 12px; color: Red; padding-left: 18px; background: url(images/user.jpg) no-repeat left center; width: 200px; float: left;"></div>
 
                     </div>
                 </div>
