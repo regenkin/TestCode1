@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="index.aspx.cs" Inherits="DTcms.Web.api.oauth.feixin.index" %>
+﻿<%@ Page Language="C#" AutoEventWireup="True" CodeBehind="index.aspx.cs" Inherits="DTcms.Web.api.oauth.feixin.index" %>

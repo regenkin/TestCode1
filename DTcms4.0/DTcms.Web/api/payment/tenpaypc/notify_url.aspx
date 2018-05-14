@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="notify_url.aspx.cs" Inherits="DTcms.Web.api.payment.tenpaypc.notify_url" %>
+﻿<%@ Page Language="C#" AutoEventWireup="True" CodeBehind="notify_url.aspx.cs" Inherits="DTcms.Web.api.payment.tenpaypc.notify_url" %>

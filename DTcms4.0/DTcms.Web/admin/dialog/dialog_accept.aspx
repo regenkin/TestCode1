@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="dialog_accept.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_accept" %>
+﻿<%@ Page Language="C#" AutoEventWireup="True" CodeBehind="dialog_accept.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_accept" %>
 <%@ Import namespace="DTcms.Common" %>
 
 <!DOCTYPE html>

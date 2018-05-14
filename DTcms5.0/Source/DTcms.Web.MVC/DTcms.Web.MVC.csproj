@@ -896,7 +896,6 @@
     <Content Include="templates\main\css\icon\iconfont.css" />
     <Content Include="templates\main\css\icon\iconfont.js" />
     <Content Include="templates\main\css\icon\iconfont.svg" />
-    <Content Include="templates\main\css\style.css" />
     <Content Include="templates\main\css\style5.css" />
     <Content Include="templates\main\css\viewer.min.css" />
     <Content Include="templates\main\data\DTcms5.0db.xml" />

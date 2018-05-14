@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="dialog_rewrite.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_rewrite" %>
+﻿<%@ Page Language="C#" AutoEventWireup="True" CodeBehind="dialog_rewrite.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_rewrite" %>
 <%@ Import namespace="DTcms.Common" %>
 
 <!DOCTYPE html>
