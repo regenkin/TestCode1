@@ -8,69 +8,67 @@
    DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
    DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
    BaseController bc = ViewBag.BasePage as BaseController;
-   ViewBag.Title = "è´­ç‰©è½¦ - " + site.name;
+   ViewBag.Title = "¹ºÎï³µ - " + site.name;
    List<DTcms.Model.cart_items> goodsList = ViewData["goodsList"] as List<DTcms.Model.cart_items>;
 }
 @section HeaderContent{
    <script src="~/Areas/Web/Scripts/cart.js"></script>
 }
-
-<!--å½“å‰ä½ç½®-->
+<!--µ±Ç°Î»ÖÃ-->
 <div class="section">
   <div class="location">
-    <span>å½“å‰ä½ç½®ï¼š</span>
-    <a href="@bc.linkurl("index")">é¦–é¡µ</a> &gt;
-        <a href="@bc.linkurl("cart")">è´­ç‰©è½¦</a>
+    <span>µ±Ç°Î»ÖÃ£º</span>
+    <a href="@bc.linkurl("index")">Ê×Ò³</a> &gt;
+        <a href="@bc.linkurl("cart")">¹ºÎï³µ</a>
   </div>
 </div>
-<!--/å½“å‰ä½ç½®-->
-
-<!--é¡µé¢å†…å®¹-->
+<!--/µ±Ç°Î»ÖÃ-->
+<!--Ò³ÃæÄÚÈİ-->
 <div class="section">
   <div class="wrapper">
     <div class="bg-wrap">
-      <!--è´­ç‰©è½¦å¤´éƒ¨-->
-      <div class="cart-head clearfix">
-        <h2><i class="iconfont icon-cart"></i>æˆ‘çš„è´­ç‰©è½¦</h2>
-        <div class="cart-setp">
+      <!--¹ºÎï³µÍ·²¿-->
+      <div class="cart-box">
+        <h1>ÎÒµÄ¹ºÎï³µ</h1>
+        <div class="cart-step">
           <ul>
-            <li class="first active">
+            <li class="selected">
               <div class="progress">
                 <span>1</span>
-                æ”¾è¿›è´­ç‰©è½¦
+                ·Å½ø¹ºÎï³µ
               </div>
             </li>
             <li>
               <div class="progress">
                 <span>2</span>
-                å¡«å†™è®¢å•ä¿¡æ¯
+                ÌîĞ´¶©µ¥ĞÅÏ¢
               </div>
             </li>
             <li class="last">
               <div class="progress">
                 <span>3</span>
-                æ”¯ä»˜/ç¡®è®¤è®¢å•
+                Ö§¸¶/È·ÈÏ¶©µ¥
               </div>
             </li>
           </ul>
         </div>
       </div>
-      <!--è´­ç‰©è½¦å¤´éƒ¨-->
+      <!--¹ºÎï³µÍ·²¿-->
 
-      <!--å•†å“åˆ—è¡¨-->
+      <!--ÉÌÆ·ÁĞ±í-->
       <div class="cart-box">
         <input id="jsondata" name="jsondata" type="hidden" />
         <table width="100%" align="center" class="cart-table" border="0" cellspacing="0" cellpadding="8">
           <tr>
             <th width="48" align="center">
-              <a onclick="selectCart(this);" href="javascript:;">å…¨é€‰</a>
+              <a onclick="selectCart(this);" href="javascript:;">È«Ñ¡</a>
             </th>
-            <th align="left" colspan="2">å•†å“ä¿¡æ¯</th>
-            <th width="84" align="left">å•ä»·</th>
-            <th width="104" align="center">æ•°é‡</th>
-            <th width="104" align="left">é‡‘é¢(å…ƒ)</th>
-            <th width="84" align="center">ç§¯åˆ†</th>
-            <th width="54" align="center">æ“ä½œ</th>
+            <th align="left" colspan="2">ÉÌÆ·ĞÅÏ¢</th>
+            <th width="84" align="left">µ¥¼Û</th>
+            <th width="104" align="center">ÊıÁ¿</th>
+            <th width="104" align="left">½ğ¶î(Ôª)</th>
+            <th width="84" align="center">»ı·Ö</th>
+            <th width="54" align="center">²Ù×÷</th>
           </tr>
           @foreach (DTcms.Model.cart_items modelt in goodsList) {
             <tr>
@@ -92,7 +90,7 @@
                 <a target="_blank" href="@bc.linkurl("goods_show", modelt.article_id)">@modelt.title</a>
                   <p class="stxt">@modelt.spec_text</p>
               </td>
-              <td>ï¿¥@modelt.user_price
+              <td>£¤@modelt.user_price
               </td>
               <td align="center">
                 <div class="buy-box">
@@ -102,7 +100,7 @@
                 </div>
               </td>
               <td>
-                <span class="red">ï¿¥<label name="amountCount">@(modelt.user_price * modelt.quantity)</label>
+                <span class="red">£¤<label name="amountCount">@(modelt.user_price * modelt.quantity)</label>
                 </span>
               </td>
               <td align="center">
@@ -111,7 +109,7 @@
                 </label>
               </td>
               <td align="center">
-                <a onclick="deleteCart('@(config.webpath)', this);" href="javascript:;">åˆ é™¤</a>
+                <a onclick="deleteCart('@(config.webpath)', this);" href="javascript:;">É¾³ı</a>
               </td>
             </tr>
           }
@@ -122,37 +120,39 @@
                 <div class="msg-tips">
                   <div class="icon warning"><i class="iconfont icon-tip"></i></div>
                   <div class="info">
-                    <strong>è´­ç‰©è½¦æ²¡æœ‰å•†å“ï¼</strong>
-                    <p>æ‚¨çš„è´­ç‰©è½¦ä¸ºç©ºï¼Œ<a href="@bc.linkurl("index")">é©¬ä¸Šå»è´­ç‰©</a>å§ï¼</p>
+                    <strong>¹ºÎï³µÃ»ÓĞÉÌÆ·£¡</strong>
+                    <p>ÄúµÄ¹ºÎï³µÎª¿Õ£¬<a href="@bc.linkurl("index")">ÂíÉÏÈ¥¹ºÎï</a>°É£¡</p>
                   </div>
                 </div>
               </td>
             </tr>
           }
           <tr>
-            <th align="right" colspan="8">å·²é€‰æ‹©å•†å“ <b class="red" id="totalQuantity">0</b> ä»¶ &nbsp;&nbsp;&nbsp;
-                            å•†å“æ€»é‡‘é¢ï¼ˆä¸å«è¿è´¹ï¼‰ï¼š<span class="red">ï¿¥</span><b class="red" id="totalAmount">0</b>å…ƒ
+            <th align="right" colspan="8">ÒÑÑ¡ÔñÉÌÆ· <b class="red" id="totalQuantity">0</b> ¼ş &nbsp;&nbsp;&nbsp;
+                            ÉÌÆ·×Ü½ğ¶î£¨²»º¬ÔË·Ñ£©£º<span class="red">£¤</span><b class="red" id="totalAmount">0</b>Ôª
             </th>
           </tr>
 
         </table>
       </div>
-      <!--/å•†å“åˆ—è¡¨-->
+      <!--/ÉÌÆ·ÁĞ±í-->
 
-      <!--è´­ç‰©è½¦åº•éƒ¨-->
+      <!--¹ºÎï³µµ×²¿-->
       <div class="cart-foot clearfix">
-        <div class="left-box">
-          <a onclick="selectCart(this);" href="javascript:;">å…¨é€‰</a>
-          <a onclick="deleteCart('@(config.webpath)');" href="javascript:;">æ¸…ç©ºè´­ç‰©è½¦</a>
+      <div class="right">
+        <div class="btn-box">
+          <a onclick="selectCart(this);" href="javascript:;">È«Ñ¡</a>
+          <a onclick="deleteCart('@(config.webpath)');" href="javascript:;">Çå¿Õ¹ºÎï³µ</a>
         </div>
-        <div class="right-box">
-          <button class="button" onclick="javascript:location.href='@bc.linkurl("index")';">ç»§ç»­è´­ç‰©</button>
-          <button class="submit" onclick="formSubmit(this, '@(config.webpath)', '@bc.linkurl("shopping")');">ç«‹å³ç»“ç®—</button>
+        <div class="btn-box">
+          <input class="btn" onclick="javascript:location.href='@bc.linkurl("index")';" value="¼ÌĞø¹ºÎï" />
+          <input class="submit btn btn-success" onclick="formSubmit(this, '@(config.webpath)', '@bc.linkurl("shopping")');" value="Á¢¼´½áËã"/>
+        </div>
         </div>
       </div>
-      <!--è´­ç‰©è½¦åº•éƒ¨-->
+      <!--¹ºÎï³µµ×²¿-->
 
     </div>
   </div>
 </div>
-<!--/é¡µé¢å†…å®¹-->
+<!--/Ò³ÃæÄÚÈİ-->
