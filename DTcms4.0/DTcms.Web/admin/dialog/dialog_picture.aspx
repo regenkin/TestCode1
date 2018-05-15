@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="dialog_picture.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_picture" %>
+﻿<%@ Page Language="C#" AutoEventWireup="True" CodeBehind="dialog_picture.aspx.cs" Inherits="DTcms.Web.admin.dialog.dialog_picture" %>
 <%@ Import namespace="DTcms.Common" %>
 
 <!DOCTYPE html>

@@ -33,8 +33,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTcms.Web.Mvc.Plugin.Feedba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTcms.Web.Mvc.Plugin.Link", "DTcms.Web.MVC\plugins\link\DTcms.Web.Mvc.Plugin.Link.csproj", "{599330B9-082B-4355-8015-77FA8DF78FB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTcms.Web.Mvc.Plugin.KfCenter", "DTcms.Web.MVC\plugins\kfcenter\DTcms.Web.Mvc.Plugin.KfCenter.csproj", "{69DF50A6-9EEF-45A9-93B0-14F81A9315B1}"
-EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -101,10 +99,6 @@ Global
 		{599330B9-082B-4355-8015-77FA8DF78FB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{599330B9-082B-4355-8015-77FA8DF78FB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{599330B9-082B-4355-8015-77FA8DF78FB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{69DF50A6-9EEF-45A9-93B0-14F81A9315B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69DF50A6-9EEF-45A9-93B0-14F81A9315B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69DF50A6-9EEF-45A9-93B0-14F81A9315B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69DF50A6-9EEF-45A9-93B0-14F81A9315B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,6 +115,5 @@ Global
 		{C77D7436-1CBE-49FF-B8DA-5217041DB3DF} = {23C15990-1273-41D6-89B4-43B764A38C6E}
 		{77C03692-9A96-4A33-8E8A-E64057F6C9C3} = {23C15990-1273-41D6-89B4-43B764A38C6E}
 		{599330B9-082B-4355-8015-77FA8DF78FB1} = {23C15990-1273-41D6-89B4-43B764A38C6E}
-		{69DF50A6-9EEF-45A9-93B0-14F81A9315B1} = {23C15990-1273-41D6-89B4-43B764A38C6E}
 	EndGlobalSection
 EndGlobal

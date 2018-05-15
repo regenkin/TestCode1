@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="result_json.aspx.cs" Inherits="DTcms.Web.api.oauth.taobao.result_json" %>
+﻿<%@ Page Language="C#" AutoEventWireup="True" CodeBehind="result_json.aspx.cs" Inherits="DTcms.Web.api.oauth.taobao.result_json" %>
