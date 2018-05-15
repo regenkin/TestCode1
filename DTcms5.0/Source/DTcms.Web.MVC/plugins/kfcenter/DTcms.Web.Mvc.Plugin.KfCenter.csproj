@@ -89,6 +89,8 @@
       <DependentUpon>ajax.ashx</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Controllers\KfCenter_ListController.cs" />
+    <Compile Include="Areas\Admin\Controllers\KfCenter_EditController.cs" />
+    <None Include="Areas\Admin\Views\KfCenter_Edit.cshtml" />
     <Compile Include="BLL\BaseBLL.cs" />
     <Compile Include="BLL\kfActSetBLL.cs" />
     <Compile Include="DALSQLServer\kfActSetDAL.cs" />
@@ -101,7 +103,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Views\kfcenter_list.cshtml" />
+    <Content Include="Areas\Admin\Views\KfCenter_list.cshtml" />
     <None Include="ajax.ashx" />
     <None Include="Areas\Admin\Views\Web.config" />
     <None Include="plugin.config" />

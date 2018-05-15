@@ -44,6 +44,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.SQLServerDAL
             using (Conn)
             {
                 string query = "UPDATE kfActSet SET [ActsetNum]=@ActsetNum,[ActsetName]=@ActsetName,[ActsetDBName]=@ActsetDBName,[ActsetType]=@ActsetType,[ActSetGroupKey]=@ActSetGroupKey,[LoginType]=@LoginType,[LoginUserName]=@LoginUserName,[LoginPwd]=@LoginPwd,[DBServerName]=@DBServerName,[CreateDate]=@CreateDate,[NewBackUpDate]=@NewBackUpDate,[DBGUID]=@DBGUID,[DBVersion]=@DBVersion,[Visible]=@Visible,[UIStyle]=@UIStyle,[LimitCount]=@LimitCount,[DBMaxSize]=@DBMaxSize,[EndDate]=@EndDate  WHERE ID =@ID";
+                //string query = "UPDATE kfActSet SET [ActsetNum]=@ActsetNum,[ActsetName]=@ActsetName,[ActsetDBName]=@ActsetDBName,[ActsetType]=@ActsetType,[ActSetGroupKey]=@ActSetGroupKey,[LoginType]=@LoginType,[LoginUserName]=@LoginUserName,[LoginPwd]=@LoginPwd,[DBServerName]=@DBServerName,[CreateDate]=@CreateDate,[DBGUID]=@DBGUID,[DBVersion]=@DBVersion,[Visible]=@Visible,[UIStyle]=@UIStyle,[LimitCount]=@LimitCount,[DBMaxSize]=@DBMaxSize,[EndDate]=@EndDate  WHERE ID =@ID";
                 return conn.Execute(query, kfactset);
             }
         }

@@ -40,7 +40,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Factory
             //          conn = new System.Data.SqlClient.SqlConnection(connString);
             //        break;
             //}
-            conn = new System.Data.SqlClient.SqlConnection("server=tcp:119.29.91.240,50362;uid=sa;pwd=sa;database=DTCMS网站演示;Connection Lifetime=30");
+            conn = new System.Data.SqlClient.SqlConnection("server=tcp:119.29.91.240,50362;uid=sa;pwd=sa;database=kfcenter;Connection Lifetime=30");
             conn.Open();
             return conn;
         }
