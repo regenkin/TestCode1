@@ -10,7 +10,12 @@
 
 }
 @section Scripts{
-
+<script>
+    $(function () {
+        //初始化表单验证
+        $("#form1").initValidform();
+    });
+</script>
 }
 <form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id">
 <!--导航栏-->
@@ -79,7 +84,6 @@
     <dt>数据库密码</dt>
     <dd>@Html.TextBox("txtLoginPwd", m.LoginPwd, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
   </dl>
-    </dl>
   <dl>
     <dt>数据库服务器</dt>
     <dd>@Html.TextBox("txtDBServerName", m.DBServerName, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
@@ -112,7 +116,7 @@
 </div>
 <!--/基本信息-->
 <!--许可信息-->
-<div class="tab-content">
+<div class="tab-content" style="display:none">
   <dl>
     <dt>限制用户数</dt>
     <dd>
@@ -122,8 +126,8 @@
   </dl>
   <dl>
     <dt>限制数据库空间</dt>
-    <dd>@Html.TextBox("txtDBMaxSize", m.DBMaxSize, new { @class="input small", datatype="n", sucmsg=" "})
-     <span class="Validform_checktip">*小数</span>
+    <dd>@Html.TextBox("txtDBMaxSize", m.DBMaxSize, new { @class = "input small", datatype = "n", sucmsg = " ", errormsg = "请输入小数" })
+     <span class="Validform_checktip">*小数(GB)</span>
      </dd>
   </dl>
     <dl>
