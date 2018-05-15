@@ -8,6 +8,7 @@ using System.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DTcms.Common;
+using DTcms.Web.Mvc.Plugin.KfCenter.Bll;
 
 namespace DTcms.Web.MVC.Areas.admin.Controllers {
     public class KfCenter_ListController : DTcms.Web.MVC.UI.Controllers.ManageController
@@ -27,9 +28,10 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
       protected override void OnActionExecuting(ActionExecutingContext filterContext) {
          base.OnActionExecuting(filterContext);
          this.keywords = DTRequest.GetQueryString("keywords");
-         if (int.TryParse(DTRequest.GetQueryString("pagesize"), out this.pageSize)) {
+         if (int.TryParse(DTRequest.GetQueryString("pagesize"), out this.pageSize))
+         {
             if (this.pageSize > 0) {
-               Utils.WriteCookie("kfcenter_page_size", "DTcmsPage", this.pageSize.ToString(), 14400);
+                Utils.WriteCookie("kfcenter_page_size", "DTcmsPage", this.pageSize.ToString(), 14400);
             }
          }
          else {
@@ -43,10 +45,10 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
          ViewBag.Page = this.page.ToString();
       }
       //
-      // GET: /admin/Site_List/
+      // GET: /admin/KfCenter_List/
 
       public ActionResult Index() {
-         RptBind("id>0" + CombSqlTxt(this.keywords), "sort_id asc,id desc");
+         RptBind("id>0" + CombSqlTxt(this.keywords), "id desc");
          return View(WEB_VIEW);
       }
 
@@ -55,8 +57,8 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
       /// </summary>
       /// <returns></returns>
       public ActionResult PageNumTextChanged() {
-         string url = Utils.CombUrlTxt("~/Areas/admin/Views/Channel/site_list.cshtml", "keywords={0}", this.keywords);
-         RptBind("id>0" + CombSqlTxt(this.keywords), "sort_id asc,id desc");
+         string url = Utils.CombUrlTxt(WEB_VIEW, "keywords={0}", this.keywords);
+         RptBind("id>0" + CombSqlTxt(this.keywords), "id desc");
          return View(url);
       }
 
@@ -75,7 +77,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
             if (!int.TryParse(item["id"].ToString(), out id))
                id = -1;
             int sortId;
-            if (!int.TryParse(item["sortId"].ToString(), out sortId))
+            if (!int.TryParse(item["id"].ToString(), out sortId))
                sortId = 99;
             bll.UpdateSort(id, sortId);
          }
@@ -123,7 +125,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
 
       #region 数据绑定=================================
       private void RptBind(string _strWhere, string _orderby) {
-         DTcms.BLL.sites bll = new DTcms.BLL.sites();
+          DTcms.Web.Mvc.Plugin.KfCenter.Bll.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet> bll = new DTcms.Web.Mvc.Plugin.KfCenter.Bll.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet>();
          DataSet ds = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
          DataTable list = null;
          if (ds.Tables.Count > 0) {
@@ -143,7 +145,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
          StringBuilder strTemp = new StringBuilder();
          _keywords = _keywords.Replace("'", "");
          if (!string.IsNullOrEmpty(_keywords)) {
-            strTemp.Append(" and (title like  '%" + _keywords + "%' or name like  '%" + _keywords + "%' or build_path like '%" + _keywords + "%' or domain like '%" + _keywords + "%')");
+             strTemp.Append(" and (ActsetNum like  '%" + _keywords + "%' or ActSetName like  '%" + _keywords + "%' or ActsetDBName like '%" + _keywords + "%' or CreateDate like '%" + _keywords + "%')");
          }
          return strTemp.ToString();
       }
@@ -152,7 +154,8 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
       #region 返回每页数量=============================
       private int GetPageSize(int _default_size) {
          int _pagesize;
-         if (int.TryParse(Utils.GetCookie("channel_site_page_size", "DTcmsPage"), out _pagesize)) {
+         if (int.TryParse(Utils.GetCookie("kfcenter_page_size", "DTcmsPage"), out _pagesize))
+         {
             if (_pagesize > 0) {
                return _pagesize;
             }

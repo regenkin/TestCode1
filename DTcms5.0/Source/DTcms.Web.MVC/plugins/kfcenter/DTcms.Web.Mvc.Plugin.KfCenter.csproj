@@ -31,11 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper">
+      <HintPath>..\..\..\Library\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Library\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -81,16 +85,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ajax.ashx.cs">
+      <DependentUpon>ajax.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Admin\Controllers\KfCenter_ListController.cs" />
+    <Compile Include="BLL\BaseBLL.cs" />
+    <Compile Include="BLL\kfActSetBLL.cs" />
+    <Compile Include="DALSQLServer\kfActSetDAL.cs" />
+    <Compile Include="Factory\ConnectionFactory.cs" />
+    <Compile Include="Factory\DALFactory.cs" />
+    <Compile Include="Factory\DbHelperSQLByConStr.cs" />
+    <Compile Include="IDal\IBaseDAL.cs" />
+    <Compile Include="IDal\IkfActSetDAL.cs" />
+    <Compile Include="Model\kfActSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\kfcenter_list.cshtml" />
+    <None Include="ajax.ashx" />
     <None Include="Areas\Admin\Views\Web.config" />
     <None Include="plugin.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="templet\" />
+    <Folder Include="UIModel\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\DTcms.BLL\DTcms.BLL.csproj">
