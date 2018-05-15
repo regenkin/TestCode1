@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTcms.Model", "DTcms.Model\DTcms.Model.csproj", "{D67868C9-56B9-4E35-8E15-C105FC44CFB9}"
@@ -36,10 +36,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTcms.Web.Mvc.Plugin.KfCenter", "DTcms.Web.MVC\plugins\kfcenter\DTcms.Web.Mvc.Plugin.KfCenter.csproj", "{69DF50A6-9EEF-45A9-93B0-14F81A9315B1}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
