@@ -1,0 +1,149 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
+   ViewBag.Title = "编辑数据中心";
+   DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet m = ViewData["model"] as DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet;
+   List<SelectListItem> siteSelectItems = ViewData["siteSelectItems"] as List<SelectListItem>;
+}
+@section HeaderContent{
+
+}
+@section Scripts{
+
+}
+<form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id">
+<!--导航栏-->
+<div class="location">
+  <a href="../kfcenter_list/index" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="../../center/index" class="home"><i class="iconfont icon-home"></i><span>首页</span></a>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>插件管理</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>数据中心</span>
+  <i class="arrow iconfont icon-arrow-right"></i>
+  <span>编辑数据中心</span>
+</div>
+<div class="line10"></div>
+<!--/导航栏-->
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <ul>
+        <li><a class="selected" href="javascript:;">基本信息</a></li>
+        <li><a href="javascript:;">许可信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--基本信息-->
+<div class="tab-content">
+  <dl>
+    <dt>账套编码</dt>
+    <dd>
+        @Html.TextBox("txtActsetNum", m.ActsetNum, new { @class="input normal", datatype="*2-100", sucmsg=" "})
+    </dd>
+  </dl>
+  <dl>
+    <dt>账套名称</dt>
+    <dd>
+    @Html.TextBox("txtActsetName", m.ActsetName, new { @class="input normal", datatype="*2-100", sucmsg=" "})
+    </dd>
+  </dl>
+  <dl>
+    <dt>数据库名称</dt>
+    <dd>
+        @Html.TextBox("txtActsetDBName", m.ActsetDBName, new { @class="input normal", datatype="*2-100", sucmsg=" "})
+    </dd>
+  </dl>
+  <dl>
+    <dt>账套类型</dt>
+    <dd>@Html.TextBox("txtActsetType", m.ActsetType, new { @class="input normal", datatype="*0-50", sucmsg=" "})</dd>
+  </dl>
+  <dl>
+    <dt>账套分组</dt>
+    <dd>@Html.TextBox("txtActSetGroupKey", m.ActSetGroupKey, new { @class="input normal", datatype="*0-30", sucmsg=" "})</dd>
+  </dl>
+  <dl>
+    <dt>登录类型</dt>
+    <dd>@Html.TextBox("txtLoginType", m.LoginType, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+  <dl>
+    <dt>数据库用户</dt>
+    <dd>@Html.TextBox("txtLoginUserName", m.LoginUserName, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+    <dl>
+    <dt>数据库密码</dt>
+    <dd>@Html.TextBox("txtLoginPwd", m.LoginPwd, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+    </dl>
+  <dl>
+    <dt>数据库服务器</dt>
+    <dd>@Html.TextBox("txtDBServerName", m.DBServerName, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+  <dl>
+    <dt>创建日期</dt>
+    <dd>
+      <div class="date-input"><i class="iconfont icon-date"></i>
+      @Html.TextBox("txtCreateDate", m.CreateDate.ToString("yyyy-MM-dd"), new { @class="input rule-date-input", datatype=@"/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/",sucmsg=" ",onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})",errormsg="请选择正确的日期"})
+      </div>
+       <span class="Validform_checktip Validform_right"> </span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>数据库GUID</dt>
+    <dd>@Html.TextBox("txtDBGUID", m.DBGUID, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+  <dl>
+    <dt>数据库版本</dt>
+    <dd>@Html.TextBox("txtDBVersion", m.DBVersion, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+  <dl>
+    <dt>是否可见</dt>
+    <dd>@Html.TextBox("txtVisible", m.Visible, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+  <dl>
+    <dt>主界面类型</dt>
+    <dd>@Html.TextBox("txtUIStyle", m.UIStyle, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+</div>
+<!--/基本信息-->
+<!--许可信息-->
+<div class="tab-content">
+  <dl>
+    <dt>限制用户数</dt>
+    <dd>
+    @Html.TextBox("txtLimitCount", m.LimitCount, new { @class="input small", datatype="n", sucmsg=" "})
+    <span class="Validform_checktip">*整数</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>限制数据库空间</dt>
+    <dd>@Html.TextBox("txtDBMaxSize", m.DBMaxSize, new { @class="input small", datatype="n", sucmsg=" "})
+     <span class="Validform_checktip">*小数</span>
+     </dd>
+  </dl>
+    <dl>
+    <dt>使用到期日</dt>
+    <dd>
+      <div class="date-input"><i class="iconfont icon-date"></i>
+      @Html.TextBox("txtEndDate", m.EndDate.ToString("yyyy-MM-dd"), new { @class="input rule-date-input", datatype=@"/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/",sucmsg=" ",onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})",errormsg="请选择正确的日期"})
+      </div>
+       <span class="Validform_checktip Validform_right"></span>
+    </dd>
+  </dl>
+</div>
+<!--/许可信息-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap">
+    <input type="submit" id="btnSubmit" class="btn" value="提交保存" />
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
+</div>
+<!--/工具栏-->
+</form>
