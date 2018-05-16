@@ -22,6 +22,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
 
       protected override void OnActionExecuting(ActionExecutingContext filterContext) {
          base.OnActionExecuting(filterContext);
+         
          ActionResult result = View(EDIT_RESULT_VIEW);
          //取到操作类型
          string _action = DTRequest.GetQueryString("action");

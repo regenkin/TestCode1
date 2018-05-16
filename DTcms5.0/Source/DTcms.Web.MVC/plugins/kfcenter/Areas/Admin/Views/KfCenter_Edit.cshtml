@@ -126,7 +126,7 @@
   </dl>
   <dl>
     <dt>限制数据库空间</dt>
-    <dd>@Html.TextBox("txtDBMaxSize", m.DBMaxSize, new { @class = "input small", datatype = "n", sucmsg = " ", errormsg = "请输入小数" })
+    <dd>@Html.TextBox("txtDBMaxSize", m.DBMaxSize, new { @class = "input small", datatype = @"/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/", sucmsg = " ", errormsg = "请输入小数(支持两位小数位)" })
      <span class="Validform_checktip">*小数(GB)</span>
      </dd>
   </dl>
