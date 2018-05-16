@@ -92,7 +92,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Models
             get { return _createDate; }
             set { _createDate = value; }
         }
-        private System.DateTime _newBackUpDate = new DateTime(1799-01-02);
+        private System.DateTime _newBackUpDate = new DateTime(1799,01,02);
         [DataMember]
         public System.DateTime NewBackUpDate
         {

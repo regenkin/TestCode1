@@ -117,7 +117,9 @@
          <td>@(Convert.ToDateTime(row["EndDate"]).ToString("yyyy-MM-dd"))</td>
          <td align="center">
              <a href="../kfcenter_edit/index?action=@DTEnums.ActionEnum.Edit&id=@row["id"]">修改</a> |
-             <a href="#">注销</a>
+             <a href="#">注销</a> |
+             <a href="#">刷GUID</a> |
+             <a href="#">变GUID</a>
          </td>
        </tr>        
      }

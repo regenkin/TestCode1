@@ -402,8 +402,13 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                 //如：server=.;uid=sa;pwd=;database=PMIS;Integrated Security=SSPI; Connection Timeout=30
                 try
                 {
-                    mySqlConnection.Open();
-                    IsCanConnectioned = true;
+                    if (!string.IsNullOrWhiteSpace(jtxtActsetDBName.ToString()))
+                    {
+                        mySqlConnection.Open();
+                        IsCanConnectioned = true;
+                    }
+                    else
+                        IsCanConnectioned = false;
                 }
                 catch
                 {
