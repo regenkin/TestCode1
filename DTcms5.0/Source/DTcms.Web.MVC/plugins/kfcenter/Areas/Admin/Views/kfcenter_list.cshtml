@@ -26,34 +26,6 @@
          }
       }
 
-      function export_site() {
-        var $row = $("#ltable tr:gt(0)");
-        var json = { list: [] };
-        var site_id = 0;
-        $($row).each(function (i, item) {
-          if ($(item).find("input:checkbox").prop("checked")) {
-            var id = $(item).find("td:eq(0)").find("label:eq(0)").text();
-            var obj = { id: id };
-            json.list.push(obj);
-            site_id = id;
-          }
-        });
-
-        $.ajax({
-          url: "/plugins/kfcenter/ajax.ashx?action=site_export&site=" + site_id + "&" + getQueryParam(),
-          type: "POST",
-          dataType: "html",
-          data: "json=" + JSON.stringify(json),
-          success: function (data) {
-            var result = JSON.parse(data);
-            alert(result["msg"]);
-          },
-          error: function () {
-            alert("导出站点失败!");
-          }
-        });
-      }
-
       function import_site() {
         var $row = $("#ltable tr:gt(0)");
         var json = { list: [] };
@@ -100,7 +72,7 @@
       <a class="menu-btn"><i class="iconfont icon-more"></i></a>
       <div class="l-list">
         <ul class="icon-list">
-          <li><a href="javascript:;" onclick="export_site();"><i class="iconfont icon-delete"></i><span>注册账套</span></a></li>
+          <li><a href="../KfCenter_Edit/index?action=@DTEnums.ActionEnum.Add"><i class="iconfont icon-delete"></i><span>注册账套</span></a></li>
         </ul>
       </div>
       <div class="r-list">

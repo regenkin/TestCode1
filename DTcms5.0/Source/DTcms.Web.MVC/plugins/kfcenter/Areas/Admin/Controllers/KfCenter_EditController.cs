@@ -57,8 +57,15 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         public ActionResult Index()
         {
             TreeBind();
-            //if (action == DTEnums.ActionEnum.Edit.ToString())
-            ShowInfo(this.id);
+            if (action == DTEnums.ActionEnum.Edit.ToString())
+            {
+                ShowInfo(this.id);
+            }
+            else
+            {
+                DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model = new DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet();
+                ViewData["model"] = model;
+            }
             return View(WEB_VIEW);
         }
 
@@ -93,10 +100,13 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         {
             DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model = bll.GetEntity(this.id);
             ViewData["model"] = model;
-            DTcms.Web.Mvc.Plugin.KfCenter.Util.EncryptTripleDes encry = new Mvc.Plugin.KfCenter.Util.EncryptTripleDes();
-            model.DBServerName = encry.Decrypt(model.DBServerName);
-            model.LoginUserName = encry.Decrypt(model.LoginUserName);
-            model.LoginPwd = encry.Decrypt(model.LoginPwd);
+            if (model != null)
+            {
+                DTcms.Web.Mvc.Plugin.KfCenter.Util.EncryptTripleDes encry = new Mvc.Plugin.KfCenter.Util.EncryptTripleDes();
+                model.DBServerName = encry.Decrypt(model.DBServerName);
+                model.LoginUserName = encry.Decrypt(model.LoginUserName);
+                model.LoginPwd = encry.Decrypt(model.LoginPwd);
+            }
         }
 
         private void TreeBind()
