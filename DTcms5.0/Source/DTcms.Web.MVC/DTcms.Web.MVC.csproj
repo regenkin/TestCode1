@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.JScript" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -1517,6 +1521,7 @@
     <Content Include="templates\main_mobile\video_list.cshtml" />
     <Content Include="templates\main_mobile\video_partial_list.cshtml" />
     <Content Include="templates\main_mobile\video_show.cshtml" />
+    <Content Include="xmlconfig\log4net.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

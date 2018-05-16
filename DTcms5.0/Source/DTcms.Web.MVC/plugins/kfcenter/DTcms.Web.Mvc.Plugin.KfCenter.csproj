@@ -34,6 +34,9 @@
     <Reference Include="Dapper">
       <HintPath>..\..\..\Library\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\Library\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Library\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -92,14 +95,19 @@
     <Compile Include="Areas\Admin\Controllers\KfCenter_EditController.cs" />
     <None Include="Areas\Admin\Views\KfCenter_Edit.cshtml" />
     <Compile Include="BLL\BaseBLL.cs" />
+    <Compile Include="BLL\kfActGroupBLL.cs" />
     <Compile Include="BLL\kfActSetBLL.cs" />
+    <Compile Include="DALSQLServer\kfActGroupDAL.cs" />
     <Compile Include="DALSQLServer\kfActSetDAL.cs" />
     <Compile Include="Factory\ConnectionFactory.cs" />
     <Compile Include="Factory\DALFactory.cs" />
     <Compile Include="Factory\DbHelperSQLByConStr.cs" />
     <Compile Include="IDal\IBaseDAL.cs" />
+    <Compile Include="IDal\IkfActGroupDAL.cs" />
     <Compile Include="IDal\IkfActSetDAL.cs" />
-    <Compile Include="Model\kfActSet.cs" />
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="Models\kfActGroup.cs" />
+    <Compile Include="Models\kfActSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

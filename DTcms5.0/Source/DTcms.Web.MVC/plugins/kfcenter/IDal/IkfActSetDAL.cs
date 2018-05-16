@@ -1,4 +1,4 @@
-﻿using DTcms.Web.Mvc.Plugin.KfCenter.Model;
+﻿using DTcms.Web.Mvc.Plugin.KfCenter.Models;
 
 namespace DTcms.Web.Mvc.Plugin.KfCenter.IDal
 {

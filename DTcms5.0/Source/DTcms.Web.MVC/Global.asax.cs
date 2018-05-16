@@ -15,6 +15,9 @@ namespace DTcms.Web.MVC {
 
          FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
          RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+        //log4net配制对应的Webconfig 
+        log4net.Config.DOMConfigurator.Configure(new System.IO.FileInfo(Server.MapPath("~/xmlconfig/log4net.config")));
       }
    }
 }

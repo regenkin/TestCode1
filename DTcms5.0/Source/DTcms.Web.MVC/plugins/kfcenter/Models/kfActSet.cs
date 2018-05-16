@@ -6,7 +6,7 @@ Description:数据中心账套信息
 using System.Runtime.Serialization;
 using System;
 
-namespace DTcms.Web.Mvc.Plugin.KfCenter.Model
+namespace DTcms.Web.Mvc.Plugin.KfCenter.Models
 {
     /// <summary>
     /// 数据中心账套信息

@@ -7,17 +7,41 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Factory
     /// </summary>
     public class DALFactory<T>
     {
+        /// <summary>
+        /// 账套
+        /// </summary>
+        /// <returns></returns>
         public static IkfActSetDAL<T> CreatekfActSetDAL()
         {
             return new DTcms.Web.Mvc.Plugin.KfCenter.SQLServerDAL.kfActSetDAL<T>();
+        }
+        /// <summary>
+        /// 账套组
+        /// </summary>
+        /// <returns></returns>
+        public static IkfActGroupDAL<T> CreatekfActGroupDAL()
+        {
+            return new DTcms.Web.Mvc.Plugin.KfCenter.SQLServerDAL.kfActGroupDAL<T>();
         }
     }
 
     public class DALFactory
     {
-        public static IkfActSetDAL<DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet> CreatekfActSetDAL()
+        /// <summary>
+        /// 账套
+        /// </summary>
+        /// <returns></returns>
+        public static IkfActSetDAL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> CreatekfActSetDAL()
         {
-            return new DTcms.Web.Mvc.Plugin.KfCenter.SQLServerDAL.kfActSetDAL<DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet>();
+            return new DTcms.Web.Mvc.Plugin.KfCenter.SQLServerDAL.kfActSetDAL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>();
+        }
+        /// <summary>
+        /// 账套组
+        /// </summary>
+        /// <returns></returns>
+        public static IkfActGroupDAL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup> CreatekfActGroupDAL()
+        {
+            return new DTcms.Web.Mvc.Plugin.KfCenter.SQLServerDAL.kfActGroupDAL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup>();
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using DTcms.Web.Mvc.Plugin.KfCenter.Factory;
 using DTcms.Web.Mvc.Plugin.KfCenter.IDal;
 
-namespace DTcms.Web.Mvc.Plugin.KfCenter.Bll
+namespace DTcms.Web.Mvc.Plugin.KfCenter.BLL
 {
     public class BaseBLL<T>
     {

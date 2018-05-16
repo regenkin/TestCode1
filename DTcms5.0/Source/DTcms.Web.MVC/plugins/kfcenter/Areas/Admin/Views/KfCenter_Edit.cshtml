@@ -4,7 +4,7 @@
    Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
    ViewBag.Title = "编辑数据中心";
    DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet m = ViewData["model"] as DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet;
-   List<SelectListItem> siteSelectItems = ViewData["siteSelectItems"] as List<SelectListItem>;
+   List<SelectListItem> lsAppSetGroup = ViewData["lsAppSetGroup"] as List<SelectListItem>;
 }
 @section HeaderContent{
 
@@ -47,6 +47,18 @@
 <!--基本信息-->
 <div class="tab-content">
   <dl>
+    <dt>数据库服务器</dt>
+    <dd>@Html.TextBox("txtDBServerName", m.DBServerName, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+  <dl>
+    <dt>数据库用户</dt>
+    <dd>@Html.TextBox("txtLoginUserName", m.LoginUserName, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+  <dl>
+    <dt>数据库密码</dt>
+    <dd>@Html.TextBox("txtLoginPwd", m.LoginPwd, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+  </dl>
+  <dl>
     <dt>账套编码</dt>
     <dd>
         @Html.TextBox("txtActsetNum", m.ActsetNum, new { @class="input normal", datatype="*2-100", sucmsg=" "})
@@ -74,19 +86,8 @@
   </dl>
   <dl>
     <dt>登录类型</dt>
-    <dd>@Html.TextBox("txtLoginType", m.LoginType, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
-  </dl>
-  <dl>
-    <dt>数据库用户</dt>
-    <dd>@Html.TextBox("txtLoginUserName", m.LoginUserName, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
-  </dl>
-    <dl>
-    <dt>数据库密码</dt>
-    <dd>@Html.TextBox("txtLoginPwd", m.LoginPwd, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
-  </dl>
-  <dl>
-    <dt>数据库服务器</dt>
-    <dd>@Html.TextBox("txtDBServerName", m.DBServerName, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+    <dd>@Html.TextBox("txtLoginType", m.LoginType, new { @class="input normal", datatype="n", sucmsg=" "})</dd>
+    <span class="Validform_checktip">整数(1-100)</span>
   </dl>
   <dl>
     <dt>创建日期</dt>
@@ -121,13 +122,13 @@
     <dt>限制用户数</dt>
     <dd>
     @Html.TextBox("txtLimitCount", m.LimitCount, new { @class="input small", datatype="n", sucmsg=" "})
-    <span class="Validform_checktip">*整数</span>
+    <span class="Validform_checktip">整数</span>
     </dd>
   </dl>
   <dl>
     <dt>限制数据库空间</dt>
     <dd>@Html.TextBox("txtDBMaxSize", m.DBMaxSize, new { @class = "input small", datatype = @"/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/", sucmsg = " ", errormsg = "请输入小数(支持两位小数位)" })
-     <span class="Validform_checktip">*小数(GB)</span>
+     <span class="Validform_checktip">小数(GB)</span>
      </dd>
   </dl>
     <dl>
@@ -136,7 +137,7 @@
       <div class="date-input"><i class="iconfont icon-date"></i>
       @Html.TextBox("txtEndDate", m.EndDate.ToString("yyyy-MM-dd"), new { @class="input rule-date-input", datatype=@"/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/",sucmsg=" ",onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})",errormsg="请选择正确的日期"})
       </div>
-       <span class="Validform_checktip Validform_right"></span>
+       <span class="Validform_checktip"></span>
     </dd>
   </dl>
 </div>

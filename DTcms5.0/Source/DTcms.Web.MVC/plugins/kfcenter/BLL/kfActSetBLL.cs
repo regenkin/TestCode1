@@ -5,11 +5,11 @@ Description:
 ****************/
 using System.Collections.Generic;
 using DTcms.Web.Mvc.Plugin.KfCenter.Factory;
-using DTcms.Web.Mvc.Plugin.KfCenter.Model;
+using DTcms.Web.Mvc.Plugin.KfCenter.Models;
 using DTcms.Web.Mvc.Plugin.KfCenter.IDal;
 
 
-namespace DTcms.Web.Mvc.Plugin.KfCenter.Bll
+namespace DTcms.Web.Mvc.Plugin.KfCenter.BLL
 {
     public class kfActSetBLL<T> : BaseBLL<T>
     {

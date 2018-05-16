@@ -8,7 +8,7 @@ using System.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DTcms.Common;
-using DTcms.Web.Mvc.Plugin.KfCenter.Bll;
+using DTcms.Web.Mvc.Plugin.KfCenter.BLL;
 
 namespace DTcms.Web.MVC.Areas.admin.Controllers {
     public class KfCenter_ListController : DTcms.Web.MVC.UI.Controllers.ManageController
@@ -125,7 +125,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
 
       #region 数据绑定=================================
       private void RptBind(string _strWhere, string _orderby) {
-          DTcms.Web.Mvc.Plugin.KfCenter.Bll.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet> bll = new DTcms.Web.Mvc.Plugin.KfCenter.Bll.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet>();
+          DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> bll = new DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>();
          DataSet ds = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
          DataTable list = null;
          if (ds.Tables.Count > 0) {
