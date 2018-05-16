@@ -67,23 +67,24 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
       /// 提交保存
       /// </summary>
       /// <returns></returns>
-      public ActionResult SubmitSave(string json) {
-         ChkAdminLevel("sys_site_manage", DTEnums.ActionEnum.Edit.ToString()); //检查权限
-         DTcms.BLL.sites bll = new DTcms.BLL.sites();
-         JObject jobject = JObject.Parse(json);
-         JToken record = jobject["list"];
-         foreach (JToken item in record) {
-            int id;
-            if (!int.TryParse(item["id"].ToString(), out id))
-               id = -1;
-            int sortId;
-            if (!int.TryParse(item["id"].ToString(), out sortId))
-               sortId = 99;
-            bll.UpdateSort(id, sortId);
-         }
-         AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "保存站点排序"); //记录日志
-         string script = JscriptMsg("保存排序成功！", Utils.CombUrlTxt("index", "keywords={0}", this.keywords), "parent.loadMenuTree");
-         return Content(script);
+      public ActionResult SubmitSave(string json)
+      {
+          //ChkAdminLevel("sys_site_manage", DTEnums.ActionEnum.Edit.ToString()); //检查权限
+          //DTcms.BLL.sites bll = new DTcms.BLL.sites();
+          //JObject jobject = JObject.Parse(json);
+          //JToken record = jobject["list"];
+          //foreach (JToken item in record) {
+          //   int id;
+          //   if (!int.TryParse(item["id"].ToString(), out id))
+          //      id = -1;
+          //   int sortId;
+          //   if (!int.TryParse(item["id"].ToString(), out sortId))
+          //      sortId = 99;
+          //   bll.UpdateSort(id, sortId);
+          //}
+          AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "保存站点排序"); //记录日志
+          string script = JscriptMsg("保存排序成功！", Utils.CombUrlTxt("index", "keywords={0}", this.keywords), "parent.loadMenuTree");
+          return Content(script);
       }
 
       /// <summary>
@@ -91,36 +92,37 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
       /// </summary>
       /// <returns></returns>
       public ActionResult SubmitDelete(string json) {
-         ChkAdminLevel("sys_site_manage", DTEnums.ActionEnum.Delete.ToString()); //检查权限
-         int sucCount = 0;
-         int errorCount = 0;
-         DTcms.BLL.sites bll = new DTcms.BLL.sites();
-         JObject jobject = JObject.Parse(json);
-         JToken record = jobject["list"];
-         int id;
-         foreach (JToken item in record) {
-            if (int.TryParse(item["id"].ToString(), out id)) {
-               //检查该分类下是否还有频道
-               int channelCount = new DTcms.BLL.site_channel().GetCount("site_id=" + id);
-               if (channelCount > 0) {
-                  errorCount += 1;
-                  continue;
-               }
-               DTcms.Model.sites model = bll.GetModel(id);
-               //删除成功后对应的目录及文件
-               if (bll.Delete(id)) {
-                  sucCount += 1;
-                  FileHelper.DeleteDirectory(sysConfig.webpath + DTKeys_Extension.DIRECTORY_REWRITE_MVC + "/" + model.build_path);
-                  FileHelper.DeleteDirectory(sysConfig.webpath + DTKeys.DIRECTORY_REWRITE_HTML + "/" + model.build_path);
-               }
-               else {
-                  errorCount += 1;
-               }
-            }
-         }
-         AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除站点成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-         string script = JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("index", "keywords={0}", this.keywords), "parent.loadMenuTree");
-         return Content(script);
+         //ChkAdminLevel("sys_site_manage", DTEnums.ActionEnum.Delete.ToString()); //检查权限
+         //int sucCount = 0;
+         //int errorCount = 0;
+         //DTcms.BLL.sites bll = new DTcms.BLL.sites();
+         //JObject jobject = JObject.Parse(json);
+         //JToken record = jobject["list"];
+         //int id;
+         //foreach (JToken item in record) {
+         //   if (int.TryParse(item["id"].ToString(), out id)) {
+         //      //检查该分类下是否还有频道
+         //      int channelCount = new DTcms.BLL.site_channel().GetCount("site_id=" + id);
+         //      if (channelCount > 0) {
+         //         errorCount += 1;
+         //         continue;
+         //      }
+         //      DTcms.Model.sites model = bll.GetModel(id);
+         //      //删除成功后对应的目录及文件
+         //      if (bll.Delete(id)) {
+         //         sucCount += 1;
+         //         FileHelper.DeleteDirectory(sysConfig.webpath + DTKeys_Extension.DIRECTORY_REWRITE_MVC + "/" + model.build_path);
+         //         FileHelper.DeleteDirectory(sysConfig.webpath + DTKeys.DIRECTORY_REWRITE_HTML + "/" + model.build_path);
+         //      }
+         //      else {
+         //         errorCount += 1;
+         //      }
+         //   }
+         //}
+         //AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除站点成功" + sucCount + "条，失败" + errorCount + "条"); //记录日志
+         //string script = JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！", Utils.CombUrlTxt("index", "keywords={0}", this.keywords), "parent.loadMenuTree");
+         //return Content(script);
+          return Content("");
       }
 
       #region 数据绑定=================================

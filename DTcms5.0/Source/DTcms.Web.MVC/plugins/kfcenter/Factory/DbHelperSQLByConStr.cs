@@ -212,7 +212,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
         /// <param name="list">SQL命令行列表</param>
         /// <param name="oracleCmdSqlList">Oracle命令行列表</param>
         /// <returns>执行结果 0-由于SQL造成事务失败 -1 由于Oracle造成事务失败 1-整体事务执行成功</returns>
-        public static int ExecuteSqlTran(List<DTcms.DBUtility.CommandInfo> list, List<DTcms.DBUtility.CommandInfo> oracleCmdSqlList)
+        public static int ExecuteSqlTran(List<CommandInfo> list, List<CommandInfo> oracleCmdSqlList)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -223,12 +223,12 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                 cmd.Transaction = tx;
                 try
                 {
-                    foreach (DTcms.DBUtility.CommandInfo myDE in list)
+                    foreach (CommandInfo myDE in list)
                     {
                         string cmdText = myDE.CommandText;
                         SqlParameter[] cmdParms = (SqlParameter[])myDE.Parameters;
                         PrepareCommand(cmd, conn, tx, cmdText, cmdParms);
-                        if (myDE.EffentNextType == DTcms.DBUtility.EffentNextType.SolicitationEvent)
+                        if (myDE.EffentNextType == EffentNextType.SolicitationEvent)
                         {
                             if (myDE.CommandText.ToLower().IndexOf("count(") == -1)
                             {
@@ -250,7 +250,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                                 myDE.OnSolicitationEvent();
                             }
                         }
-                        if (myDE.EffentNextType == DTcms.DBUtility.EffentNextType.WhenHaveContine || myDE.EffentNextType == DTcms.DBUtility.EffentNextType.WhenNoHaveContine)
+                        if (myDE.EffentNextType == EffentNextType.WhenHaveContine || myDE.EffentNextType == EffentNextType.WhenNoHaveContine)
                         {
                             if (myDE.CommandText.ToLower().IndexOf("count(") == -1)
                             {
@@ -267,13 +267,13 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                             }
                             isHave = Convert.ToInt32(obj) > 0;
 
-                            if (myDE.EffentNextType == DTcms.DBUtility.EffentNextType.WhenHaveContine && !isHave)
+                            if (myDE.EffentNextType == EffentNextType.WhenHaveContine && !isHave)
                             {
                                 tx.Rollback();
                                 throw new Exception("SQL:违背要求" + myDE.CommandText + "返回值必须大于0");
                                 //return 0;
                             }
-                            if (myDE.EffentNextType == DTcms.DBUtility.EffentNextType.WhenNoHaveContine && isHave)
+                            if (myDE.EffentNextType == EffentNextType.WhenNoHaveContine && isHave)
                             {
                                 tx.Rollback();
                                 throw new Exception("SQL:违背要求" + myDE.CommandText + "返回值必须等于0");
@@ -282,7 +282,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                             continue;
                         }
                         int val = cmd.ExecuteNonQuery();
-                        if (myDE.EffentNextType == DTcms.DBUtility.EffentNextType.ExcuteEffectRows && val == 0)
+                        if (myDE.EffentNextType == EffentNextType.ExcuteEffectRows && val == 0)
                         {
                             tx.Rollback();
                             throw new Exception("SQL:违背要求" + myDE.CommandText + "必须有影响行");
@@ -693,7 +693,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
         /// 执行多条SQL语句，实现数据库事务。
         /// </summary>
         /// <param name="SQLStringList">SQL语句的哈希表（key为sql语句，value是该语句的SqlParameter[]）</param>
-        public static int ExecuteSqlTran(System.Collections.Generic.List<DTcms.DBUtility.CommandInfo> cmdList)
+        public static int ExecuteSqlTran(System.Collections.Generic.List<CommandInfo> cmdList)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -705,13 +705,13 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                     {
                         int count = 0;
                         //循环
-                        foreach (DTcms.DBUtility.CommandInfo myDE in cmdList)
+                        foreach (CommandInfo myDE in cmdList)
                         {
                             string cmdText = myDE.CommandText;
                             SqlParameter[] cmdParms = (SqlParameter[])myDE.Parameters;
                             PrepareCommand(cmd, conn, trans, cmdText, cmdParms);
 
-                            if (myDE.EffentNextType == DTcms.DBUtility.EffentNextType.WhenHaveContine || myDE.EffentNextType == DTcms.DBUtility.EffentNextType.WhenNoHaveContine)
+                            if (myDE.EffentNextType == EffentNextType.WhenHaveContine || myDE.EffentNextType == EffentNextType.WhenNoHaveContine)
                             {
                                 if (myDE.CommandText.ToLower().IndexOf("count(") == -1)
                                 {
@@ -727,12 +727,12 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                                 }
                                 isHave = Convert.ToInt32(obj) > 0;
 
-                                if (myDE.EffentNextType == DTcms.DBUtility.EffentNextType.WhenHaveContine && !isHave)
+                                if (myDE.EffentNextType == EffentNextType.WhenHaveContine && !isHave)
                                 {
                                     trans.Rollback();
                                     return 0;
                                 }
-                                if (myDE.EffentNextType == DTcms.DBUtility.EffentNextType.WhenNoHaveContine && isHave)
+                                if (myDE.EffentNextType == EffentNextType.WhenNoHaveContine && isHave)
                                 {
                                     trans.Rollback();
                                     return 0;
@@ -741,7 +741,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                             }
                             int val = cmd.ExecuteNonQuery();
                             count += val;
-                            if (myDE.EffentNextType == DTcms.DBUtility.EffentNextType.ExcuteEffectRows && val == 0)
+                            if (myDE.EffentNextType == EffentNextType.ExcuteEffectRows && val == 0)
                             {
                                 trans.Rollback();
                                 return 0;
@@ -763,7 +763,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
         /// 执行多条SQL语句，实现数据库事务。
         /// </summary>
         /// <param name="SQLStringList">SQL语句的哈希表（key为sql语句，value是该语句的SqlParameter[]）</param>
-        public static void ExecuteSqlTranWithIndentity(System.Collections.Generic.List<DTcms.DBUtility.CommandInfo> SQLStringList)
+        public static void ExecuteSqlTranWithIndentity(System.Collections.Generic.List<CommandInfo> SQLStringList)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -775,7 +775,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                     {
                         int indentity = 0;
                         //循环
-                        foreach (DTcms.DBUtility.CommandInfo myDE in SQLStringList)
+                        foreach (CommandInfo myDE in SQLStringList)
                         {
                             string cmdText = myDE.CommandText;
                             SqlParameter[] cmdParms = (SqlParameter[])myDE.Parameters;

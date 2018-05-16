@@ -20,9 +20,6 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         {
             base.OnAuthorization(filterContext);
             ChkAdminLevel("plugin_link", DTEnums.ActionEnum.View.ToString()); //检查权限
-            LogHelper.ErrorLog("ErrorLog");
-            LogHelper.DebugLog("DebugLog");
-            LogHelper.InfoLog("InfoLog");
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -60,15 +57,8 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         public ActionResult Index()
         {
             TreeBind();
-            if (action == DTEnums.ActionEnum.Edit.ToString())
-            {
-                ShowInfo(this.id);
-            }
-            else
-            {
-                DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model = bll.GetEntity(this.id);
-                ViewData["model"] = model;
-            }
+            //if (action == DTEnums.ActionEnum.Edit.ToString())
+            ShowInfo(this.id);
             return View(WEB_VIEW);
         }
 
@@ -103,21 +93,44 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         {
             DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model = bll.GetEntity(this.id);
             ViewData["model"] = model;
+            DTcms.Web.Mvc.Plugin.KfCenter.Util.EncryptTripleDes encry = new Mvc.Plugin.KfCenter.Util.EncryptTripleDes();
+            model.DBServerName = encry.Decrypt(model.DBServerName);
+            model.LoginUserName = encry.Decrypt(model.LoginUserName);
+            model.LoginPwd = encry.Decrypt(model.LoginPwd);
         }
 
         private void TreeBind()
         {
-            DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActGroupBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup> bll = Mvc.Plugin.KfCenter.BLL.kfActGroupBLL<Mvc.Plugin.KfCenter.Models.kfActGroup>.Instance();
-            IList<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup> lsModels = bll.GetList();
-            List<SelectListItem> lsAppSetGroup = new List<SelectListItem>() 
+            try
             {
-                new SelectListItem(){ Text="请账套所属组...", Value=""}
-            };
-            foreach (DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup m in lsModels)
-            {
-                lsAppSetGroup.Add(new SelectListItem() { Text = m.ActGroupName, Value = m.ActGroupNum});
+                DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActGroupBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup> bll = Mvc.Plugin.KfCenter.BLL.kfActGroupBLL<Mvc.Plugin.KfCenter.Models.kfActGroup>.Instance();
+                IList<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup> lsModels = bll.GetList();
+                List<SelectListItem> lsAppSetGroup = new List<SelectListItem>() 
+                {
+                    new SelectListItem(){ Text="请账套所属组...", Value=""}
+                };
+                foreach (DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup m in lsModels)
+                {
+                    lsAppSetGroup.Add(new SelectListItem() { Text = m.ActGroupNum+" - "+m.ActGroupName, Value = m.ActGroupNum });
+                }
+                ViewData["lsAppSetGroup"] = lsAppSetGroup;
+
+                //登录的UI风格
+                List<SelectListItem> lsUIStyle = new List<SelectListItem>();
+                lsUIStyle.Add(new SelectListItem() { Text = "标签风格" , Value = "1" });
+                lsUIStyle.Add(new SelectListItem() { Text = "菜单风格", Value = "2" });
+                lsUIStyle.Add(new SelectListItem() { Text = "迷你风格", Value = "3" });
+                ViewData["lsUIStyle"] = lsUIStyle;
             }
-            ViewData["lsAppSetGroup"] = lsAppSetGroup;
+            catch (Exception exp)
+            {
+                LogHelper.ErrorLog("KfCenter_EditController.TreeBind", exp);
+            }
+            finally
+            {
+
+            }
+
         }
 
         private bool DoAdd()
@@ -134,7 +147,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
             model.LoginUserName = Request.Form["txtLoginUserName"].Trim();
             model.LoginPwd = Request.Form["txtLoginPwd"].Trim();
             model.DBServerName = Request.Form["txtDBServerName"].Trim();
-            model.CreateDate = DateTime.Now;
+            model.CreateDate = Utils.StrToDateTime(Request.Form["txtCreateDate"], DateTime.Now);
             //model.NewBackUpDate
             model.DBGUID = Request.Form["txtDBGUID"].Trim();
             model.DBVersion = Request.Form["txtDBVersion"].Trim();
@@ -142,7 +155,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
             model.UIStyle = Utils.StrToInt(Request.Form["txtUIStyle"].Trim(), 1);
             model.LimitCount = Utils.StrToInt(Request.Form["txtLimitCount"], 0);
             model.DBMaxSize = Utils.StrToInt(Request.Form["txtLimitCount"], 0);
-            model.EndDate = DateTime.Today.AddMonths(1);
+            model.EndDate = Utils.StrToDateTime(Request.Form["txtEndDate"], DateTime.Today.AddMonths(1));
 
             //model.site_id = Utils.StrToInt(Request.Form["ddlSiteId"], -1);
             //model.title = Request.Form["txtTitle"].Trim();
@@ -160,11 +173,22 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
             //{
             //    model.is_image = 0;
             //}
+            string old_DBServerName = model.DBServerName;
+            string old_LoginUserName = model.LoginUserName;
+            string old_LoginPwd = model.LoginPwd;
+
+            DTcms.Web.Mvc.Plugin.KfCenter.Util.EncryptTripleDes encry = new Mvc.Plugin.KfCenter.Util.EncryptTripleDes();
+            model.DBServerName = encry.Encrypt(old_DBServerName);
+            model.LoginUserName = encry.Encrypt(old_LoginUserName);
+            model.LoginPwd = encry.Encrypt(old_LoginPwd);
             if (bll.Insert(model))
             {
                 AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加数据中心：" + model.ActsetNum);
                 result = true;
             }
+            model.DBServerName = old_DBServerName;
+            model.LoginUserName = old_LoginUserName;
+            model.LoginPwd = old_LoginPwd;
             return result;
         }
 
@@ -172,29 +196,44 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         {
             bool result = false;
             DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model = bll.GetEntity(_id);
-            //model.ActsetNum = Request.Form["txtActsetNum"].Trim();
-            //model.ActsetName = Request.Form["txtActsetName"].Trim();
-            //model.ActsetDBName = Request.Form["txtActsetDBName"].Trim();
-            //model.ActsetType = Request.Form["txtActSetType"].Trim();
-            //model.ActSetGroupKey = Request.Form["txtActSetGroupKey"].Trim();
-            //model.LoginType = Request.Form["txtLoginType"].Trim();
-            //model.LoginUserName = Request.Form["txtLoginUserName"].Trim();
-            //model.LoginPwd = Request.Form["txtLoginPwd"].Trim();
-            //model.DBServerName = Request.Form["txtDBServerName"].Trim();
-            //model.CreateDate = DateTime.Now;
-            ////model.NewBackUpDate
-            //model.DBGUID = Request.Form["txtDBGUID"].Trim();
-            //model.DBVersion = Request.Form["txtDBVersion"].Trim();
-            //model.Visible = Request.Form["txtVisible"].ToLower().IndexOf("true") >= 0 ? 1 : 0;
-            //model.UIStyle = Utils.StrToInt(Request.Form["txtUIStyle"].Trim(), 1);
-            //model.LimitCount = Utils.StrToInt(Request.Form["txtLimitCount"], 0);
-            //model.DBMaxSize = Utils.StrToInt(Request.Form["txtLimitCount"], 0);
-            //model.EndDate = DateTime.Today.AddMonths(1);
+            model.ActsetNum = Request.Form["txtActsetNum"].Trim();
+            model.ActsetName = Request.Form["txtActsetName"].Trim();
+            model.ActsetDBName = Request.Form["txtActsetDBName"].Trim();
+            model.ActsetType = Request.Form["txtActSetType"].Trim();
+            model.ActSetGroupKey = Request.Form["txtActSetGroupKey"].Trim();
+            model.LoginType = Request.Form["txtLoginType"].Trim();
+            model.LoginUserName = Request.Form["txtLoginUserName"].Trim();
+            model.LoginPwd = Request.Form["txtLoginPwd"].Trim();
+            model.DBServerName = Request.Form["txtDBServerName"].Trim();
+            model.CreateDate = Utils.StrToDateTime(Request.Form["txtCreateDate"], DateTime.Now);
+            //model.NewBackUpDate
+            model.DBGUID = Request.Form["txtDBGUID"].Trim();
+            model.DBVersion = Request.Form["txtDBVersion"].Trim();
+            model.Visible = Request.Form["txtVisible"].ToLower().IndexOf("true") >= 0 ? 1 : 0;
+            model.UIStyle = Utils.StrToInt(Request.Form["txtUIStyle"].Trim(), 1);
+            model.LimitCount = Utils.StrToInt(Request.Form["txtLimitCount"], 0);
+            model.DBMaxSize = Utils.StrToInt(Request.Form["txtDBMaxSize"], 0);
+            model.EndDate = Utils.StrToDateTime(Request.Form["txtEndDate"], DateTime.Today.AddMonths(1));
+
+
+            string old_DBServerName = model.DBServerName;
+            string old_LoginUserName = model.LoginUserName;
+            string old_LoginPwd = model.LoginPwd;
+
+            DTcms.Web.Mvc.Plugin.KfCenter.Util.EncryptTripleDes encry = new Mvc.Plugin.KfCenter.Util.EncryptTripleDes();
+            model.DBServerName = encry.Encrypt(old_DBServerName);
+            model.LoginUserName = encry.Encrypt(old_LoginUserName);
+            model.LoginPwd = encry.Encrypt(old_LoginPwd);
+
             if (bll.Update(model))
             {
                 AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改数据中心：" + model.ActsetNum + "-" + model.ActsetName);
                 result = true;
             }
+
+            model.DBServerName = old_DBServerName;
+            model.LoginUserName = old_LoginUserName;
+            model.LoginPwd = old_LoginPwd;
             return result;
         }
     }

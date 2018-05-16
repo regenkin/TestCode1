@@ -11,12 +11,12 @@
 }
 @section Scripts{
    <script>
-      $(function () {
-         //初始化表单验证
-         $("#form1").initValidform();
-         //初始化上传控件
-         $(".upload-img").InitUploader({ sendurl: "/tools/upload_ajax.ashx", swf: "/scripts/webuploader/uploader.swf" });
-      });
+       $(function () {
+           //初始化表单验证
+           $("#form1").initValidform();
+           //初始化上传控件
+           $(".upload-img").InitUploader({ sendurl: "/tools/upload_ajax.ashx", swf: "/scripts/webuploader/uploader.swf" });
+       });
    </script>
 }
 <form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id">
@@ -52,10 +52,10 @@
 
 <div class="tab-content">
   <dl>
-    <dt>账套编码</dt>
+    <dt>所属站点</dt>
     <dd>
       <div class="rule-single-select">
-        @Html.TextBox("txtActsetNum", m.ActsetNum, new { @class="input normal", datatype="*2-100", sucmsg=" "})
+        @Html.DropDownList("ddlSiteId", new SelectList(siteSelectItems, "Value", "Text", m.site_id), new { datatype="*", errormsg="请选择所属站点！", sucmsg=" "})
       </div>
     </dd>
   </dl>

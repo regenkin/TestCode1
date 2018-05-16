@@ -3,8 +3,9 @@
 @{
    Layout = "~/Areas/admin/Views/Shared/_LayoutEdit.cshtml";
    ViewBag.Title = "编辑数据中心";
-   DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet m = ViewData["model"] as DTcms.Web.Mvc.Plugin.KfCenter.Model.kfActSet;
+   DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet m = ViewData["model"] as DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet;
    List<SelectListItem> lsAppSetGroup = ViewData["lsAppSetGroup"] as List<SelectListItem>;
+   List<SelectListItem> lsUIStyle = ViewData["lsUIStyle"] as List<SelectListItem>;
 }
 @section HeaderContent{
 
@@ -15,6 +16,23 @@
         //初始化表单验证
         $("#form1").initValidform();
     });
+    //测试连接
+    function btn_testcontent() {
+        var json = { txtDBServerName: $("#txtDBServerName").val(), txtLoginUserName: $("#txtLoginUserName").val(), txtLoginPwd: $("#txtLoginPwd").val(), txtActsetDBName: $("#txtActsetDBName").val() };
+        $.ajax({
+            url: "../../plugins/kfcenter/ajax.ashx?action=testdb",
+            type: "POST",
+            dataType: "html",
+            data: "json=" + JSON.stringify(json),
+            success: function (data) {
+                var rt = JSON.parse(data);
+                parent.jsprint(rt.msg,"", rt.status==1?"Success":"Error");
+            },
+            error: function () {
+                parent.jsprint("数据库连接失败!", "", "Error");
+            }
+        });
+    }
 </script>
 }
 <form id="form1" method="post" action="SubmitSave?action=@ViewBag.Action&id=@ViewBag.Id">
@@ -74,6 +92,7 @@
     <dt>数据库名称</dt>
     <dd>
         @Html.TextBox("txtActsetDBName", m.ActsetDBName, new { @class="input normal", datatype="*2-100", sucmsg=" "})
+        <a title="测试连接" class="btn witer" onclick="btn_testcontent();">测试连接</a>
     </dd>
   </dl>
   <dl>
@@ -82,12 +101,13 @@
   </dl>
   <dl>
     <dt>账套分组</dt>
-    <dd>@Html.TextBox("txtActSetGroupKey", m.ActSetGroupKey, new { @class="input normal", datatype="*0-30", sucmsg=" "})</dd>
+    <dd>
+    @Html.DropDownList("txtActSetGroupKey", new SelectList(lsAppSetGroup, "Value", "Text", m.ActSetGroupKey), new { datatype="*", errormsg="请选择所属账套分组！", sucmsg=" "})
+    </dd>
   </dl>
   <dl>
     <dt>登录类型</dt>
-    <dd>@Html.TextBox("txtLoginType", m.LoginType, new { @class="input normal", datatype="n", sucmsg=" "})</dd>
-    <span class="Validform_checktip">整数(1-100)</span>
+    <dd>@Html.TextBox("txtLoginType", m.LoginType, new { @class="input normal", datatype="n", sucmsg=" "})<span class="Validform_checktip">整数(1-100)</span></dd>
   </dl>
   <dl>
     <dt>创建日期</dt>
@@ -95,7 +115,7 @@
       <div class="date-input"><i class="iconfont icon-date"></i>
       @Html.TextBox("txtCreateDate", m.CreateDate.ToString("yyyy-MM-dd"), new { @class="input rule-date-input", datatype=@"/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/",sucmsg=" ",onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})",errormsg="请选择正确的日期"})
       </div>
-       <span class="Validform_checktip Validform_right"> </span>
+       <span class="Validform_checktip"> </span>
     </dd>
   </dl>
   <dl>
@@ -108,11 +128,18 @@
   </dl>
   <dl>
     <dt>是否可见</dt>
-    <dd>@Html.TextBox("txtVisible", m.Visible, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+    <dd>
+       <div class="rule-single-checkbox">
+         @Html.CheckBox("txtVisible", m.Visible == 1, new { id = "txtVisible" })
+      </div>
+    </dd>
+
   </dl>
   <dl>
     <dt>主界面类型</dt>
-    <dd>@Html.TextBox("txtUIStyle", m.UIStyle, new { @class="input normal", datatype="*2-100", sucmsg=" "})</dd>
+    <dd>
+        @Html.DropDownList("txtUIStyle", new SelectList(lsUIStyle, "Value", "Text", m.UIStyle), new { datatype="*", errormsg="请选择", sucmsg=" "})
+    </dd>
   </dl>
 </div>
 <!--/基本信息-->
