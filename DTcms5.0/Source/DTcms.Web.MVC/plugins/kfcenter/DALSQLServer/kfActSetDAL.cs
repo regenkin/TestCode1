@@ -100,7 +100,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.SQLServerDAL
             {
                 strSql.Append(" where " + strWhere);
             }
-            recordCount = Convert.ToInt32(DbHelperSQLByConStr.GetSingle(DTcms.Common.PagingHelper.CreateCountingSql(strSql.ToString())));
+            recordCount = Convert.ToInt32(DbHelperSQLByConStr.GetSingle(string.Format(" SELECT COUNT(1) AS RecordCount FROM ({0}) AS T ", strSql.ToString())));
             return DbHelperSQLByConStr.Query(DTcms.Common.PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
         }
         #endregion

@@ -13,58 +13,83 @@ namespace DTcms.Web.MVC.Areas.admin
         /// 运行信息
         /// </summary>
         /// <param name="info"></param>
-        public static void InfoLog(object info)
+        public static string InfoLog(object info)
         {
+            string s = GetTimeStamp();
             if (loginfo.IsInfoEnabled)
             {
-                loginfo.Info(info);
+                loginfo.Info("(" + s + ")" + info);
             }
+            return s;
         }
         /// <summary>
         /// 运行信息
         /// </summary>
         /// <param name="info"></param>
         /// <param name="se"></param>
-        public static void InfoLog(object info, Exception se)
+        public static string InfoLog(object info, Exception se)
         {
+            string s = GetTimeStamp();
             if (loginfo.IsInfoEnabled)
             {
-                loginfo.Info(info, se);
+                loginfo.Info("(" + s + ")" + info, se);
             }
+            return s;
         }
         /// <summary>
         /// 错误信息
         /// </summary>
         /// <param name="info"></param>
-        public static void ErrorLog(object info)
+        public static string ErrorLog(object info)
         {
+            string s = GetTimeStamp();
             if (logerror.IsErrorEnabled)
             {
-                logerror.Error(info);
+                logerror.Error("(" + s + ")" + info);
             }
+            return s;
         }
         /// <summary>
         /// 错误信息
         /// </summary>
         /// <param name="info"></param>
         /// <param name="se"></param>
-        public static void ErrorLog(string info, Exception se)
+        public static string ErrorLog(string info, Exception se)
         {
+            string s = GetTimeStamp();
             if (logerror.IsErrorEnabled)
             {
-                logerror.Error(info, se);
+                logerror.Error("(" + s + ")" + info, se);
             }
+            return s;
         }
         /// <summary>
         /// 调试信息
         /// </summary>
         /// <param name="obj"></param>
-        public static void DebugLog(object obj)
+        public static string DebugLog(object obj)
         {
+            string s = GetTimeStamp();
             if (logDebug.IsDebugEnabled)
             {
-                logDebug.Debug(obj);
+                logDebug.Debug("(" + s + ")" + obj);
             }
+            return s;
+        }
+        /// <summary>  
+        /// 获取当前时间戳  
+        /// </summary>  
+        /// <param name="bflag">为真时获取10位时间戳,为假时获取13位时间戳.bool bflag = true</param>  
+        /// <returns></returns>  
+        public static string GetTimeStamp(bool bflag = false)
+        {
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            string ret = string.Empty;
+            if (bflag)
+                ret = Convert.ToInt64(ts.TotalSeconds).ToString();
+            else
+                ret = Convert.ToInt64(ts.TotalMilliseconds).ToString();
+            return ret;
         }
     }
 }

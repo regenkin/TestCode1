@@ -1,10 +1,11 @@
 ﻿@using DTcms.Model;
 @using DTcms.Common;
 @using System.Data;
+@using DTcms.Web.Mvc.Plugin.KfCenter.Models;
 @{
    Layout = "~/Areas/admin/Views/Shared/_LayoutList.cshtml";
-    ViewBag.Title = "KF数据中心";
-    DataTable list = ViewData["list"] as DataTable;
+   ViewBag.Title = "KF数据中心";
+   var lskfActSet = ViewData["list"] as IList<kfActSet>;
 }
 @section HeaderContent{
    <script>
@@ -99,31 +100,31 @@
       <th align="left"  width="10%">到期日</th>
       <th width="10%">操作</th>
     </tr>
-     @foreach (DataRow row in list.Rows) {
+     @foreach (var row in lskfActSet) {
        <tr>
          <td align="center">
            <span class="checkall" style="vertical-align:middle;">
                  <input type="checkbox" />
            </span>
-           <label style="display:none">@row["id"]</label>
+           <label style="display:none">@row.ID</label>
          </td>
-         <td>@row["ActsetNum"]</td>
-         <td>@row["ActSetName"]</td>
-         <td>@row["ActsetDBName"]</td>
-         <td>@row["ActSetType"]</td>
-         <td>@(Convert.ToDateTime(row["CreateDate"]).ToString("yyyy-MM-dd HH:mm:ss"))</td>
-         <td>@row["DBGUID"]</td>
-         <td align="center">@row["LimitCount"]</td>
-         <td>@(Convert.ToDateTime(row["EndDate"]).ToString("yyyy-MM-dd"))</td>
+         <td>@row.ActsetNum</td>
+         <td>@row.ActsetName</td>
+         <td>@row.ActsetDBName</td>
+         <td>@row.ActsetType</td>
+         <td>@(Convert.ToDateTime(row.CreateDate).ToString("yyyy-MM-dd HH:mm:ss"))</td>
+         <td>@row.DBGUID</td>
+         <td align="center">@row.LimitCount</td>
+         <td>@(Convert.ToDateTime(row.EndDate).ToString("yyyy-MM-dd"))</td>
          <td align="center">
-             <a href="../kfcenter_edit/index?action=@DTEnums.ActionEnum.Edit&id=@row["id"]">修改</a> |
+             <a href="../kfcenter_edit/index?action=@DTEnums.ActionEnum.Edit&id=@row.ID">修改</a> |
              <a href="#">注销</a> |
              <a href="#">刷GUID</a> |
              <a href="#">变GUID</a>
          </td>
        </tr>        
      }
-     @if (list.Rows.Count == 0) {
+     @if (lskfActSet.Count == 0) {
         @Html.Raw("<tr><td align=\"center\" colspan=\"8\">暂无记录</td></tr>");
      }
   </table>
