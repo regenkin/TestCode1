@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
 {
+    /// <summary>
+    /// 提交数据基本格式
+    /// </summary>
     public class PostDataBase
     {
         public PostDataBase() { }
@@ -63,5 +66,43 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
         /// 数据
         /// </summary>
         public object Data { get; set; }
+    }
+
+    /// <summary>
+    /// 全局令牌
+    /// </summary>
+    public class TokenData
+    {
+        public TokenData() { }
+
+        private string _AccessToken = string.Empty;
+        /// <summary>
+        /// 全局令牌
+        /// </summary>
+        public string AccessToken
+        {
+            get { return _AccessToken; }
+            set { _AccessToken = value; }
+        }
+
+        private int? _Expire = 0;
+        /// <summary>
+        /// 令牌失效秒
+        /// </summary>
+        public int? Expire
+        {
+            get { return _Expire; }
+            set { _Expire = value; }
+        }
+
+        private DateTime _ExpireTime = DateTime.MinValue.AddDays(1);
+        /// <summary>
+        /// 令牌本机失效时间
+        /// </summary>
+        public DateTime ExpireTime
+        {
+            get { return _ExpireTime; }
+            set { _ExpireTime = value; }
+        }
     }
 }

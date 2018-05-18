@@ -144,7 +144,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
                   CurrentPage = this.page
               }
           };
-          ReturnData rData = KfHttpHelper.PostJson<PageCriteria>(WebApiUrl.KfCenter_KfActSet_GetPageData, postdata);
+          ReturnData rData = KfHttpHelper.PostJson<PageCriteria>(WebApiUrl.API_KfCenter_KfActSet_GetPageData, postdata);
           var lskfActSet = new List<kfActSet>();
           if (rData.Status == 1)
           {
