@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DTcms.Web.Mvc.Plugin.KfCenter.Factory
+namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
 {
     /// <summary>
     /// PageCriteria是一个封装查询条件相关信息的类

@@ -8,9 +8,7 @@ using System.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DTcms.Common;
-using DTcms.Web.Mvc.Plugin.KfCenter.BLL;
 using CsharpHttpHelper;
-using DTcms.Web.Mvc.Plugin.KfCenter.Factory;
 using DTcms.Web.Mvc.Plugin.KfCenter.Models;
 using DTcms.Web.Mvc.Plugin.KfCenter.Util;
 

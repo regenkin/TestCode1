@@ -16,7 +16,6 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         private const string WEB_VIEW = "~/plugins/kfcenter/Areas/admin/Views/kfcenter_edit.cshtml";
         private string action = string.Empty;
         private int id = 0;
-        private DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> bll = Mvc.Plugin.KfCenter.BLL.kfActSetBLL<Mvc.Plugin.KfCenter.Models.kfActSet>.Instance();
 
         protected override void OnAuthorization(AuthorizationContext filterContext)
         {

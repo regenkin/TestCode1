@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DTcms.Web.Mvc.Plugin.KfCenter.Factory
+namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
 {
     /// <summary>
     /// 用来装载适合所有类的分页结果类
