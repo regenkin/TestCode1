@@ -57,7 +57,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
             //获取请请求的Html
             var rData = CsharpHttpHelper.HttpHelper.JsonToObject<ReturnData>(result.Html) as ReturnData;
             //令牌失效
-            if (rData.Status == 401) _token = null;
+            if (rData != null && rData.Status == 401) _token = null;
             return rData;
         }
 
@@ -89,7 +89,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
             //获取请请求的Html
             var rData = CsharpHttpHelper.HttpHelper.JsonToObject<ReturnData>(result.Html) as ReturnData;
             //令牌失效
-            if (rData.Status == 401) _token = null;
+            if (rData != null && rData.Status == 401) _token = null;
             return rData;
         }
     }

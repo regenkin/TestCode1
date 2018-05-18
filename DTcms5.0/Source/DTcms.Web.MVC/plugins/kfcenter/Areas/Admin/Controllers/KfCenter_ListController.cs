@@ -131,8 +131,6 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
 
       #region 数据绑定=================================
       private void RptBind(string _strWhere, string _orderby) {
-          DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> bll = new DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>();
-
           PostData<PageCriteria> postdata = new PostData<PageCriteria>()
           {
               data = new PageCriteria()
@@ -149,6 +147,8 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
           if (rData.Status == 1)
           {
               var pdv = HttpHelper.JsonToObject<PageDataView<kfActSet>>(rData.Data.ToString()) as PageDataView<kfActSet>;
+              this.page = pdv.CurrentPage;
+              this.totalCount = pdv.TotalNum;
               lskfActSet = pdv.Items as List<kfActSet>;
           }
          ViewData["list"] = lskfActSet;

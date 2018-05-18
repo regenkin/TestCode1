@@ -3726,3 +3726,5 @@ Kf.CRM/dll/KfCrm.DAL.pdb
 DTcms4.0/DTcms.Web/upload/201805/14/201805142259391078.png
 DTcms5.0/Source/DTcms.Common/obj/Debug/DTcms.Common.csprojResolveAssemblyReference.cache
 /DTcms5.0/Source/DTcms.Web.MVC/Log
+/DTcms5.0/Source/DTcms.Web.MVC/bin/log4net.dll
+/DTcms5.0/Source/DTcms.Web.MVC/bin/HttpHelper.dll

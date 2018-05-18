@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data;
 using DTcms.Common;
+using DTcms.Web.Mvc.Plugin.KfCenter.Util;
+using CsharpHttpHelper;
 
 
 namespace DTcms.Web.MVC.Areas.admin.Controllers
@@ -191,11 +193,17 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
             model.DBServerName = encry.Encrypt(old_DBServerName);
             model.LoginUserName = encry.Encrypt(old_LoginUserName);
             model.LoginPwd = encry.Encrypt(old_LoginPwd);
-            if (bll.Insert(model))
+
+            //api保存
+            PostData<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> postdata = new PostData<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(){data = model };
+            ReturnData rData = KfHttpHelper.PostJson<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(WebApiUrl.API_KfCenter_KfActSet_Save, postdata);
+            if (rData.Status == 1)
             {
+                model = HttpHelper.JsonToObject<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(rData.Data.ToString()) as DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet;
                 AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加数据中心：" + model.ActsetNum);
                 result = true;
             }
+
             model.DBServerName = old_DBServerName;
             model.LoginUserName = old_LoginUserName;
             model.LoginPwd = old_LoginPwd;
@@ -235,8 +243,12 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
             model.LoginUserName = encry.Encrypt(old_LoginUserName);
             model.LoginPwd = encry.Encrypt(old_LoginPwd);
 
-            if (bll.Update(model))
+            //api保存
+            PostData<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> postdata = new PostData<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>() { data = model };
+            ReturnData rData = KfHttpHelper.PostJson<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(WebApiUrl.API_KfCenter_KfActSet_Save, postdata);
+            if (rData.Status == 1)
             {
+                model = HttpHelper.JsonToObject<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(rData.Data.ToString()) as DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet;
                 AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改数据中心：" + model.ActsetNum + "-" + model.ActsetName);
                 result = true;
             }
