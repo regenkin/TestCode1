@@ -34,6 +34,9 @@
     <Reference Include="Dapper">
       <HintPath>..\..\..\Library\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="HttpHelper">
+      <HintPath>..\..\..\Library\HttpHelper.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\Library\log4net.dll</HintPath>
     </Reference>
@@ -94,7 +97,12 @@
     <Compile Include="Areas\Admin\Controllers\KfCenter_ListController.cs" />
     <Compile Include="Areas\Admin\Controllers\KfCenter_EditController.cs" />
     <Compile Include="Factory\CommandInfo.cs" />
+    <Compile Include="Factory\PageCriteria.cs" />
+    <Compile Include="Factory\PageDataView.cs" />
     <Compile Include="Util\EncryptTripleDes.cs" />
+    <Compile Include="Util\HttpData.cs" />
+    <Compile Include="Util\KfHttpHelper.cs" />
+    <Compile Include="Util\WebApiUrl.cs" />
     <None Include="Areas\Admin\Views\KfCenter_Edit.cshtml" />
     <Compile Include="BLL\BaseBLL.cs" />
     <Compile Include="BLL\kfActGroupBLL.cs" />

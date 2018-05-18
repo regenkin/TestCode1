@@ -36,6 +36,11 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.BLL
         {
             return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
         }
+
+        public PageDataView<T> GetPageList(int pageSize, int pageIndex, string strWhere, string filedOrder)
+        {
+            return null;
+        }
         #endregion
     }
 }

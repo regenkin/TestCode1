@@ -9,6 +9,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DTcms.Common;
 using DTcms.Web.Mvc.Plugin.KfCenter.BLL;
+using CsharpHttpHelper;
+using DTcms.Web.Mvc.Plugin.KfCenter.Factory;
+using DTcms.Web.Mvc.Plugin.KfCenter.Models;
+using DTcms.Web.Mvc.Plugin.KfCenter.Util;
 
 namespace DTcms.Web.MVC.Areas.admin.Controllers {
     public class KfCenter_ListController : DTcms.Web.MVC.UI.Controllers.ManageController
@@ -128,15 +132,26 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers {
       #region 数据绑定=================================
       private void RptBind(string _strWhere, string _orderby) {
           DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> bll = new DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>();
-         DataSet ds = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
-         DataTable list = null;
-         if (ds.Tables.Count > 0) {
-            list = ds.Tables[0];
-         }
-         else {
-            list = new DataTable();
-         }
-         ViewData["list"] = list;
+
+          PostData<PageCriteria> postdata = new PostData<PageCriteria>()
+          {
+              data = new PageCriteria()
+              {
+                  TableName = "kfactset",
+                  PageSize = this.pageSize,
+                  Condition = _strWhere,
+                  Sort = _orderby,
+                  CurrentPage = this.page
+              }
+          };
+          ReturnData rData = KfHttpHelper.PostJson<PageCriteria>(WebApiUrl.API_KfCenter_KfActSet_GetPageData, postdata);
+          var lskfActSet = new List<kfActSet>();
+          if (rData.Status == 1)
+          {
+              var pdv = HttpHelper.JsonToObject<PageDataView<kfActSet>>(rData.Data.ToString()) as PageDataView<kfActSet>;
+              lskfActSet = pdv.Items as List<kfActSet>;
+          }
+         ViewData["list"] = lskfActSet;
          string pageUrl = Utils.CombUrlTxt("index", "keywords={0}&page={1}", this.keywords, "__id__");
          ViewBag.PageContent = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
       }
