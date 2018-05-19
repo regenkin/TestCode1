@@ -9,6 +9,7 @@ using System.Web.SessionState;
 using System.Xml;
 using DTcms.Web.MVC.UI;
 using DTcms.Common;
+using DTcms.Web.Mvc.Plugin.KfCenter.Util;
 
 namespace DTcms.Web.Mvc.Plugin.KfCenter
 {
@@ -26,7 +27,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
             switch (action)
             {
                 case "testdb": //测试数据库连接
-                    TestDB(context);
+                    TestDBConnecy(context);
                     break;
             }
 
@@ -384,7 +385,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
         /// 测试数据库连接
         /// </summary>
         /// <param name="context"></param>
-        private void TestDB(HttpContext context)
+        private void TestDBConnecy(HttpContext context)
         {
             try
             {
@@ -394,37 +395,12 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter
                 Newtonsoft.Json.Linq.JToken jtxtLoginUserName = jobject["txtLoginUserName"];
                 Newtonsoft.Json.Linq.JToken jtxtLoginPwd = jobject["txtLoginPwd"];
                 Newtonsoft.Json.Linq.JToken jtxtActsetDBName = jobject["txtActsetDBName"];
-
-                string ConnectionString = string.Format("server={0};uid={1};pwd={2};database={3};Connection Lifetime=30", jtxtDBServerName, jtxtLoginUserName, jtxtLoginPwd, jtxtActsetDBName);
-                bool IsCanConnectioned = true;
-                //创建连接对象
-                System.Data.SqlClient.SqlConnection mySqlConnection = new System.Data.SqlClient.SqlConnection(ConnectionString);
-                //如：server=.;uid=sa;pwd=;database=PMIS;Integrated Security=SSPI; Connection Timeout=30
-                try
-                {
-                    if (!string.IsNullOrWhiteSpace(jtxtActsetDBName.ToString()))
-                    {
-                        mySqlConnection.Open();
-                        IsCanConnectioned = true;
-                    }
-                    else
-                        IsCanConnectioned = false;
-                }
-                catch
-                {
-                    //Can not Open DataBase
-                    //打开不成功 则连接不成功
-                    IsCanConnectioned = false;
-                }
-                finally
-                {
-                    //关闭数据库连接
-                    mySqlConnection.Close();
-                }
-                if(IsCanConnectioned)
-                    context.Response.Write("{\"status\": 1,\"msg\": \"连接成功\"}");
-                else
-                    context.Response.Write("{\"status\": 0,\"msg\": \"连接失败\"}");
+                //"data":{"DBServerName","","ActsetDBName","","LoginUserName","","LoginPwd","",}
+                //api保存
+                PostData<string> postdata = new PostData<string>() { data = string.Format(@"{{""DBServerName"":""{0}"",""ActsetDBName"":""{1}"",""LoginUserName"":""{2}"",""LoginPwd"":""{3}"",}}", jtxtDBServerName, jtxtActsetDBName, jtxtLoginUserName, jtxtLoginPwd) };
+                ReturnData rData = KfHttpHelper.PostJson<string>(WebApiUrl.API_KfCenter_KfActSet_TestActSetConnection, postdata);
+                if (rData.Status == 1) { context.Response.Write("{\"status\": 1,\"msg\": \"连接成功\"}"); }
+                else { context.Response.Write("{\"status\": 0,\"msg\": \"" + rData.Message+ "\"}"); }
             }
             catch (Exception exp)
             {

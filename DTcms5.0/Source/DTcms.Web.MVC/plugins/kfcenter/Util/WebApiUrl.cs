@@ -17,6 +17,26 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
         /// 保存
         /// </summary>
         public const string API_KfCenter_KfActSet_Save = API+"/api/KfCenter/KfActSet/Save";
+        /// <summary>
+        /// 存在
+        /// </summary>
+        public const string API_KfCenter_KfActSet_Exist = API + "/api/KfCenter/KfActSet/Exist";
+        /// <summary>
+        /// 存在
+        /// </summary>
+        public const string API_KfCenter_KfActSet_GetEntity = API + "/api/KfCenter/KfActSet/GetEntity";
+        /// <summary>
+        /// 获取分组列表
+        /// </summary>
+        public const string API_KfCenter_KfActSet_TestActSetConnection = API + "/api/KfCenter/KfActSet/TestActSetConnection";
+
+
+
+        /// <summary>
+        /// 获取分组列表
+        /// </summary>
+        public const string API_KfCenter_KfActGroup_GetAllList = API + "/api/KfCenter/KfActGroup/GetAllList";
+
         #endregion
         #region OAth
         /// <summary>
