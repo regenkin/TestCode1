@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data;
 using DTcms.Common;
+using DTcms.Web.Mvc.Plugin.KfCenter.Util;
+using CsharpHttpHelper;
 
 
 namespace DTcms.Web.MVC.Areas.admin.Controllers
@@ -14,7 +16,6 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         private const string WEB_VIEW = "~/plugins/kfcenter/Areas/admin/Views/kfcenter_edit.cshtml";
         private string action = string.Empty;
         private int id = 0;
-        private DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActSetBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> bll = Mvc.Plugin.KfCenter.BLL.kfActSetBLL<Mvc.Plugin.KfCenter.Models.kfActSet>.Instance();
 
         protected override void OnAuthorization(AuthorizationContext filterContext)
         {
@@ -38,7 +39,12 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
                     JscriptMsg("传输参数不正确！", "back");
                     filterContext.Result = result;
                 }
-                if (bll.GetEntity(this.id) == null)
+
+                //api保存
+                PostData<int> postdata = new PostData<int>() { data = this.id };
+                ReturnData rData = KfHttpHelper.PostJson<int>(WebApiUrl.API_KfCenter_KfActSet_Exist, postdata);
+                if (rData.Status == 1) { }
+                else
                 {
                     JscriptMsg("内容不存在或已被删除！", "back");
                     filterContext.Result = result;
@@ -98,7 +104,14 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
 
         private void ShowInfo(int _id)
         {
-            DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model = bll.GetEntity(this.id);
+            DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model=new Mvc.Plugin.KfCenter.Models.kfActSet();
+            //api获取model
+            PostData<int> postdata = new PostData<int>() { data = _id };
+            ReturnData rData = KfHttpHelper.PostJson<int>(WebApiUrl.API_KfCenter_KfActSet_GetEntity, postdata);
+            if (rData.Status == 1)
+            {
+                model = CsharpHttpHelper.HttpHelper.JsonToObject<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(rData.Data.ToString()) as DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet;
+            }
             ViewData["model"] = model;
             if (model != null)
             {
@@ -113,8 +126,15 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         {
             try
             {
-                DTcms.Web.Mvc.Plugin.KfCenter.BLL.kfActGroupBLL<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup> bll = Mvc.Plugin.KfCenter.BLL.kfActGroupBLL<Mvc.Plugin.KfCenter.Models.kfActGroup>.Instance();
-                IList<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup> lsModels = bll.GetList();
+                IList<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup> lsModels = null;
+
+                //api获取账套组列表
+                PostData<string> postdata = new PostData<string>();
+                ReturnData rData = KfHttpHelper.PostJson<string>(WebApiUrl.API_KfCenter_KfActGroup_GetAllList, postdata);
+                if (rData.Status == 1)
+                {
+                    lsModels = CsharpHttpHelper.HttpHelper.JsonToObject<IList<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup>>(rData.Data.ToString()) as IList<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActGroup>;
+                }
                 List<SelectListItem> lsAppSetGroup = new List<SelectListItem>() 
                 {
                     new SelectListItem(){ Text="请账套所属组...", Value=""}
@@ -191,11 +211,17 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
             model.DBServerName = encry.Encrypt(old_DBServerName);
             model.LoginUserName = encry.Encrypt(old_LoginUserName);
             model.LoginPwd = encry.Encrypt(old_LoginPwd);
-            if (bll.Insert(model))
+
+            //api保存
+            PostData<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> postdata = new PostData<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(){data = model };
+            ReturnData rData = KfHttpHelper.PostJson<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(WebApiUrl.API_KfCenter_KfActSet_Save, postdata);
+            if (rData.Status == 1)
             {
+                model = HttpHelper.JsonToObject<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(rData.Data.ToString()) as DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet;
                 AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加数据中心：" + model.ActsetNum);
                 result = true;
             }
+
             model.DBServerName = old_DBServerName;
             model.LoginUserName = old_LoginUserName;
             model.LoginPwd = old_LoginPwd;
@@ -205,7 +231,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
         private bool DoEdit(int _id)
         {
             bool result = false;
-            DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model = bll.GetEntity(_id);
+            DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model = GetEntityByID(_id);
             model.ActsetNum = Request.Form["txtActsetNum"].Trim();
             model.ActsetName = Request.Form["txtActsetName"].Trim();
             model.ActsetDBName = Request.Form["txtActsetDBName"].Trim();
@@ -235,8 +261,12 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
             model.LoginUserName = encry.Encrypt(old_LoginUserName);
             model.LoginPwd = encry.Encrypt(old_LoginPwd);
 
-            if (bll.Update(model))
+            //api保存
+            PostData<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet> postdata = new PostData<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>() { data = model };
+            ReturnData rData = KfHttpHelper.PostJson<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(WebApiUrl.API_KfCenter_KfActSet_Save, postdata);
+            if (rData.Status == 1)
             {
+                model = HttpHelper.JsonToObject<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(rData.Data.ToString()) as DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet;
                 AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改数据中心：" + model.ActsetNum + "-" + model.ActsetName);
                 result = true;
             }
@@ -245,6 +275,24 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
             model.LoginUserName = old_LoginUserName;
             model.LoginPwd = old_LoginPwd;
             return result;
+        }
+
+        /// <summary>
+        /// api 获取model
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet GetEntityByID(int id)
+        {
+            DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet model=null;
+            //api获取model
+            PostData<int> postdata = new PostData<int>() { data = id };
+            ReturnData rData = KfHttpHelper.PostJson<int>(WebApiUrl.API_KfCenter_KfActSet_GetEntity, postdata);
+            if (rData.Status == 1)
+            {
+                model = CsharpHttpHelper.HttpHelper.JsonToObject<DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet>(rData.Data.ToString()) as DTcms.Web.Mvc.Plugin.KfCenter.Models.kfActSet;
+            }
+            return model;
         }
     }
 }
