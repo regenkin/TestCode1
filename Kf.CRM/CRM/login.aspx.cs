@@ -193,9 +193,9 @@ namespace XHD.CRM
             get { return _accesstoken; }
             set { _accesstoken = value; }
         }
-        private System.DateTime _expire;
+        private int _expire;
 
-        public System.DateTime Expire
+        public int Expire
         {
             get { return _expire; }
             set { _expire = value; }
