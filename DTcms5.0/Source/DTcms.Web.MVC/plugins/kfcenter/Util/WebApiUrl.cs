@@ -6,8 +6,8 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
 {
     public class WebApiUrl
     {
-        public const string API = "http://localhost:900";
-        //public const string API = "http://webapi.kinfar.net";
+        //public const string API = "http://localhost:900";
+        public const string API = "http://webapi.kinfar.net";
 
         #region KfCenter
         /// <summary>
