@@ -974,6 +974,7 @@ namespace DTcms.Web.admin.article
                     JscriptMsg("保存过程中发生错误啦！", string.Empty);
                     return;
                 }
+
                 JscriptMsg("修改信息成功！", "article_list.aspx?channel_id=" + this.channel_id);
             }
             else //添加
@@ -984,9 +985,73 @@ namespace DTcms.Web.admin.article
                     JscriptMsg("保存过程中发生错误！", string.Empty);
                     return;
                 }
+
                 JscriptMsg("添加信息成功！", "article_list.aspx?channel_id=" + this.channel_id);
             }
         }
 
+        /// <summary>
+        /// 生成静态页
+        /// </summary>
+        /// <param name="lang"></param>
+        /// <param name="aspx_filename"></param>
+        /// <param name="catalogue"></param>
+        private void CreateIndexHtml(int _id)
+        {
+            BLL.channel_site objchannel_site = new BLL.channel_site();//系统站点
+            Model.siteconfig config = new BLL.siteconfig().loadConfig();//站点配置
+            BLL.article bll = new BLL.article();
+            Model.article model = bll.GetModel(_id);
+
+            BLL.url_rewrite bllurl = new BLL.url_rewrite();
+            Model.url_rewrite modelurl = bllurl.GetInfo("www_blog_content");
+
+            foreach (Model.url_rewrite_item modelt in modelurl.url_rewrite_items)
+            {
+                string strvalue = string.IsNullOrEmpty(model.call_index.ToString()) ? model.id.ToString() : model.call_index.ToString();
+                string querystr = Regex.Replace(string.Format(modelt.path, strvalue), modelt.pattern, modelt.querystring, RegexOptions.None | RegexOptions.IgnoreCase);
+                string linkurl = string.Format("{0}/{1}/{2}?{3}", DTKeys.DIRECTORY_REWRITE_ASPX, lang, modelurl.page, querystr);
+                string HTMLPattern = string.Format("{0}/{1}/{2}", DTKeys.DIRECTORY_REWRITE_HTML, lang, Utils.GetUrlExtension(string.Format(modelt.path, strvalue), config.staticextension)); //替换扩展名
+
+
+                string aspx_filename = siteConfig.webpath + DTKeys.DIRECTORY_REWRITE_ASPX + "/" + model.build_path;
+                string catalogue = siteConfig.webpath + DTKeys.DIRECTORY_REWRITE_HTML + "/" + model.build_path;
+                if (System.IO.File.Exists(Utils.GetMapPath(config.webpath + aspx_filename.Substring(0, aspx_filename.IndexOf(".aspx") + 5))))
+                {
+
+                    string urlPath = config.webpath + aspx_filename.Replace("^", "&"); //文件相对路径
+                    string htmlPath = config.webpath + catalogue; //保存相对路径
+                    if (htmlPath.IndexOf(".") < 0)
+                        htmlPath = htmlPath + "index." + config.staticextension;
+                    //检查目录是否存在
+                    string directorystr = HttpContext.Current.Server.MapPath(htmlPath.Substring(0, htmlPath.LastIndexOf("/")));
+                    if (!System.IO.Directory.Exists(directorystr))
+                    {
+                        System.IO.Directory.CreateDirectory(directorystr);
+                    }
+                    string linkwebsite = HttpContext.Current.Request.Url.Authority;
+
+                    Model.channel_site modelchannelsite = objchannel_site.GetModel(lang);
+                    if (modelchannelsite != null && !string.IsNullOrEmpty(modelchannelsite.domain))
+                        linkwebsite = modelchannelsite.domain;
+                    System.Net.WebRequest request = System.Net.WebRequest.Create("http://" + linkwebsite + urlPath);
+                    System.Net.WebResponse response = request.GetResponse();
+                    System.IO.Stream stream = response.GetResponseStream();
+                    System.IO.StreamReader streamreader = new System.IO.StreamReader(stream, System.Text.Encoding.GetEncoding("utf-8"));
+                    string content = streamreader.ReadToEnd();
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(Utils.GetMapPath(htmlPath), false, Encoding.UTF8))
+                    {
+
+                        sw.WriteLine(content);
+                        sw.Flush();
+                        sw.Close();
+                    }
+                }
+                else
+                {
+                    HttpContext.Current.Response.Write("1");//找不到生成的模版！
+                }
+            }
+        }
     }
 }
