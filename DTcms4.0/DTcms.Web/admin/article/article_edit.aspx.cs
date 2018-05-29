@@ -992,6 +992,7 @@ namespace DTcms.Web.admin.article
             }
         }
 
+        #region 保存自动生成静态页
         /// <summary>
         /// 生成静态页
         /// </summary>
@@ -1080,6 +1081,7 @@ namespace DTcms.Web.admin.article
             else
                 return 1;
         }
+        #endregion
         #endregion
     }
 }

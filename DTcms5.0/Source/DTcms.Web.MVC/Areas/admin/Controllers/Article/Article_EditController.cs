@@ -98,6 +98,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
                 return result;
              }
              JscriptMsg("修改信息成功！", "../article_list/index?channel_id=" + this.channel_id);
+             CreateIndexHtml(this.id);
           }
           else //添加
             {
@@ -107,6 +108,7 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
                 return result;
              }
              JscriptMsg("添加信息成功！", "../article_list/index?channel_id=" + this.channel_id);
+             CreateIndexHtml(this.id);
           }
           return result;
        }
@@ -618,6 +620,106 @@ namespace DTcms.Web.MVC.Areas.admin.Controllers
                 errorCount++;
           }
           return Content(sucCount.ToString());
+       }
+       #endregion
+
+       #region 保存自动生成静态页
+       /// <summary>
+       /// 生成静态页
+       /// </summary>
+       /// <param name="lang"></param>
+       /// <param name="aspx_filename"></param>
+       /// <param name="catalogue"></param>
+       private void CreateIndexHtml(int _id)
+       {
+           if (get_builder_status() != 1) return;//没有开启生成静态页
+           BLL.sites objchannel_site = new BLL.sites();//系统站点
+           Model.sysconfig config = new BLL.sysconfig().loadConfig();//站点配置
+           BLL.site_channel objchannel = new BLL.site_channel();//系统站点
+           BLL.article bll = new BLL.article();//文章
+
+           BLL.url_rewrite bllurl = new BLL.url_rewrite();
+
+           List<Model.url_rewrite> lsmodelurl = bllurl.GetList(this.channelModel.name);
+
+           foreach (Model.url_rewrite modelurl in lsmodelurl)
+           {
+               if (modelurl.type == "detail")
+               {
+                   Model.article model = bll.GetModel(this.channel_id, _id);
+                   Model.site_channel mChannel = objchannel.GetModel(this.channel_id);
+                   Model.sites modelchannelsite = objchannel_site.GetModel(mChannel.site_id);
+                   foreach (Model.url_rewrite_item modelt in modelurl.url_rewrite_items)
+                   {
+                       string strvalue = string.IsNullOrEmpty(model.call_index.ToString()) ? model.id.ToString() : model.call_index.ToString();
+                       string querystr = Regex.Replace(string.Format(modelt.path, strvalue), modelt.pattern, modelt.querystring, RegexOptions.None | RegexOptions.IgnoreCase);
+                       string linkurl = string.Format("{0}/{1}/{2}?{3}", DTKeys.DIRECTORY_REWRITE_ASPX, modelchannelsite.build_path, modelurl.page, querystr);
+                       string HTMLPattern = string.Format("{0}/{1}/{2}", DTKeys.DIRECTORY_REWRITE_HTML, modelchannelsite.build_path, Utils.GetUrlExtension(string.Format(modelt.path, strvalue), config.staticextension)); //替换扩展名
+
+                       string aspx_filename = linkurl;//siteConfig.webpath + DTKeys.DIRECTORY_REWRITE_ASPX + "/" + model.build_path;
+                       string catalogue = HTMLPattern;//siteConfig.webpath + DTKeys.DIRECTORY_REWRITE_HTML + "/" + model.build_path;
+                       if (System.IO.File.Exists(Utils.GetMapPath(config.webpath + aspx_filename.Substring(0, aspx_filename.IndexOf(".aspx") + 5))))
+                       {
+
+                           string urlPath = config.webpath + aspx_filename.Replace("^", "&"); //文件相对路径
+                           string htmlPath = config.webpath + catalogue; //保存相对路径
+                           if (htmlPath.IndexOf(".") < 0)
+                               htmlPath = htmlPath + "index." + config.staticextension;
+                           //检查目录是否存在
+                           string directorystr = Server.MapPath(htmlPath.Substring(0, htmlPath.LastIndexOf("/")));
+                           if (!System.IO.Directory.Exists(directorystr))
+                           {
+                               System.IO.Directory.CreateDirectory(directorystr);
+                           }
+                           string linkwebsite = Request.Url.Authority;
+
+                           if (modelchannelsite != null && !string.IsNullOrEmpty(modelchannelsite.domain))
+                               linkwebsite = modelchannelsite.domain;
+                           System.Net.WebRequest request = System.Net.WebRequest.Create("http://" + linkwebsite + urlPath);
+                           System.Net.WebResponse response = request.GetResponse();
+                           System.IO.Stream stream = response.GetResponseStream();
+                           System.IO.StreamReader streamreader = new System.IO.StreamReader(stream, System.Text.Encoding.GetEncoding("utf-8"));
+                           string content = streamreader.ReadToEnd();
+                           using (System.IO.StreamWriter sw = new System.IO.StreamWriter(Utils.GetMapPath(htmlPath), false, Encoding.UTF8))
+                           {
+
+                               sw.WriteLine(content);
+                               sw.Flush();
+                               sw.Close();
+                           }
+                       }
+                       else
+                       {
+                           //HttpContext.Current.Response.Write("1");//找不到生成的模版！
+                       }
+                   }
+               }
+           }
+       }
+       /// <summary>
+       /// 判断是否登陆以及是否开启静态
+       /// </summary>
+       /// <returns></returns>
+       private int get_builder_status()
+       {
+           //取得管理员登录信息
+           Model.manager adminInfo = new DTcms.Web.MVC.UI.Controllers.ManageController().GetAdminInfo();
+           if (adminInfo == null)
+           {
+               return -1;
+           }
+           else if (!new BLL.manager_role().Exists(adminInfo.role_id, "sys_builder_html", DTEnums.ActionEnum.Build.ToString()))
+           {
+               return -2;
+           }
+           else if (sysConfig.staticstatus != 2)
+           {
+               return -3;
+           }
+           else
+           {
+               return 1;
+           }
        }
        #endregion
     }
