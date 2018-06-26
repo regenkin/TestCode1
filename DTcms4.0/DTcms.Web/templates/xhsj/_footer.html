@@ -35,7 +35,7 @@
                                 <div class="footer_link_title">
                                     友情链接</div>
                                 <ul id="frientLinks">
-                                    <%set DataTable linkTxt=get_plugin_method("DTcms.Web.Plugin.Link", "link", "get_link_list", 0, "is_lock=0 and is_image=0 and is_red=1")%>
+                                    <%set DataTable linkTxt=get_plugin_method("DTcms.Web.Plugin.Link", "link", "get_link_list", 6, "is_lock=0 and is_image=0 and is_red=1")%>
                                     <%foreach(DataRow dr in linkTxt.Rows)%>
                                     <li><a href="{dr[site_url]}" target="_blank">{dr[title]}</a> </li>
                                     <%/foreach%>

@@ -28,6 +28,12 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1155,7 +1161,6 @@
     <Content Include="templates\xhsj\video_list.html" />
     <Content Include="templates\xhsj\video_show.html" />
     <Content Include="templates\xhsj\v_yun_list.html" />
-    <Content Include="templates\xhsj\www_about.html" />
     <Content Include="templates\xhsj\www_about_show.html" />
     <Content Include="templates\xhsj\www_blog.html" />
     <Content Include="templates\xhsj\www_blog_content.html" />
