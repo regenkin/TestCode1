@@ -3730,3 +3730,14 @@ DTcms5.0/Source/DTcms.Common/obj/Debug/DTcms.Common.csprojResolveAssemblyReferen
 /DTcms5.0/Source/DTcms.Web.MVC/bin/HttpHelper.dll
 /DTcms4.0/DTcms.Web/aspx
 /DTcms4.0/DTcms.Web/html
+/DTcms4.0/DTcms.Model/*
+/DTcms4.0/DTcms.Web.UI/*
+/DTcms4.0/DTcms.Web/*
+/DTcms4.0/DTcms.Web/plugins/feedback/*
+/DTcms4.0/DTcms.Web/plugins/link/*
+/DTcms4.0/DTcms.API/*
+/DTcms4.0/DTcms.BLL/*
+/DTcms4.0/DTcms.Common/*
+/DTcms4.0/DTcms.DAL/*
+/DTcms4.0/DTcms.DBUtility/*
+/DTcms4.0/.vs
