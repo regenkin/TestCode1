@@ -325,10 +325,12 @@ namespace DTcms.Web.UI
                 string content = streamreader.ReadToEnd();
                 using (StreamWriter sw = new StreamWriter(Utils.GetMapPath(htmlPath), false, Encoding.UTF8))
                 {
-
                     sw.WriteLine(content);
                     sw.Flush();
                     sw.Close();
+
+
+                    File.Copy(Utils.GetMapPath(htmlPath), Utils.GetMapPath("/index.html"));
                 }
             }
             else

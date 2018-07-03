@@ -38,7 +38,7 @@ namespace DTcms.Web.admin.settings
             webpath.Text = model.webpath;
             webmanagepath.Text = model.webmanagepath;
             staticstatus.SelectedValue = model.staticstatus.ToString();
-            staticextension.Text = model.staticextension;
+            staticextension.Text = "html";// model.staticextension;
             if (model.memberstatus == 1)
             {
                 memberstatus.Checked = true;
@@ -163,7 +163,7 @@ namespace DTcms.Web.admin.settings
                 model.webpath = webpath.Text;
                 model.webmanagepath = webmanagepath.Text;
                 model.staticstatus = Utils.StrToInt(staticstatus.SelectedValue, 0);
-                model.staticextension = staticextension.Text;
+                model.staticextension = "html";// staticextension.Text;
                 if (memberstatus.Checked == true)
                 {
                     model.memberstatus = 1;

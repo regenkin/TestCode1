@@ -140,7 +140,7 @@
   <dl>
     <dt>静态URL后缀</dt>
     <dd>
-      <asp:TextBox ID="staticextension" runat="server" CssClass="input small" datatype="*1-100" sucmsg=" " />
+      <asp:TextBox ID="staticextension" runat="server" CssClass="input small" datatype="*1-100" sucmsg=" " Text="html"/>
       <span class="Validform_checktip">*扩展名，不包括“.”，访问或生成时将会替换此值，如：aspx、html</span>
     </dd>
   </dl>
