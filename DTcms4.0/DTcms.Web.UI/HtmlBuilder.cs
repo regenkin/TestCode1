@@ -328,8 +328,14 @@ namespace DTcms.Web.UI
                     sw.WriteLine(content);
                     sw.Flush();
                     sw.Close();
+                }
+                using (StreamWriter sw = new StreamWriter(Utils.GetMapPath("/index.html"), false, Encoding.UTF8))
+                {
+                    sw.WriteLine(content);
+                    sw.Flush();
+                    sw.Close();
 
-                    File.Copy(Utils.GetMapPath(htmlPath), Utils.GetMapPath("/index.html"),true);
+
                 }
             }
             else
