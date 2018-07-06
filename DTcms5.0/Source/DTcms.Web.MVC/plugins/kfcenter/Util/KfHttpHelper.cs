@@ -35,6 +35,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
         /// <typeparam name="T"></typeparam>
         /// <param name="url"></param>
         /// <param name="postdata"></param>
+        /// <param name="checktoken"></param>
         /// <returns></returns>
         public static ReturnData PostJson<T>(string url, PostData<T> postdata,bool checktoken=true)
         {
@@ -67,6 +68,7 @@ namespace DTcms.Web.Mvc.Plugin.KfCenter.Util
         /// <typeparam name="T"></typeparam>
         /// <param name="url"></param>
         /// <param name="postdata"></param>
+        /// <param name="checktoken"></param>
         /// <returns></returns>
         public static ReturnData GetJson<T>(string url, PostData<T> postdata, bool checktoken = true)
         {
