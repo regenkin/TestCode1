@@ -976,6 +976,8 @@
     <Content Include="templates\xhsj\down_list.html" />
     <Content Include="templates\xhsj\down_show.html" />
     <Content Include="templates\xhsj\error.html" />
+    <Content Include="templates\xhsj\football_list.html" />
+    <Content Include="templates\xhsj\football_show.html" />
     <Content Include="templates\xhsj\goods.html" />
     <Content Include="templates\xhsj\goods_list.html" />
     <Content Include="templates\xhsj\goods_show.html" />
@@ -1158,7 +1160,9 @@
     <Content Include="templates\xhsj\userorder_show.html" />
     <Content Include="templates\xhsj\userpoint.html" />
     <Content Include="templates\xhsj\video.html" />
+    <Content Include="templates\xhsj\fl.html" />
     <Content Include="templates\xhsj\video_list.html" />
+    <Content Include="templates\xhsj\fs.html" />
     <Content Include="templates\xhsj\video_show.html" />
     <Content Include="templates\xhsj\v_yun_list.html" />
     <Content Include="templates\xhsj\www_about_show.html" />
