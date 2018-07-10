@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="content-language" content="zh-CN" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="applicable-device" content="pc,mobile" />
+    <%set string category_title=get_category_title(model.category_id,"新闻资讯")%>
+    <title>{model.title} - {category_title} - {site.name}</title>
+    <meta name="keywords" content="{model.seo_keywords}" />
+    <meta name="description" content="{model.seo_description}" />
+    <meta name="author" content="order by kinfar.net" />
+    <meta name="renderer" content="webkit" />
+    <script src="http://www.redianzhishu.com/public/js/jquery.min.js"></script>
+    <script src="http://www.redianzhishu.com/public/js/bootstrap.min.js"></script>
+    <link href="/favicon.ico" rel="shortcut icon" />
+    <link href="http://www.redianzhishu.com/public/css/bootstrap.min.css?v=5" rel="stylesheet" type="text/css" />
+    <link href="http://www.redianzhishu.com/public/css/basenew.css?v=5" rel="stylesheet" type="text/css" />
+</head>
+<body style="clear: both;width: 100%;margin: 0 auto;">
+    <div class="container">
+        <div class="row top10">
+            <STYLE>
+                .tab-content>.active {
+                display: block;
+                margin-right: 10px;
+                margin-left: 10px;
+                }
+            </STYLE>
+            <div class="container" style="margin-bottom: 5px;"></div>
+            <div class="col-md-12">
+                <div class="carousel-inner">
+                    <div class="row">
+                        <div id="myTabContent" class="tab-content">
+                            <ul class="nav nav-tabs">
+                                <li style="width:50%;text-align:center;" class="active"><a href="#live" data-toggle="tab">{model.title}</a></li>
+                            </ul>
+                            <div style="margin-bottom: 10px;"></div>
+                            <div class="tab-pane fade in active" id="live">
+                                <div style="margin-bottom: 10px;"></div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <script src="http://www.redianzhishu.com/public/js/common.js" type="text/javascript"></script>
+    <script src="http://www.redianzhishu.com/app/rank/js/extend.func.js" type="text/javascript"></script>
+</body>
+</html>
