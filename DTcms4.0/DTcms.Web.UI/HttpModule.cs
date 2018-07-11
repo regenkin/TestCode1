@@ -49,104 +49,111 @@ namespace DTcms.Web.UI
             {
                 return;
             }
-
-            string requestDomain = context.Request.Url.Authority.ToLower(); //获得当前域名(含端口号)          
-            string sitePath = GetSitePath(siteConfig.webpath, requestPath, requestDomain); //获取当前站点目录
-            string requestPage = CutStringPath(siteConfig.webpath, sitePath, requestPath); //截取除安装、站点目录部分
-            //context.Response.Write(requestDomain + "___");
-            //context.Response.Write(sitePath + "___");
-            //context.Response.Write(requestPage + "___");
-            //context.Response.End();
-            //检查网站重写状态0表示不开启重写、1开启重写、2生成静态
-            if (siteConfig.staticstatus == 0)
+            try
             {
-                #region 站点不开启重写处理方法===========================
-                //遍历URL字典，匹配URL页面部分
-                foreach (Model.url_rewrite model in SiteUrls.GetUrls().Urls)
+                string requestDomain = context.Request.Url.Authority.ToLower(); //获得当前域名(含端口号)          
+                string sitePath = GetSitePath(siteConfig.webpath, requestPath, requestDomain); //获取当前站点目录
+                string requestPage = CutStringPath(siteConfig.webpath, sitePath, requestPath); //截取除安装、站点目录部分
+                //context.Response.Write(requestDomain + "___");
+                //context.Response.Write(sitePath + "___");
+                //context.Response.Write(requestPage + "___");
+                //context.Response.End();
+                //检查网站重写状态0表示不开启重写、1开启重写、2生成静态
+                if (siteConfig.staticstatus == 0)
                 {
-                    //查找到与页面部分匹配的节点
-                    if (model.page == requestPath.Substring(requestPath.LastIndexOf("/") + 1))
+                    #region 站点不开启重写处理方法===========================
+                    //遍历URL字典，匹配URL页面部分
+                    foreach (Model.url_rewrite model in SiteUrls.GetUrls().Urls)
                     {
-                        //如果该页面属于插件页则映射到插件目录，否则映射到站点目录
-                        if (model.type == DTKeys.DIRECTORY_REWRITE_PLUGIN)
+                        //查找到与页面部分匹配的节点
+                        if (model.page == requestPath.Substring(requestPath.LastIndexOf("/") + 1))
                         {
-                            context.RewritePath(string.Format("{0}{1}/{2}{3}",
-                                siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, DTKeys.DIRECTORY_REWRITE_PLUGIN, requestPage));
-                            return;
-                        }
-                        else
-                        {
-                            context.RewritePath(string.Format("{0}{1}/{2}{3}",
-                                siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, sitePath, requestPage));
-                            return;
-                        }
-                    }
-                }
-                #endregion
-            }
-            else
-            {
-                #region 站点开启重写或静态处理方法=======================
-                //遍历URL字典
-                foreach (Model.url_rewrite model in SiteUrls.GetUrls().Urls)
-                {
-                    //如果没有重写表达式则不需要重写
-                    if (model.url_rewrite_items.Count == 0 &&
-                        Utils.GetUrlExtension(model.page, siteConfig.staticextension) == requestPath.Substring(requestPath.LastIndexOf("/") + 1))
-                    {
-                        //如果该页面属于插件页则映射到插件目录，否则映射到站点目录
-                        if (model.type == DTKeys.DIRECTORY_REWRITE_PLUGIN)
-                        {
-                            context.RewritePath(string.Format("{0}{1}/{2}/{3}",
-                                siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, DTKeys.DIRECTORY_REWRITE_PLUGIN, model.page));
-                            return;
-                        }
-                        else
-                        {
-                            context.RewritePath(string.Format("{0}{1}/{2}/{3}",
-                                siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, sitePath, model.page));
-                            return;
-                        }
-                    }
-                    //遍历URL字典的子节点
-                    foreach (Model.url_rewrite_item item in model.url_rewrite_items)
-                    {
-                        string newPattern = Utils.GetUrlExtension(item.pattern, siteConfig.staticextension); //替换扩展名
-
-                        //如果与URL节点匹配则重写
-                        if (Regex.IsMatch(requestPage, string.Format("^/{0}$", newPattern), RegexOptions.None | RegexOptions.IgnoreCase)
-                            || (model.page == "index.aspx" && Regex.IsMatch(requestPage, string.Format("^/{0}$", item.pattern), RegexOptions.None | RegexOptions.IgnoreCase)))
-                        {
-                            //如果开启生成静态、不是移动站点且是频道页或首页,则映射重写到HTML目录
-                            if (siteConfig.staticstatus == 2 && !SiteDomains.GetSiteDomains().MobilePaths.Contains(sitePath) && 
-                                (model.channel.Length > 0 || model.page.ToLower() == "index.aspx")) //频道页
+                            //如果该页面属于插件页则映射到插件目录，否则映射到站点目录
+                            if (model.type == DTKeys.DIRECTORY_REWRITE_PLUGIN)
                             {
-                                string swebpath = siteConfig.webpath + DTKeys.DIRECTORY_REWRITE_HTML + "/" + sitePath +
-                                        Utils.GetUrlExtension(requestPage, siteConfig.staticextension, true);
-                                string DiskPath = context.Server.MapPath(swebpath);
-                                if(File.Exists(DiskPath))
-                                    {context.RewritePath(swebpath);return;}                                   
-                            }
-                            if (model.type == DTKeys.DIRECTORY_REWRITE_PLUGIN) //插件页
-                            {
-                                string queryString = Regex.Replace(requestPage, string.Format("/{0}", newPattern), item.querystring, RegexOptions.None | RegexOptions.IgnoreCase);
-                                context.RewritePath(string.Format("{0}{1}/{2}/{3}", 
-                                    siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, DTKeys.DIRECTORY_REWRITE_PLUGIN, model.page), string.Empty, queryString);
+                                context.RewritePath(string.Format("{0}{1}/{2}{3}",
+                                    siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, DTKeys.DIRECTORY_REWRITE_PLUGIN, requestPage));
                                 return;
                             }
-                            else //其它
+                            else
                             {
-                                string queryString = Regex.Replace(requestPage, string.Format("/{0}", newPattern), item.querystring, RegexOptions.None | RegexOptions.IgnoreCase);
+                                context.RewritePath(string.Format("{0}{1}/{2}{3}",
+                                    siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, sitePath, requestPage));
+                                return;
+                            }
+                        }
+                    }
+                    #endregion
+                }
+                else
+                {
+                    #region 站点开启重写或静态处理方法=======================
+                    //遍历URL字典
+                    foreach (Model.url_rewrite model in SiteUrls.GetUrls().Urls)
+                    {
+                        //如果没有重写表达式则不需要重写
+                        if (model.url_rewrite_items.Count == 0 &&
+                            Utils.GetUrlExtension(model.page, siteConfig.staticextension) == requestPath.Substring(requestPath.LastIndexOf("/") + 1))
+                        {
+                            //如果该页面属于插件页则映射到插件目录，否则映射到站点目录
+                            if (model.type == DTKeys.DIRECTORY_REWRITE_PLUGIN)
+                            {
                                 context.RewritePath(string.Format("{0}{1}/{2}/{3}",
-                                    siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, sitePath, model.page), string.Empty, queryString);
+                                    siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, DTKeys.DIRECTORY_REWRITE_PLUGIN, model.page));
                                 return;
                             }
+                            else
+                            {
+                                context.RewritePath(string.Format("{0}{1}/{2}/{3}",
+                                    siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, sitePath, model.page));
+                                return;
+                            }
+                        }
+                        //遍历URL字典的子节点
+                        foreach (Model.url_rewrite_item item in model.url_rewrite_items)
+                        {
+                            string newPattern = Utils.GetUrlExtension(item.pattern, siteConfig.staticextension); //替换扩展名
 
+                            //如果与URL节点匹配则重写
+                            if (Regex.IsMatch(requestPage, string.Format("^/{0}$", newPattern), RegexOptions.None | RegexOptions.IgnoreCase)
+                                || (model.page == "index.aspx" && Regex.IsMatch(requestPage, string.Format("^/{0}$", item.pattern), RegexOptions.None | RegexOptions.IgnoreCase)))
+                            {
+                                //如果开启生成静态、不是移动站点且是频道页或首页,则映射重写到HTML目录
+                                if (siteConfig.staticstatus == 2 && !SiteDomains.GetSiteDomains().MobilePaths.Contains(sitePath) &&
+                                    (model.channel.Length > 0 || model.page.ToLower() == "index.aspx")) //频道页
+                                {
+                                    string swebpath = siteConfig.webpath + DTKeys.DIRECTORY_REWRITE_HTML + "/" + sitePath +
+                                            Utils.GetUrlExtension(requestPage, siteConfig.staticextension, true);
+                                    string DiskPath = context.Server.MapPath(swebpath);
+                                    if (File.Exists(DiskPath))
+                                    { context.RewritePath(swebpath); return; }
+                                }
+                                if (model.type == DTKeys.DIRECTORY_REWRITE_PLUGIN) //插件页
+                                {
+                                    string queryString = Regex.Replace(requestPage, string.Format("/{0}", newPattern), item.querystring, RegexOptions.None | RegexOptions.IgnoreCase);
+                                    context.RewritePath(string.Format("{0}{1}/{2}/{3}",
+                                        siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, DTKeys.DIRECTORY_REWRITE_PLUGIN, model.page), string.Empty, queryString);
+                                    return;
+                                }
+                                else //其它
+                                {
+                                    string queryString = Regex.Replace(requestPage, string.Format("/{0}", newPattern), item.querystring, RegexOptions.None | RegexOptions.IgnoreCase);
+                                    context.RewritePath(string.Format("{0}{1}/{2}/{3}",
+                                        siteConfig.webpath, DTKeys.DIRECTORY_REWRITE_ASPX, sitePath, model.page), string.Empty, queryString);
+                                    return;
+                                }
+
+                            }
                         }
                     }
+                    #endregion
                 }
-                #endregion
             }
+            catch (Exception exp)
+            {
+                context.RewritePath(string.Format("/index.html"));
+            }
+            finally { }
         }
         #endregion
 
