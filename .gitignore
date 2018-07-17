@@ -3758,3 +3758,7 @@ DTcms5.0/Source/DTcms.Common/obj/Debug/DTcms.Common.csprojResolveAssemblyReferen
 /DTcms5.0/Source/DTcms.Web.MVC/plugins/feedback/obj/Debug
 /DTcms5.0/Source/DTcms.Web.MVC/obj/Debug
 /DTcms5.0/Source/DTcms.Web/obj/Debug
+/DTcms5.0/Source/DTcms.Web/bin
+/DTcms5.0/Source/DTcms.Web/bin
+/DTcms5.0/Source/DTcms.Web/bin
+/DTcms5.0/Source/DTcms.Web.MVC/bin
