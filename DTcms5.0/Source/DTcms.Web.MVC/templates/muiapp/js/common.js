@@ -11,7 +11,7 @@ if(pageurl == '?m2w') {
     addCookie('m2wcookie', '1', 0);
 }
 if(getCookie('m2wcookie') != '1' && browserRedirect()) {
-    //location.href = 'http://mobile.ud77.com';
+    location.href = 'http://mobile.ud77.com';
 }
 /*工具类方法
 ------------------------------------------------*/
