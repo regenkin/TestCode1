@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Kf.HttpClient">
+      <HintPath>..\Library\Kf.HttpClient.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\log4net.dll</HintPath>
@@ -350,6 +353,9 @@
     <Compile Include="Areas\Web\Controllers\Video_ListController.cs" />
     <Compile Include="Areas\Web\Controllers\Video_ShowController.cs" />
     <Compile Include="Areas\Web\WebAreaRegistration.cs" />
+    <Compile Include="ERPAjax\submit_ajax.ashx.cs">
+      <DependentUpon>submit_ajax.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -864,6 +870,7 @@
     <Content Include="Areas\admin\Views\Dialog\dialog_category_spec.cshtml" />
     <Content Include="Areas\admin\Views\Order\site_payment_edit.cshtml" />
     <Content Include="Areas\admin\Views\Order\site_payment_list.cshtml" />
+    <Content Include="ERPAjax\submit_ajax.ashx" />
     <None Include="Properties\PublishProfiles\jtdygs.com.pubxml" />
     <None Include="Properties\PublishProfiles\ud77.com.pubxml" />
     <Content Include="Scripts\jquery\jquery.form.min.js" />
@@ -1500,6 +1507,7 @@
     <Content Include="templates\muiapp\js\jaliswall.js" />
     <Content Include="templates\muiapp\js\jquery-1.8.3.min.js" />
     <Content Include="templates\muiapp\js\jquery.min.js" />
+    <Content Include="templates\muiapp\js\login-validate.js" />
     <Content Include="templates\muiapp\js\mui.min.js" />
     <Content Include="templates\muiapp\js\rem.js" />
     <Content Include="templates\muiapp\js\swiper.min.js" />
