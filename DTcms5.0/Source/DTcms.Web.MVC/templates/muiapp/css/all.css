@@ -617,8 +617,9 @@ html.holding, body.holding { overflow: hidden; height: 100%; }
 
 .home-imgtit { display: block; width: 10.5rem; padding: 1px 0; margin: auto; }
 
-.home-nav { padding: 0.58rem 0.15rem 0.52rem; margin-bottom: 0.3rem; }
-.home-nav img { display: block; width: 2.3rem; }
+.home-nav { padding: 0 0.4rem 0.4rem; margin-bottom: 0.3rem; line-height: 1; }
+.home-nav img {  display: block; width: 1.16rem; margin: 0.35rem auto 0.3rem; }
+.home-nav .name { display: block; text-align: center; font-size: .38rem; color: #363636; }
 
 .home-qnav { padding: 0 0.4rem 0.4rem; margin-bottom: 0.3rem; line-height: 1; }
 .home-qnav .tiptxt { padding-top: 0.4rem; color: #909090; font-size: .42rem; }
