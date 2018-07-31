@@ -1,0 +1,242 @@
+﻿@using System.Data;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_Layout.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = site.seo_title;
+}
+
+<!--Banner-->
+<div class="section">
+    <div id="slide-box" class="slide-box">
+        <ul class="list-box">
+            <li style="opacity: 1; z-index: 2;"><a href="/news/show-86.html" target="_blank"><img src="/templates/cms/web/images/banner_5.png"></a></li>
+            <li style="opacity: 0; z-index: 1;"><a href="/content/product.html" target="_blank"><img src="/templates/cms/web/images/banner_1.png"></a></li>
+            <li style="opacity: 0; z-index: 1;"><a href="/content/product.html" target="_blank"><img src="/templates/cms/web/images/banner_2.png"></a></li>
+            <li style="opacity: 0; z-index: 1;"><a href="/content/product.html" target="_blank"><img src="/templates/cms/web/images/banner_3.png"></a></li>
+            <li style="opacity: 0; z-index: 1;"><a href="/content/product.html" target="_blank"><img src="/templates/cms/web/images/banner_4.png"></a></li>
+        </ul>
+    <div class="speed-box"><div class="speed-btn"><a href="javascript:;" class="selected"></a><a href="javascript:;" class=""></a><a href="javascript:;" class=""></a><a href="javascript:;" class=""></a><a href="javascript:;" class=""></a></div></div><a class="prev-btn" href="javascript:;" style="display: block;"></a><a class="next-btn" href="javascript:;" style="display: block;"></a></div>
+</div>
+<!--/Banner-->
+
+<!--第一屏-->
+<div class="section">
+    <div class="main-tit">
+        <h2>产品优势</h2>
+        <p>轻量级架构，普通三层开发模式，自定义功能模型，无需技术门槛，轻松上手</p>
+    </div>
+    <div class="icon-list">
+        <ul>
+            <li class="icon-box">
+                <div class="img-box"><img src="/templates/cms/web/images/ts_1.png"></div>
+                <h3>轻量级架构</h3>
+                <p>普通三层开发模式<br>开源无门槛，保持轻量级架构</p>
+            </li>
+            <li class="icon-box">
+                <div class="img-box"><img src="/templates/cms/web/images/ts_2.png"></div>
+                <h3>响应式管理界面</h3>
+                <p>全面兼容IE8及主流浏览器<br>体验后台管理界面响应式的快感</p>
+            </li>
+            <li class="icon-box">
+                <div class="img-box"><img src="/templates/cms/web/images/ts_3.png"></div>
+                <h3>可插拨插件</h3>
+                <p>系统支持可插拨插件<br>提供开发教程，扩展更简单</p>
+            </li>
+            <li class="icon-box">
+                <div class="img-box"><img src="/templates/cms/web/images/ts_4.png"></div>
+                <h3>功能自定义</h3>
+                <p>支持商品/视频/图片/附件<br>全面满足用户需求</p>
+            </li>
+            <li class="icon-box">
+                <div class="img-box"><img src="/templates/cms/web/images/ts_5.png"></div>
+                <h3>内置URL重写引擎</h3>
+                <p>无需配置IIS Rewite<br>动静态实现统一访问地址</p>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--/第一屏-->
+
+<!--第二屏-->
+<div class="wrapper">
+    <!--官方动态-->
+    <div class="section">
+        <div class="lay-list">
+            <ul>
+                <li>
+                    <div class="list-box">
+                        <div class="side-tit">
+                            <h2>最新动态</h2>
+                            <a href="@bc.linkurl("news_list",57)"><i class="fa fa-chevron-circle-right"></i></a>
+                        </div>
+                        <div class="side-box">
+                        @{
+                           DataTable redNews = bc.get_article_list(site.build_path + "_news", 0, 2, "category_id=57 and status=0 and img_url<>''");
+                           foreach(DataRow reddr in redNews.Rows){
+                              <div class="img-list">
+                                 <div class="img-box">
+                                    <a title="@reddr["title"]" href="@bc.linkurl("news_show", reddr["id"])"><img src="@reddr["img_url"]" /></a>
+                                 </div>
+                                 <div class="txt-box">
+                                    <a title="@reddr["title"]" href="@bc.linkurl("news_show", reddr["id"])">@reddr["title"]</a>
+                                    <span>@(DateTime.Parse(reddr["add_time"].ToString()).ToString("yyyy-MM-dd"))</span>
+                                 </div>
+                                 <p>@reddr["zhaiyao"]</p>
+                              </div>
+                           }
+                        }    
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="side-tit">
+                            <h2>团队日志</h2>
+                            <a href="@bc.linkurl("news_list", 58)"><i class="fa fa-chevron-circle-right"></i></a>
+                        </div>
+                        <div class="side-box">
+                            @{
+                               DataTable hotNews = bc.get_article_list(site.build_path + "_news", 58, 5, "status=0");
+                               foreach(DataRow hotdr in hotNews.Rows){
+                               <div class="txt-list">
+                                  <a title="@hotdr["title"]" href="@bc.linkurl("news_show", hotdr["id"])">
+                                     <i class="fa fa-file-text-o"></i>
+                                     <span>@hotdr["title"]</span>
+                                  </a>
+                               </div>
+                              }
+                            }
+                         </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="side-tit">
+                            <h2>最新教程</h2>
+                            <a href="/video/list-0.html"><i class="fa fa-chevron-circle-right"></i></a>
+                        </div>
+                        <div class="side-box">
+                            
+                            <div class="img-list">
+                                <div class="img-box">
+                                    <a title="使用教程-扩展字段使用" href="/video/show-83.html"><img src="/upload/201610/21/201610210158217711.png"></a>
+                                </div>
+                                <div class="txt-box">
+                                    <a title="使用教程-扩展字段使用" href="/video/show-83.html">使用教程-扩展字段使用</a>
+                                    <span>2016-10-21</span>
+                                </div>
+                                <p>从 3.0 开始，我们为扩展字段进行改进，在架构上进行了升级，使用扩展字段能够在模板页面轻松的调用。有了频道视图的配合，使得我们调用扩展字段和变通的字段一样方便，有了这些改进，基本上可以满足 80%网站和客户各种需求。</p>
+                            </div>
+                            
+                            <div class="img-list">
+                                <div class="img-box">
+                                    <a title="第四章 插件开发" href="/video/show-82.html"><img src="/upload/201610/20/201610200204474695.png"></a>
+                                </div>
+                                <div class="txt-box">
+                                    <a title="第四章 插件开发" href="/video/show-82.html">第四章 插件开发</a>
+                                    <span>2016-10-20</span>
+                                </div>
+                                <p>本章节只要讲解了插件的结构、安装和卸载时所需要完成的工作，了解这些之后我们进一步使用官方的友情链接插件做为一个例子进行详细讲解，使用户可以尽快上手开发自已的系统插件。</p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="side-tit">
+                            <h2>通知公告</h2>
+                            <a href="@bc.linkurl("news_list", 59)"><i class="fa fa-chevron-circle-right"></i></a>
+                        </div>
+                        <div class="side-box">
+                           @{
+                              DataTable niticeNews = bc.get_article_list(site.build_path + "_news", 59, 5, "status=0");
+                              foreach(DataRow ndr in niticeNews.Rows){
+                              <div class="txt-list">
+                                 <a href="@bc.linkurl("news_show", ndr["id"])">
+                                    <i class="fa fa-file-text-o"></i>
+                                    <span>@ndr["title"]</span>
+                                 </a>
+                              </div>                                 
+                              }
+                           }
+                        </div>
+                    </div>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+    <!--/官方动态-->
+    
+    <!--客户案例-->
+    <div class="section" style="display:none">
+        <div class="lay-list list">
+            <div class="side-tit">
+                <h2>客户案例</h2>
+                <a href="/project/list-0.html"><i class="fa fa-chevron-circle-right"></i></a>
+            </div>
+            <ul>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="side-box">
+                            <div class="img-box">
+                                <a href="/project/show-66.html"><img src="/upload/201610/10/201610102207094451.png"></a>
+                            </div>
+                            <h3><a href="/project/show-66.html">礼叮当</a></h3>
+                            <p>互联网时代，品牌越来越趋向人格化，以人格背书的品牌将更具生命力，给用户以信任的连接感。但是企业很难通过传统的产品传播方式让品牌内涵以及人格饱满起来，品牌衍生品设计可以帮助企业摆脱死板的形象，让品牌形象活跃、生动起来。移动互联网的发展，场景化显得越来越重要，…</p>
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="side-box">
+                            <div class="img-box">
+                                <a href="/project/show-62.html"><img src="/upload/201610/10/201610100107460859.png"></a>
+                            </div>
+                            <h3><a href="/project/show-62.html">诺壹佰</a></h3>
+                            <p>诺壹佰隶属于鑫诺财富咨询管理有限公司,由鑫诺财富负责运营。我们提供股权众筹、影视众筹等多种投资众筹品种，全方位、点对点地满足投资者多样化的投资需求。</p>
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="side-box">
+                            <div class="img-box">
+                                <a href="/project/show-61.html"><img src="/upload/201610/09/201610091608580826.png"></a>
+                            </div>
+                            <h3><a href="/project/show-61.html">绿源电动车</a></h3>
+                            <p>山东电池生产基地位于山东沂南 ，由绿源与力伴共同投资兴办的专业从事电动车铅蓄电池的研发与生产的基地。基地总投资3亿元人民币，占地面积约16万平方米。预计项目全部投产后，可年产新型铅蓄电池300万千伏安时，实现年产值20亿元，可提供1200余个就业岗位。基地将采用行业内最…</p>
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="side-box">
+                            <div class="img-box">
+                                <a href="/project/show-60.html"><img src="/upload/201610/09/201610091512537492.png"></a>
+                            </div>
+                            <h3><a href="/project/show-60.html">景光物流</a></h3>
+                            <p>深圳景光物流有限公司创建于2009年6月，公司经过近五年的发展，已成为了国内一家集汽运、整车、仓储、配送为一体的一站式物流服务供应商。公司运营本部位于广东东莞，目前拥有100多家营业部，150多台自有营运车辆、资历深厚的管理团队及超过1000名员工，公司目前拥有国内汽运、…</p>
+                        </div>
+                    </div>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+    <!--/客户案例-->
+</div>
+<!--第二屏-->
+

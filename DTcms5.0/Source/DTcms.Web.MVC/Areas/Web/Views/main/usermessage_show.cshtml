@@ -1,0 +1,66 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/_LayoutShow.cshtml";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   DTcms.Model.user_message m = ViewData["userModel"] as DTcms.Model.user_message;
+   ViewBag.Title = "查看站内短信息 - " + site.name;
+}
+
+<!--当前位置-->
+<div class="section">
+  <div class="location">
+    <span>当前位置：</span>
+    <a href="@bc.linkurl("index")">首页</a> &gt;
+        <a href="@bc.linkurl("usercenter", "index")">会员中心</a>
+    <a href="@bc.linkurl("usermessage", "list")">站内短消息</a>
+  </div>
+</div>
+<!--/当前位置-->
+
+<div class="section clearfix">
+
+  <!--左侧导航-->
+  @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/partial_ucenter_nav.cshtml")
+  <!--/左侧导航-->
+
+  <!--右侧内容-->
+  <div class="right-auto">
+    <div class="bg-wrap" style="min-height: 765px;">
+      <!--系统消息-->
+      <div class="sub-tit">
+        <a class="add" href="@bc.linkurl("usermessage", "add")">+ 写新消息</a>
+        <a class="add" href="javascript:history.go(-1);"><i class="iconfont icon-reply"></i>返回</a>
+        <ul>
+          <li class="selected">
+            <a href="javascript:;">查看短消息</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="meta">
+        <h2>@m.title</h2>
+        <div class="info">
+          <span><i class="iconfont icon-date"></i>@m.post_time</span>
+          @if (m.type == 2) {
+            <span><i class="iconfont icon-user"></i>发件人：@m.post_user_name</span>
+          }
+          else if (m.type == 3) {
+            <span><i class="iconfont icon-user"></i>收件人：@m.accept_user_name</span>
+          }
+        </div>
+      </div>
+      <div class="entry">
+        @Html.Raw(m.content)
+      </div>
+      <!--/系统消息-->
+
+    </div>
+    <!--/右侧内容-->
+  </div>
+</div>

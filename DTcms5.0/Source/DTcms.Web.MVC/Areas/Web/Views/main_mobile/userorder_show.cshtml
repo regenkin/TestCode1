@@ -1,0 +1,135 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/_LayoutShow.cshtml";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   DTcms.Model.orders m = ViewData["model"] as DTcms.Model.orders;
+   ViewBag.Title = "查看订单 - " + site.name;
+}
+
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-footer="main_footer">
+      <header>
+        <a href="javascript:;" onclick="history.back(-1);" class="backButton">返回</a>
+        <h1>查看订单</h1>
+        <a onclick="$.ui.toggleSideMenu()" class="menuButton"></a>
+      </header>
+      
+      <div class="wrap-box">
+        <h2>订单信息</h2>
+        <dl>
+          <dt>订单号</dt>
+          <dd>@m.order_no</dd>
+        </dl>
+        <dl>
+          <dt>订单状态</dt>
+          <dd>@bc.get_order_status(m.id)</dd>
+        </dl>
+        <dl>
+          <dt>配送方式</dt>
+          <dd>@bc.get_express_title(m.express_id)</dd>
+        </dl>
+        <dl>
+          <dt>支付方式</dt>
+          <dd>@bc.get_payment_title(m.payment_id)</dd>
+        </dl>
+      </div>
+      
+      <div class="wrap-box">
+        <h2>收货信息</h2>
+        <dl>
+          <dt>顾客姓名</dt>
+          <dd>@m.accept_name</dd>
+        </dl>
+        <dl>
+          <dt>送货地址</dt>
+          <dd>@m.area @m.address @m.post_code</dd>
+        </dl>
+        <dl>
+          <dt>联系电话</dt>
+          <dd>@m.mobile @m.telphone</dd>
+        </dl>
+        <dl>
+          <dt>备注留言</dt>
+          <dd>@m.message</dd>
+        </dl>
+        <dl>
+          <dt>开具发票：</dt>
+          <dd>
+            @(m.is_invoice==1 ? "是" : "否")
+          </dd>
+        </dl>
+        @if(m.is_invoice==1){
+        <dl>
+          <dt>发票抬头：</dt>
+          <dd>
+            @m.invoice_title
+          </dd>
+        </dl>
+        }
+      </div>
+      
+      <div>
+        <ul class="car-list inset">
+          @if(m.order_goods!=null){
+             foreach(DTcms.Model.order_goods modelt in m.order_goods){
+             <li>
+               <a href="@bc.linkurl("goods_show",modelt.article_id)" data-ignore="true" class="img-box">
+                 <img src="<%=get_article_img_url(modelt.article_id)%>" />
+               </a>
+               <h2>@modelt.goods_title</h2>
+               @if(modelt.spec_text!=""){
+                 <p class="stxt">@modelt.spec_text</p>
+               }
+               <div class="note">
+                 <span>共@(modelt.quantity)件</span>
+                 <i class="price">￥@(modelt.real_price*modelt.quantity)</i>
+               </div>
+             </li>
+             }
+          }else{
+             <div class="nodata">
+               <h1></h1>
+               <p>暂无商品信息</p>
+             </div>
+          }
+        </ul>
+      </div>
+      
+      <div class="wrap-box">
+        <h2>应付总金额：<b class="red">￥@m.order_amount</b></h2>
+        <p>运费：￥@(m.express_fee)&nbsp;&nbsp;手续费：￥@(m.payment_fee)&nbsp;&nbsp;税费：@(m.invoice_taxes)</p>
+        <p>商品：￥@(m.real_amount)&nbsp;&nbsp;总积分：@(m.point)分</p>
+      </div>
+      <div>
+        @if(m.status<3 && bc.get_order_payment_status(m.id)){
+        <a href="@bc.linkurl("payment","?action=confirm&order_no="+m.order_no)" data-ignore="true" class="btn red full">确认付款</a>
+        }
+        @if(m.status<2){
+        <a href="javascript:;" onclick="clickSubmit('@(config.webpath)tools/submit_ajax.ashx?action=order_cancel&order_no=@m.order_no');" class="btn full">取消订单</a>
+        }
+      </div>
+      
+      <!--版权信息-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_copyright.cshtml")
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--底部导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_footer.cshtml")
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_nav.cshtml")
+    <!--/左侧导航-->
+      
+  </div>
+</div>

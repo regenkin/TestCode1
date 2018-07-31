@@ -1,0 +1,242 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_Layout.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   UserAmountController c = ViewBag.This as UserAmountController;
+   DTcms.Model.users m = c.userModel;
+   ViewBag.Title = "账户余额 - " + site.name;
+   string action = ViewBag.Action as string;
+   DataTable list = null;
+   int count = 0;
+   int totalcount = 0;
+   int page = int.Parse(ViewBag.Page as string);
+   string pageList = string.Empty;
+}
+@section HeaderContent{
+   @switch(action){
+      case "recharge":
+         <link rel="stylesheet" href="@(config.webpath)Content/validate.css" />
+         <script type="text/javascript" src="@(config.webpath)scripts/jquery/jquery.form.min.js"></script>
+         <script type="text/javascript" src="@(config.webpath)scripts/jquery/Validform_v5.3.2_min.js"></script>
+         <script>
+            $(function () {
+               //初始化表单
+               AjaxInitForm('#rechargeForm', '#btnSubmit', 0);
+            });
+         </script>         
+         break;
+      case "log":
+         <link rel="stylesheet" href="@(config.webpath)Content/pagination.css" />
+         <script>
+            function ExecPostBack(checkValue) {
+               if (arguments.length == 1) {
+                  ExecDelete('@(config.webpath)tools/submit_ajax.ashx?action=user_recharge_delete', checkValue, '#turl');
+               } else {
+                  var valueArr = '';
+                  $("input[name='checkId']:checked").each(function (i) {
+                     valueArr += $(this).val();
+                     if (i < $("input[name='checkId']:checked").length - 1) {
+                        valueArr += ","
+                     }
+                  });
+                  ExecDelete('@(config.webpath)tools/submit_ajax.ashx?action=user_recharge_delete', valueArr, '#turl');
+               }
+            }
+	     </script>      
+      break;
+      case "list":
+         <link rel="stylesheet" href="@(config.webpath)Content/pagination.css" />
+         <script type="text/javascript">
+            function ExecPostBack(checkValue) {
+               if (arguments.length == 1) {
+                  ExecDelete('@(config.webpath)tools/submit_ajax.ashx?action=user_amount_delete', checkValue, '#turl');
+               } else {
+                  var valueArr = '';
+                  $("input[name='checkId']:checked").each(function (i) {
+                     valueArr += $(this).val();
+                     if (i < $("input[name='checkId']:checked").length - 1) {
+                        valueArr += ","
+                     }
+                  });
+                  ExecDelete('@(config.webpath)tools/submit_ajax.ashx?action=user_amount_delete', valueArr, '#turl');
+               }
+            }
+	     </script>      
+      break;
+   }
+}
+<div class="section clearfix">
+  <div class="line30"></div>
+
+  <div class="info-wrap">
+    <!--左侧导航-->
+    @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_ucenter_nav.cshtml")
+    <!--/左侧导航-->
+    
+    <!--右侧内容-->
+    <div class="home-box">
+      @if(action=="recharge"){
+      <!--账户充值-->
+
+      <div class="u-tab-head">
+        <p>
+          <a class="selected" href="@bc.linkurl("useramount","recharge")">账户充值</a>
+          <a href="@bc.linkurl("useramount","log")">充值记录</a>
+          <a href="@bc.linkurl("useramount","list")">收支明细</a>
+        </p>
+      </div>
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>账户充值</strong>
+        </div>
+        <form id="rechargeForm" name="recharge_form" url="@(config.webpath)tools/submit_ajax.ashx?action=user_amount_recharge&site=@site.build_path">
+        <div class="form-box">
+          <dl>
+            <dt>账户余额：</dt>
+            <dd>当前账户金额为：<b class="red">￥@m.amount</b> 元</dd>
+          </dl>
+          <dl>
+            <dt>充值金额：</dt>
+            <dd>
+              <input name="order_amount" id="order_amount" type="text" class="input small" onkeydown="return checkNumber(event);" datatype="n"  nullmsg="请输入金额" sucmsg=" " /> 元
+            </dd>
+          </dl>
+          <dl>
+            <dt>支付方式：</dt>
+            <dd>
+            @{
+               list = bc.get_payment_list(0, "is_lock=0 and type=1 and id>2");
+               foreach (DataRow dr in list.Rows) {
+                  count ++;
+                  if (count == list.Rows.Count) {
+                     <label><input name="payment_id" type="radio" value="@dr["id"]" datatype="*" sucmsg=" " /> @dr["title"]</label>
+                  }
+                  else {
+                     <label><input name="payment_id" type="radio" value="@dr["id"]" /> @dr["title"]</label>
+                  }
+               }
+            }
+            </dd>
+          </dl>
+          <dl>
+            <dt></dt>
+            <dd><input name="btnSubmit" id="btnSubmit" type="submit" class="btn btn-success" value="确认充值" /></dd>
+          </dl>
+        </div>
+        </form>
+      </div>
+      <!--/账户充值-->
+      }else if(action == "log"){
+      <!--充值记录-->
+      <div class="u-tab-head">
+        <p>
+          <a href="@bc.linkurl("useramount","recharge")">账户充值</a>
+          <a class="selected" href="@bc.linkurl("useramount","log")">充值记录</a>
+          <a href="@bc.linkurl("useramount","list")">收支明细</a>
+        </p>
+      </div>
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>充值记录</strong>
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mtable">
+        @{
+          list = bc.get_user_recharge_list(10, page, "user_id="+m.id, out totalcount);<!--取得一个DataTable-->
+          pageList = bc.get_page_link(10, page, totalcount, "useramount", action, "__id__");<!--取得分页页码列表-->
+          foreach(DataRow dr in list.Rows){
+            <tr>
+              <td width="20" align="center">
+                <input name="checkId" class="checkall" type="checkbox" value="@dr["id"]" >
+              </td>
+              <td>@dr["add_time"]</td>
+              <td width="140">@dr["recharge_no"]</td>
+              <td width="80">@c.get_payment_title(Convert.ToInt32(dr["payment_id"]))</td>
+              <td width="80">￥@dr["amount"]</td>
+              <td width="50">
+                @if(Convert.ToInt32(dr["status"])>0){
+                  @:已完成
+                }else{
+                  @:未完成
+                }
+              </td>
+              <td width="30"><a onclick="ExecPostBack('@dr["id"]');" href="javascript:;">删除</a></td>
+            </tr>
+            }
+         }
+          @if(list.Rows.Count==0){
+            <tr><td colspan="5" align="center">暂无记录...</td></tr>
+          }
+        </table>
+        <div class="page-foot">
+          <div class="flickr right">@pageList</div><!--放置页码列表-->
+          <div class="page-btns">
+            <a onclick="checkAll(this);" href="javascript:;">全选</a>
+            <span class="pipe">|</span>
+            <a onclick="ExecPostBack();" href="javascript:;">删除</a>
+          </div>
+        </div>
+      </div>
+      <input id="turl" type="hidden" value="@bc.linkurl("useramount","log")" /><!--存在跳转的URL值-->
+      <!--/充值记录-->
+      }else if(action=="list"){
+      <!--收支明细-->
+      <div class="u-tab-head">
+        <p>
+          <a href="@bc.linkurl("useramount","recharge")">账户充值</a>
+          <a href="@bc.linkurl("useramount","log")">充值记录</a>
+          <a class="selected" href="@bc.linkurl("useramount","list")">收支明细</a>
+        </p>
+      </div>
+      <div class="u-tab-content">
+        <div class="title-div">
+          <strong>收支明细</strong>
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mtable">
+        @{
+          list = bc.get_user_amount_list(10, page, "user_id="+m.id, out totalcount); <!--取得一个DataTable-->
+          pageList = bc.get_page_link(10, page, totalcount, "useramount", action, "__id__"); <!--取得分页页码列表-->
+          foreach(DataRow dr in list.Rows){
+            <tr>
+              <td width="20" align="center">
+                <input name="checkId" class="checkall" type="checkbox" value="@dr["id"]" >
+              </td>
+              <td width="150">@dr["add_time"]</td>
+              <td>@dr["remark"]</td>
+              <td width="50">
+                @if(Convert.ToInt32(dr["value"]) > 0){
+                  @:+@dr["value"]
+                }else{
+                  @dr["value"]
+                }
+              </td>
+              <td width="30"><a onclick="ExecPostBack('@dr["id"]');" href="javascript:;">删除</a></td>
+            </tr>
+          }
+          if(list.Rows.Count==0){
+            <tr><td colspan="5" align="center">暂无记录...</td></tr>
+          }
+        }
+        </table>
+        <div class="page-foot">
+          <div class="flickr right">@pageList</div><!--放置页码列表-->
+          <div class="page-btns">
+            <a onclick="checkAll(this);" href="javascript:;">全选</a>
+            <span class="pipe">|</span>
+            <a onclick="ExecPostBack();" href="javascript:;">删除</a>
+          </div>
+        </div>
+      </div>
+      <input id="turl" type="hidden" value="@bc.linkurl("useramount","list")" /><!--存在跳转的URL值-->
+      <!--收支明细-->
+      }
+      
+    </div>
+    <!--/右侧内容-->
+  </div>
+</div>

@@ -1,0 +1,94 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_LayoutList.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   Article_ListController bc = ViewBag.BasePage as Article_ListController;
+   DTcms.Model.article_category m = bc.model;
+   ViewBag.Title = m.title + " - " + site.name;
+   DataTable list = null;
+   string channel = site.build_path + "_news";
+   int category_id = int.Parse(ViewBag.CategoryId as string);
+   int count = 0;
+   string category_nav = bc.get_category_menu("news_list", category_id);
+   DTcms.BLL.article_category bll_category = new DTcms.BLL.article_category();
+   string category_name = bll_category.GetTitle(category_id);
+   int pagesize = 20;
+   int totalcount = 0;
+   string pagelist = string.Empty;
+   int page = int.Parse(ViewBag.Page as string);      
+}
+
+<div class="wrapper">
+   <div class="section">
+      <!--所在位置-->
+      <div class="navi-box">
+         <a href="@bc.linkurl("index")">首页</a>
+         &nbsp;&gt;&nbsp;<a href="@bc.linkurl("news_list",category_id)">@category_name</a>
+      </div>
+      <!--/所在位置-->
+
+      <!--内容列表-->
+      <div class="conn-wrap">
+         <div class="sub-nav">
+            @{
+               DataTable listCategory = bc.get_category_child_list(channel, 0);
+               foreach (DataRow cdr in listCategory.Rows) {
+               <a class="@(category_id == (int)cdr["id"] ? "selected" : "")" href="@bc.linkurl("news_list", cdr["id"])">@cdr["title"]</a>
+                  count++;
+                  if (count < listCategory.Rows.Count) {
+               <i>|</i>
+                  }
+               }
+            }
+         </div>
+         <div class="n-list">
+            <ul>
+               @{
+                  list = bc.get_article_list(channel, pagesize, "category_id=" + category_id);
+                  foreach (DataRow dr in list.Rows) {
+                  <li>
+                     <div class="list-box">
+                        <h3><a href="@bc.linkurl("news_show", dr["id"])">@dr["title"]</a></h3>
+                        <div class="info">
+                           <span><i class="fa fa-calendar"></i>@DateTime.Parse(dr["add_time"].ToString()).ToString("yyyy-MM-dd")</span>
+                           <span><i class="fa fa-eye"></i><script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_article_click&amp;id=@dr["click"]"></script>次</span>
+                        </div>
+                        <div class="note">
+                           @if (dr["img_url"].ToString() != "") {
+                              <div class="img-box">
+                                 <img src="@dr["img_url"]" />
+                              </div>
+                              <p>
+                                 @Html.Raw(dr["zhaiyao"])
+                              </p>
+                           }
+                           else {
+                              <p style="width: 100%">
+                                 @Html.Raw(dr["zhaiyao"])
+                              </p>
+                           }
+                        </div>
+                     </div>
+                  </li>
+                  }
+               }
+            </ul>
+         </div>
+         <!--页码列表-->
+         <div class="page-box">
+            <div class="digg">@Html.Raw(pagelist)</div>
+         </div>
+         <!--/页码列表-->
+      </div>
+      <!--内容列表-->
+   </div>
+</div>
+
+
+
+

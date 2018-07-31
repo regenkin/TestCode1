@@ -1,0 +1,117 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/_Layout.cshtml";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = "合作网站登录 - " + site.name;
+}
+@section HeaderContent{
+<script>
+$(function(){
+	tabs('#oauthTabs','click');
+	//初始化表单1
+	AjaxInitForm('#bindForm', '#btnSubmit1', 0, '#turl');
+	//初始化表单2
+	AjaxInitForm('#oauthForm', '#btnSubmit2', 0, '#turl');
+});
+</script>
+}
+
+<!--当前位置-->
+<div class="section">
+  <div class="location">
+    <span>当前位置：</span>
+    <a href="@bc.linkurl("index")">首页</a> &gt;
+        <a href="@bc.linkurl("login")">会员登录</a>
+  </div>
+</div>
+<!--/当前位置-->
+
+<!--导航推荐-->
+<div class="section">
+  <div class="wrapper">
+    <div class="bg-wrap">
+      <div class="nav-tit">
+        <a class="selected" href="javascript:;">合作网站登录</a>
+      </div>
+
+      <div id="oauthTabs" class="oauth-box">
+        <!--选项卡-->
+        <div id="tabHead" class="tab-head">
+          <ul>
+            <li>
+              <a class="selected" href="javascript:;">绑定已有的账号</a>
+            </li>
+            <li>
+              <a href="javascript:;">创建新的账号</a>
+            </li>
+          </ul>
+        </div>
+        <!--/选项卡-->
+
+        <!--选项内容-->
+        <form name="bindForm" id="bindForm" url="@(config.webpath)tools/submit_ajax.ashx?action=user_oauth_bind">
+          <div class="tab-content" style="display: block;">
+            <div class="form-box">
+              <dl class="form-group">
+                <dt>用户名：</dt>
+                <dd>
+                  <input name="txtUserName" class="input" type="text" sucmsg=" " nullmsg="请输入用户名" datatype="*">
+                </dd>
+              </dl>
+              <dl class="form-group">
+                <dt>密　码：</dt>
+                <dd>
+                  <input name="txtPassword" class="input" type="password" sucmsg=" " nullmsg="请输入密码" datatype="*6-20">
+                </dd>
+              </dl>
+              <dl class="form-group">
+                <dd>
+                  <input id="btnSubmit1" name="btnSubmit1" class="submit" type="submit" value="立即绑定">
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </form>
+
+        <form name="oauthForm" id="oauthForm" url="@(config.webpath)tools/submit_ajax.ashx?action=user_oauth_register&site_id=@site.id">
+          <div class="tab-content">
+            <div class="form-box">
+              <dl class="form-group">
+                <dt>电子邮箱：</dt>
+                <dd>
+                  <input name="txtEmail" class="input" type="text" sucmsg=" " nullmsg="请输入邮箱地址" datatype="e">
+                </dd>
+              </dl>
+              <dl class="form-group">
+                <dt>手机号码：</dt>
+                <dd>
+                  <input name="txtMobile" class="input" type="text" sucmsg=" " nullmsg="请输入手机号码" datatype="m">
+                </dd>
+              </dl>
+              <dl class="form-group">
+                <dt>登录密码：</dt>
+                <dd>
+                  <input name="txtPassword" class="input" type="password" sucmsg=" " nullmsg="请设置密码" datatype="*6-20">
+                </dd>
+              </dl>
+              <dl class="form-group">
+                <dd>
+                  <input id="btnSubmit2" name="btnSubmit2" class="submit" type="submit" value="创建新账户" />
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </form>
+        <input id="turl" name="turl" type="hidden" value="@ViewBag.turl" />
+        <!--/选项内容-->
+      </div>
+
+    </div>
+  </div>
+</div>

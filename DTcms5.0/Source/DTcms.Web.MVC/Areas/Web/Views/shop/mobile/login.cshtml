@@ -1,0 +1,193 @@
+﻿@using System.Data;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/mobile/Shared/_LayoutBase.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = "会员登录 - " + site.name;
+}
+@section HeaderContent{
+   <link href="~/templates/@ViewBag.TemplateSkin/mobile/css/base.css" rel="stylesheet" />
+   <link href="~/templates/@ViewBag.TemplateSkin/mobile/css/account.css" rel="stylesheet" />
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/login-validate.js"></script>
+}
+@section Scripts{
+    <script>
+       $(function () {
+          //提交表单
+          $("#btnSubmit").bind("click", function () {
+             if ($("#txtUserName").val() == "" || $("#txtPassword").val() == "") {
+                $("#msgtips").show();
+                $("#msgtips").text("请填写用户名和登录密码！");
+                return false;
+             }
+             $.ajax({
+                type: "POST",
+                url: $("#loginform").attr("url"),
+                dataType: "json",
+                data: {
+                   "txtUserName": $("#txtUserName").val(),
+                   "txtPassword": $("#txtPassword").val(),
+                   "chkRemember": $("#chkRemember").attr("checked")
+                },
+                timeout: 20000,
+                beforeSend: function (XMLHttpRequest) {
+                   $("#btnSubmit").attr("disabled", true);
+                   $("#msgtips").show();
+                   $("#msgtips").text("正在登录，请稍候...");
+                },
+                success: function (data, textStatus) {
+                   if (data.status == 1) {
+                      if (typeof (data.url) == "undefined") {
+                         location.href = $("#turl").val();
+                      } else {
+                         location.href = data.url;
+                      }
+                   } else {
+                      $("#btnSubmit").attr("disabled", false);
+                      $("#msgtips").text(data.msg);
+                   }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                   $("#msgtips").text("状态：" + textStatus + "；出错提示：" + errorThrown);
+                   $("#btnSubmit").attr("disabled", false);
+                }
+             });
+             return false;
+          });
+       });
+
+    $(function() {
+		$(".input-close").hide();
+		displayPwd();
+		displayClearBtn();
+		setTimeout(displayClearBtn, 200 ); //延迟显示,应对浏览器记住密码
+	});	
+
+	//是否显示清除按钮
+	function displayClearBtn(){
+		if(document.getElementById("txtUserName").value != ''){
+			$("#txtUserName").siblings(".input-close").show();
+		}
+		if(document.getElementById("txtPassword").value != ''){
+			$(".ciphertext").siblings(".input-close").show();
+		}
+		if($("#codeLevel").val()!="" && $("#codeLevel").val()!='0'){
+			if($("#validateCode").val()!=""){
+				$("#validateCode").siblings(".input-close").show();
+			}
+		}
+	}
+
+	//清除input内容
+    $('.input-close').click(function(e){  
+		$(e.target).parent().find(":input").val("");
+		$(e.target).hide();
+		$($(e.target).parent().find(":input")).each(function(i){
+			if(this.id=="ptext" || this.id=="txtPassword"){
+				$("#txtPassword").val('');
+				$("#ptext").val('');
+			}
+         });
+    });  
+	
+	//设置password字段的值	
+	$('.txt-password').bind('input',function(){
+		$('#txtPassword').val($(this).val());
+	});
+	
+	//显隐密码切换
+	function displayPwd(){
+    	$(".tp-btn").toggle(
+          function(){
+            $(this).addClass("btn-on");
+			var textInput = $(this).siblings(".plaintext");
+    		var pwdInput = $(this).siblings(".ciphertext");
+			pwdInput.hide();
+			textInput.val(pwdInput.val()).show().focusEnd();
+          },
+          function(){
+		  	$(this).removeClass("btn-on");
+		  	var textInput = $(this).siblings(".plaintext ");
+    		var pwdInput = $(this).siblings(".ciphertext");
+            textInput.hide();
+			pwdInput.val(textInput.val()).show().focusEnd();
+          }
+    	);
+	}
+
+	//监控用户输入
+	$(":input").bind('input propertychange', function() {
+		if($(this).val()!=""){
+			$(this).siblings(".input-close").show();
+		}else{
+			$(this).siblings(".input-close").hide();
+		}
+    });
+</script>
+}
+<div id="J_body">
+   <form id="loginform" name="loginform" class="login-cont" url="@(config.webpath)tools/submit_ajax.ashx?action=user_login&site=@site.build_path">
+      <input type="hidden" name="is_send" value="0">
+      <div class="login-tit">请先登录</div>
+
+      <div class="form-sec">
+         <div class="form-item">
+            <div class="item-left">手机号</div>
+            <div class="item-right">
+               <input type="text" id="txtUserName" placeholder="请输入手机号" maxlength="11" name="mobile">
+            </div>
+         </div>
+
+         <div class="form-item">
+            <div class="item-left">密码</div>
+            <div class="item-right">
+               <input type="password" id="txtPassword" placeholder="请输入密码" name="password">
+            </div>
+         </div>
+      </div>
+
+      <div class="form-btn"><input name="" id="btnSubmit" type="submit" value="登录" class="btn btn-primary" /><!--<button type="submit" id="btnSubmit" class="btn btn-primary">登录</button>--></div>
+
+      <div class="form-footer">
+         <a href="@bc.linkurl("register")">注册 &nbsp;| &nbsp;</a>
+         <a href="javascript:;">忘记密码</a>
+      </div>
+   </form>
+</div>
+<div id="J_btnScrollTop" class="btn-scroll-top" style="position: fixed; bottom: 15px; right: 11px; z-index: 9; display: none;"><i class="iconfont"></i></div>
+<input id="turl" name="turl" type="hidden" value="@ViewBag.turl" /><!--记住上一页网址-->
+
+<!--手机号已注册-->
+<div class="dialog-sec dialog-in-transition">
+   <div>
+      <div class="sec-hd">手机已注册，请直接登录</div>
+      <div class="sec-bd">
+         <div class="input-cell">
+            <div class="cell-hd">
+               <div class="x-input"><span class="input-label" style="width: 42px;">手机号</span>
+                  <div class="input-bd">
+                     <input type="text" pattern="[0-9]*" maxlength="11" disabled="" placeholder="请输入您的手机号">
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="input-cell">
+            <div class="cell-hd">
+               <div class="x-input"><span class="input-label" style="width: 42px;">密码</span>
+                  <div class="input-bd">
+                     <input type="password" placeholder="请输入您的手机号">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="sec-ft"><a class="ui-btn primary" href="javascript:;">
+         <div class="btn-cont"><i class="loader" style="display: none;"></i><span>确定</span></div>
+      </a></div>
+      <div class="sec-end"><a class="end-action" href="javascript:;">忘记密码</a> <a class="end-action" href="javascript:;">更换手机号</a> </div>
+   </div>
+</div>
+<!--手机号已注册 end-->

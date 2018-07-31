@@ -1,0 +1,125 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_LayoutShow.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = "视频专区 - " + site.name;
+   DataTable list = null;
+   string channel = "cms_video";
+}
+<div class="wrapper">
+    <div class="section">
+        <!--所在位置-->
+        <div class="navi-box">
+            <a href="@bc.linkurl("index")">首页</a> &gt;
+            <a href="@bc.linkurl("video")">视频教程</a>
+            
+        </div>
+        <!--/所在位置-->
+        
+        <!--内容列表-->
+        <div class="screen-box">
+            <h4>筛选：</h4>
+            <ul>
+                
+                <li class="selected"><a href="@bc.linkurl("video_list",0)">全部</a></li>
+                
+                <li><a href="@bc.linkurl("video_list",60)">二次开发</a></li>
+                
+                <li><a href="@bc.linkurl("video_list",61)">使用教程</a></li>
+                
+            </ul>
+        </div>
+        <div class="v-list">
+            <ul>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="img-box">
+                            <a href="/video/show-83.html"><img src="/upload/201610/21/201610210158217711.png"></a>
+                        </div>
+                        <div class="note">
+                            <h3><a href="/video/show-83.html">使用教程-扩展字段使用</a></h3>
+                            <div class="info">
+                                <span><i class="fa fa-calendar"></i>2016/10/21 1:55:47</span>
+                                <span><i class="fa fa-eye"></i>733次</span>
+                            </div>
+                            <p>从 3.0 开始，我们为扩展字段进行改进，在架构上进行了升级，使用扩展字段能够在模板页面轻松的调用。有了频道视图的配合，使得我们调用扩展字段和变通的字段一样方便，有了这些改进，基本上可以满足 80%网站和客户各种需求。</p>
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="img-box">
+                            <a href="/video/show-82.html"><img src="/upload/201610/20/201610200204474695.png"></a>
+                        </div>
+                        <div class="note">
+                            <h3><a href="/video/show-82.html">第四章 插件开发</a></h3>
+                            <div class="info">
+                                <span><i class="fa fa-calendar"></i>2016/10/20 1:29:09</span>
+                                <span><i class="fa fa-eye"></i>484次</span>
+                            </div>
+                            <p>本章节只要讲解了插件的结构、安装和卸载时所需要完成的工作，了解这些之后我们进一步使用官方的友情链接插件做为一个例子进行详细讲解，使用户可以尽快上手开发自已的系统插件。</p>
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="img-box">
+                            <a href="/video/show-81.html"><img src="/upload/201610/20/201610200208412600.png"></a>
+                        </div>
+                        <div class="note">
+                            <h3><a href="/video/show-81.html">第三章 URL配置</a></h3>
+                            <div class="info">
+                                <span><i class="fa fa-calendar"></i>2016/10/19 3:58:37</span>
+                                <span><i class="fa fa-eye"></i>274次</span>
+                            </div>
+                            <p>DTcms 二次开发系列教程，本教程适用于DTcms 4.0版本。本章节主要讲解只要针对开发人员在后台进行添加自定义的频道时所需要掌握的 URL 配置必备知识， 从认识正则表达式到配置自己想要的 URL 效果进行讲解。</p>
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="img-box">
+                            <a href="/video/show-80.html"><img src="/upload/201610/20/201610200208317158.png"></a>
+                        </div>
+                        <div class="note">
+                            <h3><a href="/video/show-80.html">第二章 自定义标签和页面</a></h3>
+                            <div class="info">
+                                <span><i class="fa fa-calendar"></i>2016/10/19 3:56:33</span>
+                                <span><i class="fa fa-eye"></i>332次</span>
+                            </div>
+                            <p>DTcms 二次开发系列教程，本教程适用于DTcms 4.0版本。本章节主要讲解开发人员在制作网站模板时，如果系统默认提供的标签方法不能满足现有开发需求时通过自己修改项目源代码添加自定义标签，以及学会如何增加前台模板页面。学习本课程需要具备 Asp.Net C#程序设计语言基础。</p>
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="list-box">
+                        <div class="img-box">
+                            <a href="/video/show-79.html"><img src="/upload/201610/20/201610200208228430.png"></a>
+                        </div>
+                        <div class="note">
+                            <h3><a href="/video/show-79.html">第一章 快速上手</a></h3>
+                            <div class="info">
+                                <span><i class="fa fa-calendar"></i>2016/10/19 3:41:55</span>
+                                <span><i class="fa fa-eye"></i>680次</span>
+                            </div>
+                            <p>本章节主要为了能让用户下载DTcms后尽快掌握使用方法，所以不会提及有关技术开发部分内容知识，仅从网站建设的步骤和流程开始入手。DTcms 二次开发系列教程，本教程适用于DTcms 4.0版本。</p>
+                        </div>
+                    </div>
+                </li>
+                
+            </ul>
+        </div>
+        <!--内容列表-->
+    </div>
+</div>

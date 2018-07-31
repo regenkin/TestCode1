@@ -1,0 +1,113 @@
+﻿@using System.Data;
+@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+   string channel = "cms_news";
+}
+
+<!--页面底部-->
+<div class="footer">
+    <div class="section">
+        <div class="foot-menu">
+            <ul>
+                <li>
+                    <div class="wrap-box">
+                        <i class="fa fa-sitemap"></i>
+                        <span>轻量级架构</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="wrap-box">
+                        <i class="fa fa-desktop"></i>
+                        <span>响应式管理界面</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="wrap-box">
+                        <i class="fa fa-puzzle-piece"></i>
+                        <span>可插拨插件</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="wrap-box">
+                        <i class="fa fa-cubes"></i>
+                        <span>功能自定义</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="wrap-box">
+                        <i class="fa fa-cloud"></i>
+                        <span>内置URL引擎</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="foot-box">
+            <div class="foot-nav">
+                <ul>
+                    <li>
+                        <h3>产品介绍</h3>
+                        <p><a href="@bc.linkurl("content","product")">产品介绍</a></p>
+                    </li>
+                    <li>
+                        <h3>官方动态</h3>
+                        @{
+                           DataTable list1 = bc.get_category_list(channel, 0);
+                           foreach(DataRow dr1 in list1.Rows){
+                              <p><a href="@bc.linkurl("news_list", dr1["id"])">@dr1["title"]</a></p>
+                           }
+                        }
+                    </li>
+                    <li>
+                        <h3>教程文档</h3>
+                        <p><a href="@bc.linkurl("help")">帮助文档</a></p>
+                        <p><a href="@bc.linkurl("video_list",0)">视频教程</a></p>
+                    </li>
+                    <li>
+                        <h3>联系我们</h3>
+                        <p><a href="@bc.linkurl("content","about")">关于我们</a></p>
+                        <p><a href="@bc.linkurl("content","contact")">联系方式</a></p>
+                        <p><a href="@bc.linkurl("content","report")">投诉举报</a></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="foot-tel">
+                <h4></h4>
+                <p>周一至周日 9:00-24:00</p>
+                <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=000000&amp;site=qq&amp;menu=yes" target="_blank">
+                    <i class="fa fa-phone"></i>
+                    在线客服
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="copyright clearfix">
+        <div class="section">
+            <div class="wrap-box">
+               <p>@site.crod 版本号：@Utils.GetVersion()</p>
+               <p>@Html.Raw(site.copyright)</p>
+               <p>@Html.Raw(config.webcountcode)</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="online-wrap">
+    <a id="wxcode" href="javascript:;">
+        <i class="fa fa-qrcode"></i>
+    </a>
+    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=00000&amp;site=qq&amp;menu=yes" target="_blank">
+        <i class="fa fa-qq"></i>
+    </a>
+    <a id="gotop" href="javascript:;" style="visibility: hidden;">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    <div id="code-img">
+        <img src="/templates/cms/web/images/wxcode.jpg">
+        <p>微信扫一扫</p>
+    </div>
+</div>
+<!--/页面底部-->

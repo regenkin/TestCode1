@@ -1,0 +1,173 @@
+﻿@using System.Data;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_LayoutShow.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = "新闻资讯 - " + site.name;
+   string channel = site.build_path + "_news";
+   DataTable list = null;
+   int count = 0;
+}
+@section HeaderContent{
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/jquery.flexslider-min.js"></script>
+}
+@section Scripts{
+   <script>
+      $(function () {
+         $(".focusbox").flexslider({
+            directionNav: false,
+            pauseOnAction: false
+         });
+      });
+   </script>
+}
+
+<div class="section clearfix">
+  <div class="line15"></div>
+  <!--焦点图-->
+  <div class="wrapper clearfix">
+    <div class="main-left">
+      <div class="focusbox">
+        <ul class="slides">
+         @{
+          list = bc.get_article_list(channel, 0, 8, "status=0 and is_slide=1 and img_url<>''");
+          foreach(DataRow dr in list.Rows){
+          <li>
+            <a title="@dr["title"]" href="@bc.linkurl("news_show",dr["id"])">
+              <span class="note-bg"></span>
+              <span class="note-txt">@dr["title"]</span>
+              <img src="@dr["img_url"]" />
+            </a>
+          </li>               
+          }
+         }
+        </ul>
+      </div>
+    </div>
+    <!--/焦点图-->
+    
+    <!--最新资讯-->
+    <div class="main-left" style="margin-right:0;">
+      <ul class="txt-list">
+        @{
+           count = 0;
+           list = bc.get_article_list(channel, 0, 9, "status=0");
+           foreach(DataRow dr in list.Rows){
+              count++;
+              if(count == 1){
+                 <li class="tit">
+                   <a title="@dr["title"]" href="<@bc.linkurl("news_show",dr["id"])">@dr["title"]</a>
+                 </li>
+              }
+              else{
+                 <li>
+                  <span>@DateTime.Parse(dr["add_time"].ToString()).ToString("MM-dd")</span>
+                   <a title="@dr["title"]" href="@bc.linkurl("news_show",dr["id"])">@dr["title"]</a>
+                 </li>
+              }
+           }
+        }
+      </ul>
+    </div>
+    <!--/最新资讯-->
+    
+    <!--头条资讯-->
+    <div class="sidebar-right" style="margin-left:15px;">
+      <ul class="img-list ilist">
+      @{
+      list = bc.get_article_list(channel, 0, 2, "status=0 and is_top=1 and img_url<>''");
+      foreach(DataRow dr in list.Rows){
+         <li>
+            <a title="@dr["title"]" href="@bc.linkurl("news_show",dr["id"])">               
+            @if(dr["is_top"].ToString() == "1"){
+            <span class="abs-txt">头条</span>
+            }
+            <span class="abs-bg"></span>
+            <span class="txt1">@dr["title"]</span>
+            <span class="txt2">
+               <i>@DateTime.Parse(dr["add_time"].ToString()).ToString("MM-dd")</i>
+               <p>@dr["zhaiyao"]</p>
+            </span>
+            <img src="@dr["img_url"]" />
+            </a>
+         </li>
+      }
+      }
+      </ul>
+    </div>
+    <!--/头条资讯-->
+    
+  </div>
+</div>
+
+<!--分类资讯-->
+@{
+list = bc.get_category_child_list(channel,0);
+foreach(DataRow dr in list.Rows){ 
+<div class="section clearfix">
+  <div class="ntitle">
+    <h2>
+      <a href="@bc.linkurl("news_list",dr["id"])">@dr["title"]<em></em></a>
+    </h2>
+    <p>
+      <!--小类-->
+      @{
+      DataTable dt1 = bc.get_category_child_list(channel,int.Parse(dr["id"].ToString()));
+      count = 0;
+      foreach (DataRow row in dt1.Rows) {
+         if (count == 1) {
+            <a class="no-bg" href="@bc.linkurl("news_list",row["id"])">@row["title"]</a>
+         }
+         else {
+            <a href="@bc.linkurl("news_list",row["id"])">@row["title"]</a>
+         }
+      }
+      }
+    </p>
+  </div>
+  
+  <div class="wrapper clearfix">
+    <div class="sidebar-left">
+      <div class="t-list">
+        <ul>
+         @{
+          DataTable dt2 = bc.get_article_list(channel, Convert.ToInt32(dr["id"]), 4, "status=0 and img_url<>''");
+          foreach (DataRow dr2 in dt2.Rows) {
+            <li>
+            <a class="img-box" title="@dr2["title"]" href="@bc.linkurl("news_show",dr2["id"])">
+               <img src="@dr2["img_url"]" border="0">
+            </a>
+            <h3><a title="@dr2["title"]" href="@bc.linkurl("news_show",dr2["id"])">@dr2["title"]</a></h3>
+            <p>@Html.Raw(dr2["zhaiyao"].ToString())</p>
+            <i>@dr2["add_time"]</i>
+            </li>               
+         }
+         }
+        </ul>
+      </div>
+    </div>
+    
+    <div class="sidebar-right" style="padding-top:10px;">
+      <ul class="rank-list">
+         @{
+         count = 0;
+         DataTable dt3 = bc.get_article_list(channel, Convert.ToInt32(dr["id"]), 10, "status=0", "click desc,id desc");
+         foreach (DataRow dr3 in dt3.Rows) {
+            count++;
+            <li class="@(count == 1 ? "active" : "")">                  
+               <i class="num">@count</i>
+               <a href="@bc.linkurl("news_show",dr3["id"])">@dr3["title"]</a>
+            </li>                  
+         }
+         }
+      </ul>
+    </div>
+    
+  </div>
+</div>
+}
+}
+<!--分类资讯-->

@@ -1,0 +1,106 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/_LayoutShow.cshtml";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   Article_ShowController bc = ViewBag.BasePage as Article_ShowController;
+   string category_title = bc.get_category_title(m.category_id, "视频专区");
+   ViewBag.Title = m.title + " - " + category_title + " - " + site.name;
+   string channel = "video";
+   DataTable relVideo = bc.get_article_list(channel, m.category_id, 3, "is_red=1 and id<>" + m.id);//相关视频
+}
+
+@section HeaderContent{
+   <script src="~/Scripts/ckplayer/ckplayer.js"></script>
+   <script>
+	   $(document).ready(function(e) {
+		   //设置视频容器大小
+		   winResize();
+		   $(window).resize(function() {
+			   winResize();
+		   });
+		   //初始化视频容器
+		   initCKPlayer('video-box', '@m.fields["video_src"]', '@(config.webpath)scripts/ckplayer/ckplayer.swf');
+       });
+	   //改变大小函数
+	   function winResize(){
+		   var w = $(".video-box").parent().width();
+		   var h = w*9/16;
+		   $(".video-box").width(w).height(h);
+	   }
+   </script>
+}
+
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-header="main_header" data-footer="main_footer">
+      <!--视频容器-->
+      <div id="video-box" class="video-box"></div>
+      <!--/视频容器-->
+      
+      <!--视频详细-->
+      <div class="meta">
+        <h1 class="meta-tit">@m.title</h1>
+        <p class="meta-info">
+          <span class="time">@m.add_time</span>
+          <span class="view"><script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_article_click&id=@m.id&click=1"></script>次浏览</span>
+          分类：@category_title
+        </p>
+      </div>
+      
+      <div class="entry">
+        @Html.Raw(m.content)
+      </div>
+      <!--/视频详细-->
+      
+      <!--相关资讯-->
+      <div class="section">
+        <h1>相关视频</h1>
+      </div>
+      <div>
+        <ul class="photo-list">
+          @foreach(DataRow dr in relVideo.Rows){
+          <li>
+            <a href="@bc.linkurl("video_show",dr["id"])" data-ignore="true">
+              <img src="@dr["img_url"]" alt="@dr["title"]" />
+              <h2>@dr["title"]</h2>
+            </a>
+          </li>
+          }
+          @if(relVideo.Rows.Count == 0){
+          <p class="nodata">同类下暂无推荐视频...</p>
+          }
+        </ul>
+      </div>
+      <!--/相关视频-->
+      
+      <!--评论-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_comment_box.cshtml")
+      <!--/评论-->
+      
+      <!--版权信息-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_copyright.cshtml")
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--页面头部-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_header.cshtml")
+    <!--/页面头部-->
+    
+    <!--底部导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_footer.cshtml")
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_nav.cshtml")
+    <!--/左侧导航-->
+      
+  </div>
+</div>

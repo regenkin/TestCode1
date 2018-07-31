@@ -1,0 +1,140 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_LayoutList.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   Article_ShowController bc = ViewBag.BasePage as Article_ShowController;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   string category_title = bc.get_category_title(m.category_id, "创意灵感");
+   ViewBag.Title = m.title + " - " + category_title + " - " + site.name;
+   string channel = "household_photo";
+   DataTable list = null;
+   int count = 0;
+   string category_nav = bc.get_category_menu("photo_list", m.category_id);
+   //获取商品列表
+   list = new DTcms.BLL.article_link().GetAricleList(m.id);
+}
+
+@section HeaderContent{
+   <link href="~/templates/@ViewBag.TemplateSkin/web/css/lightbox.css" rel="stylesheet" />
+   <link href="~/templates/@ViewBag.TemplateSkin/web/css/flexslider.css" rel="stylesheet" />
+   <script src="~/Areas/Web/Scripts/js/cart.js"></script>
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/jquery.flexslider-min.js"></script>
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/lightbox.min.js"></script>
+   <script src="~/Areas/Web/Scripts/jquery/jquery.pagination.js"></script>
+   <script src="~/Areas/Web/Scripts/jquery/Validform_v5.3.2_min.js"></script>
+}
+
+@section Scripts{
+<script>
+   $(function () {
+      $(".focusbox").flexslider({
+         directionNav: false,
+         pauseOnAction: false
+      });
+   });
+</script>
+}
+
+<div id="main">
+   <div>
+     <a href="@bc.linkurl("index")">首页</a>&gt; <a href="@bc.linkurl("photo")">创意灵感</a>@Html.Raw(category_nav)
+   </div>
+   <!--相册图片-->
+   <div class="album-list">
+      <ul>
+      @if(m.albums!=null){
+         foreach(DTcms.Model.article_albums mt in m.albums){
+         <li>
+            <a href="@mt.original_path" data-lightbox="album" data-title="@mt.remark">
+            <img src="@mt.thumb_path" />
+            </a>
+         </li>
+         }
+      }
+      </ul>
+   </div>
+   <!--/相册图片-->
+
+   <div class="newRoomsetContainer" id="roomsetMainContent">
+      <div id="roomsettingdetailsjsenabledDiv" class="roomsettingdetailsjsenabled">
+         <div class="roomDetails">
+            <div class="roomDescriptionDetails">
+               <div>
+                  <h1 class="roomHeadline">@m.title</h1>
+               </div>
+               <div class="roomDescription">
+                  <p>@Html.Raw(m.content)</p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 分享 -->
+      <div class="roomsetlinkContainer">
+         <div class="floatLeft">
+            <div class="shareMPAContainer" id="roomsetShare">
+               @RenderPage("~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/partial_share_js.cshtml")
+               <div class="clearAll"></div>
+            </div>
+         </div>
+      </div>
+      <!-- 分享/ -->
+
+   <!-- 商品列表 -->
+   <div id="roomsetproductsComponentId" class="roomsetproductsComponent">
+      <div class="productsInRoomTItle">查看关联商品列表</div>
+      <div class="productLists adproductLists" id="productLists">
+         <div class="gridRow">
+            @for(int i=0;i<list.Rows.Count;i+=4){
+               DataRow dr = null;
+               for(int j=0;j<4;j++){
+                  if (i + j >= list.Rows.Count) {
+                     break;
+                  }
+                  dr = list.Rows[i + j];
+               <div class="threeColumn product @(j == 3 ? "lastColumn" : "")">
+                  <div class="image">
+                     <a href="@bc.linkurl("goods_show", dr["id"])" class="productLink"><img style="width:250px; height:250px;" src="@dr["img_url"]" alt="@dr["title"]" class="prodImg" /></a>
+                  </div>
+                  <div class="productDetails">
+                     <a href="@bc.linkurl("goods_show", dr["id"])">
+                        <div class="productTitle floatLeft">@dr["title"]</div>
+                        <div class="productDesp">@dr["sub_title"]</div>
+                        <div class="price regularPrice">¥&nbsp;@dr["sell_price"]</div>
+                     </a>
+                     <div class="moreInfo">
+                        <span class="size">@dr["zhaiyao"]</span>
+                        <div class="buttonsContainer">
+                           <a href="#" class="orangeBtn">保存至清单</a>
+                        </div>
+                  </div>
+                  </div>
+               </div>
+               }
+            }
+            <div class="clearGrid"></div>
+         </div>
+      </div>
+   </div>
+   <!-- 商品列表/ -->
+
+
+      
+
+      <div class="roomsetfooter">
+         <div class="jsroompreviouslink">
+            上一篇：@Html.Raw(bc.get_prevandnext_article("photo_show", -1, "没有了", 0))
+         </div>
+         <div class="jsroomnextlink">
+            下一篇：@Html.Raw(bc.get_prevandnext_article("photo_show", 1, "没有了", 0))
+         </div>
+      </div>
+   </div>
+   <div id="breadCrumbNew" class="gridRow breadCrumbNew">
+      当前位置: <a href="@bc.linkurl("index")">首页</a>@Html.Raw(category_nav)
+   </div>
+</div>

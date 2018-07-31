@@ -1,0 +1,279 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@using System.Data;
+@{
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+   DataTable photo_cate_list = bc.get_category_child_list("household_photo", 0);
+   DataTable goods_cate_list = bc.get_category_child_list("household_goods", 0);   
+}
+
+<script>
+   $(function () {
+      //全部房间下拉菜单
+      var inRoomsArea = false;
+      $("#moreRooms").hover(
+         function () {
+            $("#moreRoomsMenu").slideDown();
+         },
+         function () {
+            setTimeout(function () {
+               if (!inRoomsArea) {
+                  inRoomsArea = false;
+                  $("#moreRoomsMenu").slideUp();
+               }
+            }, 100);
+         }
+      );
+
+      $("#moreRoomsMenu").hover(
+         function () {
+            inRoomsArea = true;
+         },
+         function () {
+            inRoomsArea = false;
+            $("#moreRoomsMenu").slideUp();
+         }
+      );
+
+      //全部商品下拉菜单
+      var inGoodsArea = false;
+      $("#allProducts").hover(
+         function () {
+            $("#moreGoodsMenu").slideDown();
+         },
+         function () {
+            setTimeout(function () {
+               if (!inGoodsArea) {
+                  inGoodsArea = false;
+                  $("#moreGoodsMenu").slideUp();
+               }
+            }, 100);
+         }
+      );
+
+      $("#moreGoodsMenu").hover(
+         function () {
+            inGoodsArea = true;
+         },
+         function () {
+            inGoodsArea = false;
+            $("#moreGoodsMenu").slideUp();
+         }
+      );
+   });
+
+   function search() {
+      var url = "@bc.linkurl("search")";
+         SiteSearch(url, "#keywords");
+      }
+</script>
+<div id="topMenu" class="topMenu">
+   <div class="logoContainer">
+      <a href="@bc.linkurl("index")" class="logoLink">
+         <img src="@site.logo" alt="欢迎来到@(site.title)" class="logo" />
+      </a>
+      <div class="searchForm">
+         <div class="formInput langLinks">
+            <input type="text" value="" name="query" id="search" class="langLinks" autocomplete="off"><span id="indicator" style="display: none"><img src="~/templates/@ViewBag.TemplateSkin/web/images/loading.gif"></span>
+         </div>
+         <div class="formBtn">
+            <div class="buttonContainer">
+               <a id="lnkSearchBtnHeader" href="#">
+                  <span class="buttonLeft"></span>
+                  <span class="buttonCaption">搜索</span>
+                  <span class="buttonRight"></span>
+               </a>
+            </div>
+         </div>
+      </div>
+      <div class="ikeaTagline" id="txtIKEATagHeader">欢迎来到@(site.title)！</div>
+   </div>
+   <div class="rightSection">
+      <div class="iconLinkContainer">
+         <div>
+            <a href="@bc.linkurl("cart")">
+               <img src="~/templates/@ViewBag.TemplateSkin/web/images/shopping_cart.jpg" alt="购物车">
+               <span style="display:block;">购物车<span id="shoppingCartCount"><script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_cart_count"></script></span>件</span>
+            </a>
+         </div>
+      </div>
+      <div class="linkList">
+         <ul>
+            @if (bc.GetUserInfo() == null) {
+               <li><a href="@bc.linkurl("register")">新用户注册</a></li>
+               <li><a href="@bc.linkurl("regedit")"></a></li>
+               <li><a href="@bc.linkurl("login")">用户登录</a></li>
+            }
+            else{
+            <li><a href="@bc.linkurl("usercenter","index")" class="arrowLink">用户中心</a></li>
+            <li><a href="@bc.linkurl("usercenter","index")" class="arrowLink">@bc.GetUserInfo().user_name</a></li>
+            <li><a href="@bc.linkurl("usercenter","exit")" class="arrowLink">退出登录</a></li>
+            }
+         </ul>
+      </div>
+   </div>
+</div>
+
+<div id="menu">
+   <div class="mainMenu">
+      <div class="tableContainer">
+         <table>
+            <tbody>
+               <tr>
+                  <td class="allProducts" id="allProducts">
+                     <a>
+                        <span class="end">
+                           <span class="separator">
+                              <span class="padding">所有产品</span>
+                           </span>
+                        </span>
+                     </a>
+                  </td>
+                  <td class="newAtIkea" style="display:none;">
+                     <a href="/cn/zh/catalog/news/departments/" id="lnkMainMenu2Header">
+                        <span class="separator">
+                           <span class="padding">新品</span>
+                        </span>
+                     </a>
+                  </td>
+                  <td>
+                     <a href="@bc.linkurl("photo")">
+                        <span class="separator">
+                           <span class="padding">创意灵感</span>
+                        </span>
+                     </a>
+                  </td>
+                  <td>
+                     <a href="@bc.linkurl("photo_list",108)">
+                        <span class="separator">
+                           <span class="padding">卧室</span>
+                        </span>
+                     </a>
+                  </td>
+                  <td>
+                     <a href="@bc.linkurl("photo_list", 112)">
+                        <span class="separator">
+                           <span class="padding">浴室</span>
+                        </span>
+                     </a>
+                  </td>
+                  <td>
+                     <a href="@bc.linkurl("photo_list", 110)">
+                        <span class="separator">
+                           <span class="padding">客厅</span>
+                        </span>
+                     </a>
+                  </td>
+
+                  <td>
+                     <a href="@bc.linkurl("photo_list", 109)">
+                        <span class="separator">
+                           <span class="padding">厨房</span>
+                        </span>
+                     </a>
+                  </td>
+                  <td>
+                     <a href="@bc.linkurl("photo_list", 113)">
+                        <span class="separator">
+                           <span class="padding">餐厅</span>
+                        </span>
+                     </a>
+                  </td>
+                  <td>
+                     <a href="@bc.linkurl("photo_list", 107)">
+                        <span class="separator">
+                           <span class="padding">儿童房间</span>
+                        </span>
+                     </a>
+                  </td>
+                  <td>
+                     <a href="@bc.linkurl("photo_list", 111)">
+                        <span class="separator">
+                           <span class="padding">家庭工作室</span>
+                        </span>
+                     </a>
+                  </td>
+                  <td style="width: 161px;"></td>
+                  <td id="moreRooms" class="moreRooms">
+                     <a href="javascript:;">
+                        <span class="end">
+                           <span class="padding"><span class="arrow" id="arrow2">&nbsp;</span>所有创意</span>
+                        </span>
+                     </a>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <img src="~/templates/@ViewBag.TemplateSkin/web/images/main_menu_shadow.gif" alt="" class="mainMenuShadow">
+</div>
+<div class="moreRoomsMenuWrapper">
+   <div class="moreRoomsMenu" id="moreRoomsMenu" style="overflow: visible; display: none;">
+      <div class="border">
+         <table cellspacing="0" id="table">
+            <tbody>
+               @for(int i=0; i<photo_cate_list.Rows.Count; i+=2){
+                  <tr>
+                  @for (int j = 0; j <= 1; j++) {
+                     if (i + j == photo_cate_list.Rows.Count) {
+                        break;
+                     }
+                     DataRow dr = photo_cate_list.Rows[i + j];
+                     <td>
+                        <div class="@(j == 0 ? "contentLeft" : "contentRight") @(i > (photo_cate_list.Rows.Count - 2) ? "noBorder" : "")">
+                           <a href="@bc.linkurl("photo_list", dr["id"])">
+                              <div class="productImage" style="background-position: -@((int)dr["sort_id"] * 25)px 0;"></div>
+                              <span>@dr["title"]</span>
+                           </a>
+                        </div>
+                     </td>                     
+                  }
+                  </tr>
+               }
+            </tbody>
+         </table>
+      </div>
+      <div class="endLeft"></div>
+      <div class="endCenter"></div>
+      <div class="endRight"></div>
+   </div>
+</div>
+<div class="moreGoodsMenuWrapper">
+   <div class="moreGoodsMenu" id="moreGoodsMenu" style="overflow: visible; display: none;">
+      <div class="border">
+         @for (int i = 0; i < goods_cate_list.Rows.Count; i += 4) {
+            <div class="productCategoryContainerWrapper">
+               @for (int j = 0; j < 4; j++) {
+                  if (i + j >= goods_cate_list.Rows.Count) {
+                     break;
+                  }
+                  <div class="productCategoryContainer @(j == 0 ? "productCategoryContainerNoBorder" : "")">
+                     <span class="header">@goods_cate_list.Rows[i + j]["title"]</span>
+                     <div class="textContainer">
+                     @{
+                        DataTable cate_list = bc.get_category_child_list("household_goods", (int)goods_cate_list.Rows[i + j]["id"]);
+                        foreach (DataRow cdr in cate_list.Rows) {
+                           <a href="@bc.linkurl("goods")?category_id=@cdr["id"]">@cdr["title"]</a>
+                        }
+                     }
+                     </div>
+                  </div>
+               }
+            </div>
+            if((i+4) < goods_cate_list.Rows.Count){
+            <div class="productCategoryDivider productCategoryDividerFirst"></div>
+            <div class="productCategoryDivider"></div>
+            <div class="productCategoryDivider"></div>
+            <div class="productCategoryDivider"></div>
+            }
+         }
+         <div class="clearAll"></div>
+      </div>
+      <div class="endLeft"></div>
+      <div class="endCenter"></div>
+      <div class="endRight"></div>
+   </div>
+</div>

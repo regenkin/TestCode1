@@ -1,0 +1,154 @@
+﻿@using System.Data;
+@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+}
+   <script>
+      function search() {
+         var url = "@bc.linkurl("search")";
+         SiteSearch(url, "#ipt_search_keywords", "goods");
+      }
+   </script>
+<script>
+   $(function () {
+      //图片延迟加载
+      $("img.lazy").lazyload({
+         effect: "fadeIn"
+      });
+   });
+
+   function GetRTime() {
+      var EndTime = new Date('2015/08/20 00:00:00');
+      var NowTime = new Date();
+      var t = EndTime.getTime() - NowTime.getTime();
+      var d = Math.floor(t / 1000 / 60 / 60 / 24);
+      var h = Math.floor(t / 1000 / 60 / 60 % 24);
+      var m = Math.floor(t / 1000 / 60 % 60);
+      var s = Math.floor(t / 1000 % 60);
+
+      $(".t_d").html(d + "天");
+      $(".t_h").html(h + "时");
+      $(".t_m").html(m + "分");
+      $(".t_s").html(s + "秒");
+   }
+   setInterval(GetRTime, 0);
+</script>
+
+	<div id="top_new_top">
+		<div class="top_new_top">
+			<div class="top_right">
+				<ul class="top_sitemenu">
+					<!-- widgets other_menu -->
+               <li class="blue"><a href="@bc.linkurl("login")">登录</a></li>	
+               <li class="blue"><a href="@bc.linkurl("usercenter", "order")">我的订单</a></li>	
+               <li class="blue"></li>	
+					<li class="blue"><a href="@bc.linkurl("cart")">购物车</a></li>		
+					<li class="t_car"></li>		
+					<li class="t_cen"><a href="@bc.linkurl("usercenter", "index")">会员中心</a></li>
+					<!-- widgets weixin_menu -->
+					<li class="t_cen"><a href="@bc.linkurl("content", "contact")">联系我们</a></li>
+				</ul>
+			</div>
+			<div class="top_left">
+				您好! 欢迎来到@(site.name)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="@bc.linkurl("index")?site=main">标准版演示</a>&nbsp;&nbsp;
+            <a href="@bc.linkurl("index")?site=cms">平台介绍</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+
+	<div class="TopBox1 w1200">
+		<!-- 商城logo -->
+		<div class="CWebLogo">
+			<p>
+				<a href="@bc.linkurl("goods")"><img width="250" alt="@site.name" src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/logo.png" border="0"></a>
+			</p>
+		</div>
+		<div class="head-right">
+      <ul class="auto-bind" id="search_type">
+         <li class="selected" data-type="goods"><span>商品</span></li>
+         <li data-type="seller"><span>品牌</span></li>
+         <!--li data-type="brands" class="hide">
+			<span>品牌</span>
+		</li-->
+      </ul>
+      <form class="search-form auto-theme-bind" id="searchbar_3" action=""  method="post" data-bind-type="searchbar" async="false">
+         <input name="search_keywords" id="ipt_search_keywords" type="text" onkeydown="if(event.keyCode==13){search();return false};" maxlength="30" placeholder="请输入关键字" value="@ViewBag.Keyword" ac_options="{}" autocompleter="associate_autocomplete_goods:name,goods_id">
+         <button class="btn btn-search submit-btn" id="btn_serach_submit" type="button" onclick="search();"><span>搜 索</span></button>
+      </form>
+      <!--
+<p id="hotword">
+	<span style="color:#676767;" class="hide"><b>热门搜索：</b></span>
+	</p>
+-->
+      <div class="head-r-nav" id="h-r-nav">
+         <ul>
+            <li>热门关键词 </li>
+         </ul>
+		</div>
+      </div>
+		<div class="cart fr" style="display:none">
+			<ul>  		
+				<!--我的商城-->
+				<{widgets id="my_mall"}>
+				<!--购物车结算-->
+				<{widgets id="basic_cart"}>
+			</ul>
+		</div>
+		<div class="clear"></div>
+   </div>
+	<div class="menu">
+		<div class="w1200">
+			<div class="nav fl">
+				<i class="iconfont icon-caidan"></i>全部分类<br>
+				<div class="left-nav abs" style="display:none">
+               <div class="NavAll f_l">
+                  <ul class="FirNav">
+                     @foreach(DataRow cdr in bc.get_category_child_list("goods",0).Rows){
+                     <li>
+                        <ul class="TwoNav">
+                           <li class="Nv1">
+                              <h3>
+                                 <i class="iconfont ">
+                                    <img src="@cdr["img_url"]" width="16" height="16"></i>
+                                 <a href="@bc.linkurl("goods_list", cdr["id"])" class="CategoryTitle">@cdr["title"]</a>
+                              </h3>
+                           </li>
+
+                           <div id="m1" class="Nav_01">
+                              @foreach(DataRow dr in bc.get_category_child_list("goods", Convert.ToInt32(cdr["id"])).Rows){
+                              <div class="NavHidde01 f_l">
+                                 <h1><a href="@bc.linkurl("goods_list", dr["id"])">@dr["title"]</a></h1>
+                              </div>
+                              }
+                           </div>
+                        </ul>
+                     </li>
+                     }
+                  </ul>
+               </div>
+
+
+				</div>
+				<script>
+				   $(".nav").mouseover(function () {
+				      $(".left-nav").show();
+				   })
+				   $(".left-nav").mouseout(function () {
+				      $(this).hide();
+				   })
+				</script>
+			</div>
+			<div class="nav-list fl">
+				<a href="@bc.linkurl("usercenter","index")">会员中心</a>
+			</div>
+         <div class="nav-list fl">
+            <a href="@bc.linkurl("index")">首页</a>
+         </div>
+			<div class="clear"></div>
+		</div>
+	</div>

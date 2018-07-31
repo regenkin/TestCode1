@@ -1,0 +1,53 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   int comment_count=bc.get_comment_count(m.channel_id, m.id, "is_lock=0");<!--取得评论总数-->
+   bool isLogin=bc.IsUserLogin();
+   string userAvatar = isLogin ? bc.GetUserInfo().avatar : "";
+  }
+    <script type="text/javascript">
+      $(function(){
+        //初始化评论列表
+        pageInitComment();
+        //初始化发表评论表单
+        AjaxInitForm('#comment_form', '#btnSubmit', 1, '', pageInitComment);
+      });
+      //初始化评论列表
+      function pageInitComment(){
+        AjaxPageList('#comment_list', '#pagination', 10, @comment_count, '@(config.webpath)tools/submit_ajax.ashx?action=comment_list&channel_id=@m.channel_id&article_id=@m.id');
+      }
+    </script>
+<form id="commentForm" name="commentForm" class="form-box" url="@(config.webpath)tools/submit_ajax.ashx?action=comment_add&channel_id=@m.channel_id&article_id=@m.id">
+    <div class="avatar-box">
+        @if(isLogin && userAvatar != ""){
+           <img src="@userAvatar" />
+        }else{
+           <i class="iconfont icon-user-full"></i>
+        }
+    </div>
+    <div class="conn-box">
+        <div class="editor">
+            <textarea id="txtContent" name="txtContent" sucmsg=" " datatype="*10-1000" nullmsg="请填写评论内容！"></textarea>
+        </div>
+        <div class="subcon">
+            <input id="btnSubmit" name="submit" type="submit" value="提交评论"class="submit" />
+            <strong>验证码：</strong>
+            <input id="txtCode" name="txtCode" class="code" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('btnSubmit').click();return false};" type="text" sucmsg=" " datatype="s4-4" errormsg="请填写4位验证码" nullmsg="请填写验证码！" />
+            <a href="javascript:;" onclick="ToggleCode(this, '@(config.webpath)tools/verify_code.ashx');return false;">
+                <img width="80" height="22" src="@(config.webpath)tools/verify_code.ashx"> 看不清楚？
+            </a>
+        </div>
+    </div>
+</form>
+                
+<ul id="commentList" class="list-box"></ul>
+                
+<!--放置页码-->
+<div class="page-box" style="margin:5px 0 0 62px">
+    <div id="pagination" class="digg"></div>
+</div>
+<!--/放置页码-->

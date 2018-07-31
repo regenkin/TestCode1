@@ -1,0 +1,153 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/shop/mobile/Shared/_LayoutPay.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = "确认订单 - " + site.name;
+   DTcms.Model.users userModel = ViewData["userModel"] as DTcms.Model.users;
+   List<DTcms.Model.cart_items> goodsList = ViewData["goodsList"] as List<DTcms.Model.cart_items>;
+   DTcms.Model.cart_total goodsTotal = ViewData["goodsTotal"] as DTcms.Model.cart_total;
+   DTcms.Model.orderconfig orderConfig = ViewData["orderConfig"] as DTcms.Model.orderconfig;
+}
+@section HeaderContent{
+   <link href="~/Content/validate.css" rel="stylesheet" />
+   <script src="~/Scripts/PCASClass.js"></script>
+   <script src="~/Areas/Web/Scripts/js/cart.js"></script>
+   <script src="~/Scripts/Validform_v5.3.2_min.js"></script>
+   <link href="~/templates/@ViewBag.TemplateSkin/mobile/css/order.css" rel="stylesheet" />
+}
+@section Scripts{
+<script>
+   $(function () {
+      //初始化收货地址
+      initUserAddress("#userAddress");
+      //初始化表单
+      AjaxInitForm('#orderForm', '#btnSubmit', 0);
+   });
+</script>
+}
+<div id="J_checkout">
+   <!--v-start-->
+   <!--v-if-->
+
+   <div class="sec-address-info">
+      <div class="address-info address-info-nil">
+         <i class="iconfont"></i>
+         <strong>请选择收货地址</strong>
+      </div>
+      <!--v-if-->
+
+   </div>
+
+   <!--v-for-start-->
+   <!--fragment-start-->
+   <!--v-start-->
+   <div class="sec-trade-group">
+      <div class="hd">
+         <h3>店铺: Tan的小店</h3>
+      </div>
+      <div class="bd">
+         <!--v-for-start-->
+         <div class="trade-item">
+            <div class="goods-media">
+               <div class="goods-img">
+                  <img src="http://wdwd-prod.wdwdcdn.com/57a855c2c5f35.jpg?imageView/2/w/100"></div>
+               <div class="goods-title">[演示商品不发货勿拍]胡桃木 苹果mac macbook蓝牙键 键盘贴键盘膜键盘保护膜</div>
+               <div class="goods-props">默认规格</div>
+               <div class="goods-price">
+                  <span class="price">￥1.00</span>
+               </div>
+               <div class="goods-amount">x 2</div>
+            </div>
+         </div>
+         <!--v-for-end-->
+         <div class="list">
+            <div class="trade-postage item">
+               配送方式
+        <div class="item-note"><i class="iconfont"></i></div>
+               <!--v-if-->
+            </div>
+            <!--v-if-->
+            <div class="trade-invoice-info item" style="display: none;">
+               发票信息
+        <div class="item-note">普通发票 明细 <i class="iconfont"></i></div>
+            </div>
+            <div class="trade-price item">
+               <div class="f-r"><span class="red num">￥2.00</span></div>
+               合计
+            </div>
+            <div class="trade-note item">
+               <input type="text" class="input-text" placeholder="给卖家留言" value="">
+            </div>
+         </div>
+      </div>
+   </div>
+   <!--v-if-->
+   <!--v-if-->
+   <!--v-end-->
+   <!--v-component-->
+   <!--fragment-end-->
+   <!--v-for-end-->
+
+   <div class="sec-pay-total">
+      <div class="pay-total red">合计支付：<span class="num">￥2.00</span></div>
+      <div class="pay-info">
+         <div class="pay-total-count">共 2 件</div>
+         <span class="gray">运费 ￥0.00</span>
+      </div>
+   </div>
+
+   <div class="sec-payments">
+      <!--v-if-->
+      <!--fragment-start-->
+      <div class="payment-item">
+         <button type="button" class="btn btn-line btn-pay-alipay"><span>支付宝</span></button>
+      </div>
+      <!--v-component-->
+      <!--fragment-end-->
+      <!--v-if-->
+      <!--fragment-start-->
+      <div class="payment-item">
+         <button type="button" class="btn btn-line btn-pay-upay"><span>信用卡</span></button>
+      </div>
+      <!--v-component-->
+      <!--fragment-end-->
+      <!--v-if-->
+   </div>
+   <!--v-component-->
+
+   <!--v-start-->
+   <!--fragment-start-->
+   <!--v-start-->
+   <div class="page-address-selector from-bottom-transition">
+      <div class="hd">
+         <h3>收货地址</h3>
+         <a href="javascript:;" class="close"><i class="iconfont"></i></a>
+      </div>
+      <div class="bd">
+         <div class="sec-address-list">
+            <div class="addr-item">
+               <a class="btn-add-address" href="javascript:;"><i class="ico-add">+</i>添加新地址</a>
+            </div>
+            <!--v-for-start-->
+            <!--v-for-end-->
+         </div>
+      </div>
+   </div>
+   <div class="wd-overlay-layer fade-transition"></div>
+   <!--v-end-->
+   <!--v-component-->
+   <!--fragment-end-->
+   <!--v-if-->
+   <!--v-if-->
+   <!--v-end-->
+   <!--v-component-->
+   <!--v-end-->
+   <!--v-component-->
+</div>
+<div class="powered-by">买啊提供技术支持</div>

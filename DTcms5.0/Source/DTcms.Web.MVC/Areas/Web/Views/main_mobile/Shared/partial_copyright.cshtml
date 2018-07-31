@@ -1,0 +1,16 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+}
+
+<div class="copyright">
+   <p>
+      <a href="@bc.linkurl("index")" data-ignore="true">触屏版</a> | 
+      <a href="@config.weburl" data-ignore="true">电脑版</a> | 
+      <a href="javascript:;" onclick="$.ui.scrollToTop('mainPanel')">返回顶部</a>
+   </p>
+   <address>版权所有 @site.company 版本号 V @Utils.GetVersion()</address>
+</div>

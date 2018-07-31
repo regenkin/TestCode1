@@ -1,0 +1,109 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/Shared/_LayoutShow.cshtml";
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   DTcms.Model.article m = ViewData["model"] as DTcms.Model.article;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   Article_ShowController c = ViewBag.This as Article_ShowController;
+   string category_title = bc.get_category_title(m.category_id, "资源下载");
+   ViewBag.Title = m.title + " - " + category_title +" - " + site.name;
+   string channel = "down";
+   DataTable categoryList1 = bc.get_category_child_list(channel, 0);//资源类别
+   DataTable redDownList = bc.get_article_list(channel, m.category_id, 5, "status=0 and is_red=1 and id<>" + m.id);//推荐资源
+   DataTable hotDownList = bc.get_article_list(channel, 0, 10, "status=0", "click desc,id desc");//人气排行
+   DataTable relList = bc.get_article_list(channel, m.category_id, 4, "is_red=1 and id<>" + m.id);//相关资源
+}
+<div id="afui">
+  <div id="content">
+
+	<div id="mainPanel" class="panel" data-header="main_header" data-footer="main_footer">
+      <!--资源详细-->
+      <div class="meta">
+        <h1 class="meta-tit">@m.title</h1>
+        <p class="meta-info">
+          <span class="time">@m.add_time</span>
+          <span class="view"><script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_article_click&id=@m.id&click=1"></script>次浏览</span>
+          分类：@category_title
+        </p>
+      </div>
+      
+      <div class="entry">
+        @Html.Raw(m.content)
+      </div>
+      <!--/资源详细-->
+      
+      <!--附件下载-->
+      <div class="section">
+        <h1>附件下载</h1>
+      </div>
+      <div>
+        <ul class="list listview">
+          @if(m.attach!=null){
+             foreach(DTcms.Model.article_attach modelt in m.attach){
+             <li>
+               <a href="javascript:;" onclick="downLink(@modelt.point, '@(config.webpath)tools/download.ashx?site=@site.build_path&id=@modelt.id');">
+                 <h2>@modelt.file_name</h2>
+                 <div class="note" style="height:20px;">
+                   <p><i class="date">大小： 
+                   @(modelt.file_size>1024 ? (modelt.file_size/1024f).ToString("#.##") : modelt.file_size  + "KB")
+                    下载：<script type="text/javascript" src="@(config.webpath)tools/submit_ajax.ashx?action=view_attach_count&id=@modelt.id"></script>次
+                    所需积分：@modelt.point 分</i></p>
+                 </div>
+               </a>
+             </li>
+             }
+          }
+        </ul>
+      </div>
+      <!--附件下载-->
+      
+      <!--相关资源-->
+      <div class="section">
+        <h1>相关资源</h1>
+      </div>
+      <div>
+        <ul class="list listview">
+          @foreach(DataRow dr in redDownList.Rows){
+          <li>
+            <a href="@bc.linkurl("down_show",dr["id"])" data-ignore="true">
+              <i class="date">@(((DateTime)dr["add_time"]).ToString("MM-dd"))</i>
+              <span class="text">@dr["title"]</span>
+            </a>
+          </li>
+          }
+          @if(redDownList.Rows.Count == 0){
+          <li><a href="javascript:;">同类下暂无推荐的资源...</a></li>
+          }
+        </ul>
+      </div>
+      <!--/相关资源-->
+      
+      <!--评论-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_comment_box.cshtml")
+      <!--/评论-->
+      
+      <!--版权信息-->
+      @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_copyright.cshtml")
+      <!--/版权信息-->
+    
+	</div>
+    
+    <!--页面头部-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_header.cshtml")
+    <!--/页面头部-->
+    
+    <!--底部导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_footer.cshtml")
+    <!--/底部导航-->
+	
+    <!--左侧导航-->
+    @RenderPage("~/Areas/Web/Views/" + site.build_path + "/Shared/partial_nav.cshtml")
+    <!--/左侧导航-->
+      
+  </div>
+</div>

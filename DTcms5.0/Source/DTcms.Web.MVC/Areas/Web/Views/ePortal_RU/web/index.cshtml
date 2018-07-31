@@ -1,0 +1,24 @@
+﻿@using System.Data;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@{
+   Layout = "";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = site.seo_title;
+   IndexController c = ViewBag.Controller as IndexController;
+   DataTable categoryList = bc.get_category_child_list("ePortal_news", 0);
+   int count = 0;
+}
+<div>
+   <div style="width:601px; height:384px; margin: 50px auto;"><img src="@(config.webpath)templates/@ViewBag.TemplateSkin/web/images/site_close.png" alt="" /></div>
+</div>
+
+
+	
+
+
+
+
+

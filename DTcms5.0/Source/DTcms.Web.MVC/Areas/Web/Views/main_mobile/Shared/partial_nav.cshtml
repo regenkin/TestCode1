@@ -1,0 +1,22 @@
+﻿@using DTcms.Model;
+@using DTcms.Common;
+@{
+   DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
+   DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
+   DTcms.Web.MVC.UI.Controllers.BaseController bc = ViewBag.BasePage as DTcms.Web.MVC.UI.Controllers.BaseController;
+}
+<nav>
+   <ul class="list">
+      <li class="divider">网站导航</li>
+      <li><a href="@bc.linkurl("index")" class="icon home" data-ignore="true">网站首页</a></li>
+      <li><a href="@bc.linkurl("news")" class="icon tv" data-ignore="true">新闻资讯</a></li>
+      <li><a href="@bc.linkurl("goods")" class="icon basket" data-ignore="true">购物商城</a></li>
+      <li><a href="@bc.linkurl("video")" class="icon camera" data-ignore="true">视频专区</a></li>
+      <li><a href="@bc.linkurl("photo")" class="icon picture" data-ignore="true">图片分享</a></li>
+      <li><a href="@bc.linkurl("down")" class="icon download" data-ignore="true">资源下载</a></li>
+      <li><a href="@bc.linkurl("usercenter","index")" class="icon user" data-ignore="true">会员中心</a></li>
+      <li><a href="@bc.linkurl("content","about")" class="icon info" data-ignore="true">关于我们</a></li>
+      <li><a href="@bc.linkurl("feedback")" class="icon message" data-ignore="true">在线留言</a></li>
+      <li><a href="@bc.linkurl("content","contact")" class="icon phone" data-ignore="true">联系我们</a></li>
+   </ul>
+</nav>

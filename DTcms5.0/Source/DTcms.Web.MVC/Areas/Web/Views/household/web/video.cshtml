@@ -1,0 +1,418 @@
+﻿@using System.Data;
+@using System.Web;
+@using DTcms.Web.MVC.Areas.Web.Controllers;
+@using DTcms.Web.MVC.UI.Controllers;
+@using DTcms.Model;
+@{
+   Layout = "~/Areas/Web/Views/" + ViewBag.TemplateSkin + "/web/Shared/_Layout.cshtml";
+   DTcms.Model.site_channel site = ViewData["site"] as DTcms.Model.site_channel;
+   DTcms.Model.siteconfig config = ViewData["config"] as DTcms.Model.siteconfig;
+   BaseController bc = ViewBag.BasePage as BaseController;
+   ViewBag.Title = "视频专区 - " + site.name;
+   DataTable list = null;
+   string channel = "video";
+}
+@section HeaderContent{
+   <script src="~/templates/@ViewBag.TemplateSkin/web/js/jquery.flexslider-min.js"></script>
+   <script>
+      $(function () {
+         $(".focusbox").flexslider({
+            directionNav: false,
+            pauseOnAction: false
+         });
+      });
+   </script>
+}
+
+<div id="main">
+   <div class="gridRow">
+      <div class="threeColumn removeMargin firstColumn">
+         <h1 class="categoryGray">卧室家具</h1>
+         <h2 class="headTwoGray">专为家里最爱的房间打造</h2>
+         <p class="copyTextGray">舒适的床为您带来一整夜的好睡眠。卧室家具为您打造更多储物空间（让您轻松找到物品）。有温暖的灯光营造氛围，还有柔软的纺织品相伴，而这一切的价格都让可您大放宽心，酣然入梦。</p>
+      </div>
+
+      <div class="sixColumn removeMargin">
+         <div class="visualNavContainer">
+            <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_beds/">
+               <img class="imageStyle" src="/cn/zh/media/categories/bedroom__Beds frame_520_PH141405.jpg" title="Go to Bed frames"></a>
+            <div class="categoryContainer">
+               <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_beds/" class="categoryName">床</a><a class="categoryNumber">(143)</a>
+            </div>
+            <div class="clearAll"></div>
+            <div class="subCategory">
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/16284/" class="subCategory">双人床,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/16285/" class="subCategory">单人床,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/19037/" class="subCategory">客床和坐卧两用床,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/25205/" class="subCategory">带储物床,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20656/" class="subCategory">床边桌,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/19059/" class="subCategory">床用储物件,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/19039/" class="subCategory">高架床和双层床</a>
+
+            </div>
+         </div>
+      </div>
+
+      <div class="threeColumn removeMargin">
+
+         <div class="visualNavContainer">
+            <a href="/cn/zh/catalog/categories/departments/bedroom/Mattresses/">
+               <img class="imageStyle" src="/cn/zh/media/categories/bedroom__Mattresses_250_PH100579.jpg" title="Go to mattresses"></a>
+            <div class="categoryContainer">
+               <a href="/cn/zh/catalog/categories/departments/bedroom/Mattresses/" class="categoryName">床垫</a><a class="categoryNumber">(34)</a>
+            </div>
+            <div class="clearAll"></div>
+            <div class="subCategory">
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/24828/" class="subCategory">弹簧床垫,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/24823/" class="subCategory">泡沫和乳胶床垫,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/24827/" class="subCategory">木条床板,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/24826/" class="subCategory">床褥,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/24824/" class="subCategory">床垫保护垫和枕套</a>
+
+            </div>
+         </div>
+      </div>
+
+   </div>
+   <div class="gridRow">
+      <div class="twoColumn removeMargin firstColumn">
+
+         <div class="visualNavContainer">
+            <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_storage/">
+               <img class="imageStyle" src="/cn/zh/media/categories/bedroom__Bedroom_storage_160_PH134997.jpg" title="Go to bedroom storage"></a>
+            <div class="categoryContainer">
+               <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_storage/" class="categoryName">卧室储物</a><a class="categoryNumber">(792)</a>
+            </div>
+            <div class="clearAll"></div>
+            <div class="subCategory">
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/19053/" class="subCategory">衣柜,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/29879/" class="subCategory">固定式衣柜,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/11466/" class="subCategory">开放式衣类储物系列,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/29880/" class="subCategory">开放式衣柜,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10451/" class="subCategory">抽屉柜,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20656-2/" class="subCategory">床边桌,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/19059-2/" class="subCategory">床用储物件,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10452/" class="subCategory">衣物储藏件,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/16274/" class="subCategory">挂钩和衣架,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20657/" class="subCategory">梳妆台,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10398/" class="subCategory">连壁搁板,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/19064/" class="subCategory">床头板</a>
+
+            </div>
+         </div>
+      </div>
+
+      <div class="fourColumn removeMargin">
+
+         <div class="visualNavContainer">
+            <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_textiles/">
+               <img class="imageStyle" src="/cn/zh/media/categories/bedroom__Bedroom_textiles_rugs_160_PH140672.jpg" title="Go to bedroom textiles &amp; rugs"></a>
+            <div class="categoryContainer">
+               <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_textiles/" class="categoryName">纺织品</a><a class="categoryNumber">(770)</a>
+            </div>
+            <div class="clearAll"></div>
+            <div class="subCategory">
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10651/" class="subCategory">床上用品,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20529/" class="subCategory">被子,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20533/" class="subCategory">枕头,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20527/" class="subCategory">床罩,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_rugs/" class="subCategory">地毯,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20528/" class="subCategory">毯子和休闲毯,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10659/" class="subCategory">靠垫和靠垫套,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10654/" class="subCategory">窗帘和百页帘,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/18891/" class="subCategory">窗帘杆和轨道　,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10655/" class="subCategory">布料和缝纫用品</a>
+
+            </div>
+         </div>
+      </div>
+
+      <div class="twoColumn removeMargin">
+
+         <div class="visualNavContainer">
+            <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_lighting/">
+               <img class="imageStyle" src="/cn/zh/media/categories/bedroom__Bedroo_lighting_160_PE617347.jpg" title="Go to bedroom lighting"></a>
+            <div class="categoryContainer">
+               <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_lighting/" class="categoryName">照明</a><a class="categoryNumber">(369)</a>
+            </div>
+            <div class="clearAll"></div>
+            <div class="subCategory">
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20515/" class="subCategory">LED灯具,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20503/" class="subCategory">壁灯,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10732/" class="subCategory">台灯,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/18750/" class="subCategory">顶灯,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10731/" class="subCategory">落地灯,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10803/" class="subCategory">灯罩、灯座和电线,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/bedroom_integrated_lighting/" class="subCategory">内置照明,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20506/" class="subCategory">射灯,</a>
+
+               <a href="/cn/zh/catalog/categories/departments/bedroom/10744/" class="subCategory">灯泡和配件</a>
+
+            </div>
+         </div>
+      </div>
+
+      <div class="twoColumn removeMargin">
+
+         <div class="visualNavContainer">
+            <a href="/cn/zh/catalog/categories/departments/bedroom/20489/">
+               <img class="imageStyle" src="/cn/zh/media/categories/bedroom__Mirrors_160_PH141284.jpg" title="Go to Mirrors"></a>
+            <div class="categoryContainer">
+               <a href="/cn/zh/catalog/categories/departments/bedroom/20489/" class="categoryName">镜子</a><a class="categoryNumber">(47)</a>
+            </div>
+            <div class="clearAll"></div>
+            <div class="subCategory">
+            </div>
+         </div>
+      </div>
+
+      <div class="twoColumn removeMargin">
+
+         <div class="visualNavContainer">
+            <div class="categoryContainer">
+
+               <div><a href="/cn/zh/catalog/categories/departments/bedroom/series/" class="categoryName ">所有系列</a></div>
+
+            </div>
+         </div>
+      </div>
+
+      <div class="clearAll"></div>
+   </div>
+   <!-- lets not get the adcopy if its already present in the request -->
+   <div class="gridRow">
+      <div id="201521_becd01a_00" class="gridColumn twelveColumn">
+         <div class="gridComponent" style="height: 90px;">
+            <div style="left: 0px; top: 0px; z-index: 1; position: absolute;">
+               <div style="text-align: left; left: ; top: ; width: ; height: ; z-index: 1; position: relative;" class="categoryGray">
+                  卧室灵感
+               </div>
+               <div style="text-align: left; left: ; top: ; width: ; height: ; z-index: 2; position: relative;" class="headTwoGray">
+                  您想从哪里开始新的一天？
+               </div>
+               <a href="/cn/zh/catalog/categories/departments/bedroom/tools/cobe/roomset/" class="bodyTextGray" style="text-align: left; left: ; top: ; width: ; height: ; z-index: 3; position: relative; display: block;">查看展示区
+               </a>
+            </div>
+            <div class="clearAll"></div>
+         </div>
+         <div class="clearAll"></div>
+      </div>
+      <div id="" class="gridColumn sixColumn">
+         <div class="gridRow">
+            <div id="20163_becd01a_01" class="gridColumn twelveColumn lastColumn">
+               <div class="gridComponent" style="height: 396px;">
+                  <a href="/se/en/catalog/categories/departments/bedroom/tools/cobe/roomset/20163_cosl02a">
+                     <img usemap="#20163_becd01a_01" src="/ms/img/ads/vitality/201631/20163_becd01a/20163_becd01a_01_PH132729.jpg" alt="A bedroom furnished with a solid birch bed with a higher end with a sheer fabric that doubles as a room divider. Shown together with a white wardrobe and a standing mirror with storage behind." style="left: 0px; top: 0px; width: 520px; height: 396px; z-index: 1; position: absolute;" class="">
+                  </a>
+                  <div class="clearAll"></div>
+               </div>
+               <div class="clearAll"></div>
+            </div>
+            <div class="clearAll"></div>
+         </div>
+         <div class="clearAll"></div>
+      </div>
+      <div id="" class="gridColumn threeColumn">
+         <div class="gridRow">
+            <div id="20163_becd01a_02" class="gridColumn twelveColumn lastColumn">
+               <div class="gridComponent" style="height: 188px;">
+                  <a href="/se/en/catalog/categories/departments/bedroom/tools/cobe/roomset/20163_cosl04a">
+                     <img usemap="#20163_becd01a_02" src="/ms/img/ads/vitality/201631/20163_becd01a/20163_becd01a_02_PH132612.jpg" alt="A light bedroom furnished with a bed in white stained oak combined with white chest of drawers and bedside tables." style="left: 0px; top: 0px; width: 250px; height: 188px; z-index: 1; position: absolute;" class="">
+                  </a>
+                  <div class="clearAll"></div>
+               </div>
+               <div class="clearAll"></div>
+            </div>
+            <div class="clearAll"></div>
+         </div>
+         <div class="gridRow">
+            <div id="201541_becd01a_04" class="gridColumn twelveColumn lastColumn">
+               <div class="gridComponent" style="height: 188px;">
+                  <a href="/cn/zh/catalog/categories/departments/bedroom/tools/cobe/roomset/20153_cost27a">
+                     <img usemap="#201541_becd01a_04" src="/ms/img/ads/vitality/20154/201541_becd01a/201541_becd01a_04_PH123705.jpg" alt="卧室里放着两个六斗抽屉柜和一个单门三斗抽屉柜，均为棕色白蜡木贴面。" style="left: 0px; top: 0px; width: 250px; height: 188px; z-index: 1; position: absolute;" class="">
+                  </a>
+                  <div class="clearAll"></div>
+               </div>
+               <div class="clearAll"></div>
+            </div>
+            <div class="clearAll"></div>
+         </div>
+         <div class="clearAll"></div>
+      </div>
+      <div id="" class="gridColumn threeColumn lastColumn">
+         <div class="gridRow">
+            <div id="201621_becd01a_03" class="gridColumn twelveColumn lastColumn">
+               <div class="gridComponent" style="height: 188px;">
+                  <a href="/cn/zh/catalog/categories/departments/bedroom/tools/cobe/roomset/20161_cost02a">
+                     <img usemap="#201621_becd01a_03" src="/ms/img/ads/vitality/201621/201621_becd01a/201621_becd01a_03_PH127958.jpg" alt="卧室放着带有黑色柜门的白色衣柜，搭配一张黑色的床和一个绿色玻璃门柜。" style="left: 0px; top: 0px; width: 250px; height: 188px; z-index: 1; position: absolute;" class="">
+                  </a>
+                  <div class="clearAll"></div>
+               </div>
+               <div class="clearAll"></div>
+            </div>
+            <div class="clearAll"></div>
+         </div>
+         <div class="gridRow">
+            <div id="201621_becd01a_05" class="gridColumn twelveColumn lastColumn">
+               <div class="gridComponent" style="height: 188px;">
+                  <a href="/cn/zh/catalog/categories/departments/bedroom/tools/cobe/roomset/20161_cosl03a">
+                     <img usemap="#201621_becd01a_05" src="/ms/img/ads/vitality/201621/201621_becd01a/201621_becd01a_05_PH128715.jpg" alt="宽敞的卧室内摆放着一张米色双人床，带有软垫床头板和米色与白色相间的床用纺织品。" style="left: 0px; top: 0px; width: 250px; height: 188px; z-index: 1; position: absolute;" class="">
+                  </a>
+                  <div class="clearAll"></div>
+               </div>
+               <div class="clearAll"></div>
+            </div>
+            <div class="clearAll"></div>
+         </div>
+         <div class="clearAll"></div>
+      </div>
+      <div class="clearAll"></div>
+   </div>
+   <div class="gridRow">
+      <div id="201521_becd01a_06" class="gridColumn twelveColumn lastColumn">
+         <div class="gridComponent" style="height: 40px;">
+            <a href="/cn/zh/catalog/categories/departments/bedroom/tools/cobe/roomset/" class="bodyTextGray" style="text-align: center; left: 0px; top: 0px; width: 1060px; height: ; z-index: 1; position: absolute;">查看展示区
+            </a>
+            <div class="clearAll"></div>
+         </div>
+         <div class="clearAll"></div>
+      </div>
+      <div class="clearAll"></div>
+   </div>
+   <!-- lets not get the adcopy if its already present in the request -->
+   <div class="gridRow">
+      <div id="201731_bevd01a_00" class="gridColumn twelveColumn lastColumn">
+         <div class="gridComponent" style="height: 50px;">
+            <div style="left: 0px; top: 0px; z-index: 1; position: absolute;">
+               <div style="text-align: left; left: ; top: ; width: 350px; height: ; z-index: 1; position: relative;" class="categoryGray">就在宜家</div>
+               <div style="text-align: left; left: ; top: ; width: ; height: ; z-index: 2; position: relative;" class="headTwoGray">用于睡眠（或存储）的中心装饰品</div>
+            </div>
+            <div class="clearAll"></div>
+         </div>
+         <div class="clearAll"></div>
+      </div>
+      <div class="clearAll"></div>
+   </div>
+   <div class="gridRow">
+      <div id="201731_bevc01a_01" class="gridColumn twelveColumn lastColumn">
+         <div class="gridComponent" style="height: 730px;">
+            <img usemap="#201731_bevc01a_01" src="/ms/img/ads/vitality/20173/201731_bevc01a/201731_bevc01a_01_PH140755.jpg" alt="A bedroom with a white bed that includes six soft-closing drawers for extra cushions and blankets, three on each side." style="left: 0px; top: 0px; width: 1060px; height: 670px; z-index: 1; position: absolute;" class="">
+            <a href="/cn/zh/catalog/categories/departments/bedroom/25205/" class="bodyTextGray" style="text-align: left; left: 0px; top: 685px; width: ; height: ; z-index: 2; position: absolute;">查看更多储物床</a>
+            <div class="prodStyle1_W">
+               <dl style="left: 552px; top: 537px; width: ; height: ; z-index: 4; position: absolute;">
+                  <a href="/cn/zh/catalog/products/80349850/">
+                     <div id="toolTipBigPrice_80349850" class="">
+                        <div class="productDetails">
+                           <img alt="New" class="newImgSmall" border="0" src="/ms/zh_CN/img/icons/new_small.gif"><div class="productWidth">
+                              <div class="productTitle">诺德里</div>
+                              <div class="productDesp  floatLeft">床架带抽屉</div>
+                           </div>
+                           <div class="clearAll"></div>
+                           <div class="floatLeft prodPrice">¥&nbsp;2,599.00</div>
+                           <div class="productWidth"></div>
+                        </div>
+                     </div>
+                  </a>
+                  <div id="toolTipBigPriceWee_80349850" class=""></div>
+               </dl>
+            </div>
+            <div style="text-align: left; left: 160px; top: 61px; width: 360px; height: ; z-index: 5; position: absolute;" class="bodyTextWhite">NORDLI床架为你创造一个漂亮的卧室中心装饰品<br>
+               包括六个软关门的抽屉，用于简单而大空间的存储</div>
+            <map class="toolTipMapName" name="201731_bevc01a_01" id="201731_bevc01a_01">
+               <area coords="574,186,526,246,394,290,154,326,138,386,174,488,186,526,187,582,462,624,466,658,526,634,623,646,802,578,834,582,946,534,959,514,978,446,978,406,974,338,930,314,918,298,954,198" shape="poly" href="/cn/zh/catalog/products/80349850/" alt="诺德里 床架带抽屉 ¥&nbsp;2,599.00" tooltiptype="none/80349850">
+            </map>
+            <div class="clearAll"></div>
+         </div>
+         <div class="clearAll"></div>
+      </div>
+      <div class="clearAll"></div>
+   </div>
+   <div class="gridRow">
+      <div id="201731_bevd01a_02" class="gridColumn twelveColumn lastColumn">
+         <div class="gridComponent" style="height: 30px;">
+            <div style="left: 0px; top: 0px; z-index: 1; position: absolute;">
+               <div style="text-align: left; left: ; top: ; width: ; height: ; z-index: 1; position: relative;" class="headTwoGray">沉醉于水彩画</div>
+            </div>
+            <div class="clearAll"></div>
+         </div>
+         <div class="clearAll"></div>
+      </div>
+      <div class="clearAll"></div>
+   </div>
+   <div class="gridRow">
+      <div id="201731_txvc02a_01" class="gridColumn twelveColumn lastColumn">
+         <div class="gridComponent" style="height: 730px;">
+            <img usemap="#201731_txvc02a_01" src="/ms/img/ads/vitality/20173/201731_txvc02a/201731_txvc02a_01_PH140615.jpg" alt="A bed with quilt cover and two pillowcases made of 100% cotton, with a dotted pattern in blue, grey, beige and apricot, that looks like strokes of watercolours." style="left: 0px; top: 0px; width: 1060px; height: 670px; z-index: 1; position: absolute;" class="">
+            <a href="/cn/zh/catalog/categories/departments/bedroom/10680/" class="bodyTextGray" style="text-align: left; left: 0px; top: 685px; width: ; height: ; z-index: 2; position: absolute;">查看更多被套系列</a>
+            <div class="prodStyle1_W">
+               <dl style="left: 352px; top: 218px; width: ; height: ; z-index: 3; position: absolute;">
+                  <a href="/cn/zh/catalog/products/50337735/">
+                     <div id="toolTipBigPrice_50337735" class="">
+                        <div class="productDetails">
+                           <img alt="New" class="newImgSmall" border="0" src="/ms/zh_CN/img/icons/new_small.gif"><div class="productWidth">
+                              <div class="productTitle">SMÅSTARR 斯莫斯塔</div>
+                              <div class="productDesp  floatLeft">被套和2个枕套</div>
+                           </div>
+                           <div class="clearAll"></div>
+                           <div class="floatLeft prodPrice">¥&nbsp;199.00</div>
+                           <div class="productWidth"></div>
+                        </div>
+                     </div>
+                  </a>
+                  <div id="toolTipBigPriceWee_50337735" class=""></div>
+               </dl>
+            </div>
+            <div style="text-align: left; left: 46px; top: 507px; width: 330px; height: ; z-index: 4; position: absolute;" class="bodyTextWhite">SMÅSTARR被套设计由梦幻中水粉色而产生的灵感<br>
+               让你的床时尚感十足</div>
+            <map class="toolTipMapName" name="201731_txvc02a_01" id="201731_txvc02a_01">
+               <area coords="1051,160,450,146,454,298,410,314,290,478,354,498,330,662,1055,662" shape="poly" href="/cn/zh/catalog/products/50337735/" alt="SMÅSTARR 斯莫斯塔 被套和2个枕套 ¥&nbsp;199.00" tooltiptype="none/50337735">
+            </map>
+            <div class="clearAll"></div>
+         </div>
+         <div class="clearAll"></div>
+      </div>
+      <div class="clearAll"></div>
+   </div>
+</div>
