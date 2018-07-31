@@ -3,12 +3,9 @@
 @{
     DTcms.Model.sites site = ViewData["site"] as DTcms.Model.sites;
     Layout = "~/Areas/Web/Views/" + site.templet_path + "/Shared/_LayoutShow.cshtml";
-<<<<<<< HEAD
-=======
     DTcms.Model.sysconfig config = ViewData["sysConfig"] as DTcms.Model.sysconfig;
     ViewBag.Title = "会员登录 - " + site.name;
     string turl = ViewBag.turl as string;
->>>>>>> 52a49257eed8aef8b0fcc7dfb131941b0ea9daa3
 }
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="~/templates/@site.templet_path/css/loaders.min.css" />
@@ -25,10 +22,7 @@
             $(".loading").fadeOut(300)
         })
     </script>
-<<<<<<< HEAD
-=======
     <script src="~/templates/@site.templet_path/js/login-validate.js"></script>
->>>>>>> 52a49257eed8aef8b0fcc7dfb131941b0ea9daa3
 }
 @section Body_front{
     <!--loading页开始-->
@@ -53,45 +47,26 @@
 </header>
 
 <div class="login">
-<<<<<<< HEAD
-    <form id="loginform" name="loginform" url="{config.webpath}tools/submit_ajax.ashx?action=user_login&site={site.build_path}">
-=======
-    <form id="loginform" name="loginform" url="@(config.webpath)tools/submit_ajax.ashx?action=user_login&site_id=@site.id">
->>>>>>> 52a49257eed8aef8b0fcc7dfb131941b0ea9daa3
+    <form id="loginform" name="loginform" url="@(config.webpath)ERPAjax/submit_ajax.ashx?action=user_login&site_id=@site.id">
         <ul>
             <li>
                 <img src="~/templates/@site.templet_path/images/footer01.png" />
                 <label>企业号</label>
-<<<<<<< HEAD
-                <input type="text" placeholder="输入企业号" />
-=======
                 <input type="text" id="txtCorp" name="txtCorp" placeholder="输入企业号" />
->>>>>>> 52a49257eed8aef8b0fcc7dfb131941b0ea9daa3
             </li>
             <li>
                 <img src="~/templates/@site.templet_path/images/login.png" />
                 <label>员工号</label>
-<<<<<<< HEAD
-                <input type="text" placeholder="输入员工号" />
-=======
                 <input type="text" id="txtUserName" name="txtUserName" placeholder="输入员工号" />
->>>>>>> 52a49257eed8aef8b0fcc7dfb131941b0ea9daa3
             </li>
             <li>
                 <img src="~/templates/@site.templet_path/images/password.png" />
                 <label>密码</label>
-<<<<<<< HEAD
-                <input type="password" placeholder="请输入密码" />
-            </li>
-        </ul>
-        <input type="submit" value="登录" />
-=======
                 <input type="password" id="txtPassword" name="txtPassword" placeholder="请输入密码" />
             </li>
         </ul>
         <div id="msgtips" style="display:none;text-align:center;color:#F00;font-size:12px;line-height:1.5em;"></div>
         <input type="submit" id="btnSubmit" name="btnSubmit" value="登录" />
         <input id="turl" name="turl" type="hidden" value="@turl" />
->>>>>>> 52a49257eed8aef8b0fcc7dfb131941b0ea9daa3
     </form>
 </div>
