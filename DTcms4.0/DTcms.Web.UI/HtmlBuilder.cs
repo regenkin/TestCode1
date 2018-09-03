@@ -328,18 +328,16 @@ namespace DTcms.Web.UI
                     sw.WriteLine(content);
                     sw.Flush();
                     sw.Close();
-
-
-                    File.Copy(Utils.GetMapPath(htmlPath), Utils.GetMapPath("/index.html"));
+                    if (aspx_filename.ToLower() == "aspx/" + lang.ToLower() + "/index.aspx")
+                        File.Copy(Utils.GetMapPath(htmlPath), Utils.GetMapPath("/index.html"),true);
                 }
-                using (StreamWriter sw = new StreamWriter(Utils.GetMapPath("/index.html"), false, Encoding.UTF8))
-                {
-                    sw.WriteLine(content);
-                    sw.Flush();
-                    sw.Close();
+                //using (StreamWriter sw = new StreamWriter(Utils.GetMapPath("/index.html"), false, Encoding.UTF8))
+                //{
 
-
-                }
+                //    sw.WriteLine(content);
+                //    sw.Flush();
+                //    sw.Close();
+                //}
             }
             else
             {
