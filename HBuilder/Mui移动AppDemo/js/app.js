@@ -10,29 +10,51 @@
 	owner.login = function(loginInfo, callback) {
 		callback = callback || $.noop;
 		loginInfo = loginInfo || {};
+		loginInfo.corpnum = loginInfo.corpnum || '';
 		loginInfo.account = loginInfo.account || '';
 		loginInfo.password = loginInfo.password || '';
-		if (loginInfo.account.length < 5) {
-			return callback('账号最短为 5 个字符');
+		if (loginInfo.corpnum.length < 1) {
+			return callback('企业号不能为空');
 		}
-		if (loginInfo.password.length < 6) {
-			return callback('密码最短为 6 个字符');
+		if (loginInfo.account.length < 1) {
+			return callback('账号不能为空');
 		}
-		var users = JSON.parse(localStorage.getItem('$users') || '[]');
-		var authed = users.some(function(user) {
-			return loginInfo.account == user.account && loginInfo.password == user.password;
-		});
-		if (authed) {
-			return owner.createState(loginInfo.account, callback);
-		} else {
-			return callback('用户名或密码错误');
+		if (loginInfo.password.length < 1) {
+			return callback('密码不能为空');
 		}
+//		var users = JSON.parse(localStorage.getItem('$users') || '[]');
+//		var authed = users.some(function(user) {
+//			return loginInfo.account == user.account && loginInfo.password == user.password;
+//		});
+//		if (authed) {
+//			return owner.createState(loginInfo.account, callback);
+//		} else {
+//			return callback('用户名或密码错误');
+//		}
+//		var user = JSON.parse(loginInfo);
+		owner.createState(loginInfo,"token123456789", callback);
+//		mui.post('',{
+//				data:{}
+//			},function(data){
+//				//服务器返回响应，根据响应结果，分析是否登录成功；
+//				if(data.code=200)
+//				{
+//					
+//					return owner.createState(loginInfo,token, callback);
+//				}
+//				else
+//				{
+//					return callback('用户名或密码错误');
+//				}
+//			},'json'
+//		);
 	};
 
-	owner.createState = function(name, callback) {
+	owner.createState = function(loginInfo,token, callback) {
 		var state = owner.getState();
-		state.account = name;
-		state.token = "token123456789";
+		state.corpnum = loginInfo.corpnum;
+		state.account = loginInfo.account;
+		state.token = token;
 		owner.setState(state);
 		return callback();
 	};

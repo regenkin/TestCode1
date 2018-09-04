@@ -771,6 +771,7 @@ namespace DTcms.Web.admin.article
             if (bll.Add(model) > 0)
             {
                 AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加" + this.channel_name + "频道内容:" + model.title); //记录日志
+                this.id = model.id;
                 result = true;
             }
             return result;
@@ -988,7 +989,8 @@ namespace DTcms.Web.admin.article
                 }
 
                 JscriptMsg("添加信息成功！", "article_list.aspx?channel_id=" + this.channel_id);
-                CreateIndexHtml(this.id);
+                if(this.id>0)
+                    CreateIndexHtml(this.id);
             }
         }
 
