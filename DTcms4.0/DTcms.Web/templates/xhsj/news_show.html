@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=yes">
-    <%set string category_title=get_category_title(model.category_id,"足球指数")%>
+    <%set string category_title=get_category_title(model.category_id,"新闻资讯")%>
     <title>{model.title} - {category_title} - {site.name}</title>
     <meta name="keywords" content="{model.seo_keywords}" />
     <meta name="description" content="{model.seo_description}" />
@@ -17,10 +17,11 @@
     <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/owl.carousel.css" />
     <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/style.css" />
     <link rel="stylesheet" type="text/css" href="<%templateskin%>/css/responsive.css" />
-    <script src="<%templateskin%>/js/jquery-1.11.0.min.js"></script>
-    <script src="<%templateskin%>/js/wow.min_1.js"></script>
-    <script src="<%templateskin%>/js/owl.carousel.min.js"></script>
-    <script src="<%templateskin%>/js/page.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/wow.min_1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/owl.carousel.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/page.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/common.js"></script>
 </head>
 <body>
     <!--页面头部-->
@@ -44,10 +45,14 @@
                                             <div class="technical_support_box_z">
                                                 <div class="technical_support_box_z_header">
                                                     <div class="title">
-                                                        {model.title}</div>
+                                                        {model.title}
+                                                    </div>
                                                     <ul>
                                                         <li><i class="iconfont icon-date"></i>{model.add_time}</li>
-                                                        <li><i class="iconfont icon-view"></i><script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_article_click&channel_id={model.channel_id}&id={model.id}&click=1"></script>次</li>
+                                                        <li>
+                                                            <i class="iconfont icon-view"></i>
+                                                            <script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_article_click&channel_id={model.channel_id}&id={model.id}&click=1"></script>次
+                                                        </li>
                                                     </ul>
                                                 </div>
                                                 <div class="technical_support_box_z_info_box">
@@ -55,6 +60,33 @@
                                                         {model.content}
                                                     </div>
                                                 </div>
+
+                                                <div class="line15"></div>
+
+                                                <!--上下篇-->
+                                                <div class="next-prev-single">
+                                                    <li class="previous"><%=get_prevandnext_article("news_show", -1, "<a href='javascript:'>无</a>", 0)%></li>
+                                                    <li class="next"><%=get_prevandnext_article("news_show", 1, "<a href='javascript:'>无</a>", 0)%></li>
+                                                </div>
+                                                <!--/上下篇-->
+                                                <div class="line15"></div>
+                                                <!--分享-->
+                                                <%template src=/_share_js.html/%>
+                                                <!--/分享-->
+                                                <div class="line15"></div>
+                                                <!--用户评论-->
+                                                <%if(model.is_msg==1)%>
+                                                <h2 class="base-tit">
+                                                    <i>
+                                                        共有<b>
+                                                            <script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_comment_count&id={model.id}"></script>
+                                                        </b>访客发表了评论
+                                                    </i>
+                                                    <span>网友评论</span>
+                                                </h2>
+                                                <%template src="_comment_box.html"%>
+                                                <%/if%>
+                                                <!--用户评论-->
                                             </div>
                                         </div>
                                     </div>

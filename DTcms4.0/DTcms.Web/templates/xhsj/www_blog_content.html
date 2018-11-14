@@ -37,32 +37,38 @@
                         <span class="g-bg glyphicon glyphicon-user margin-r-5" aria-hidden="true"></span><%=get_article_field({model.id}, "author")%>
                         <span class="g-bg glyphicon glyphicon-calendar margin-l-10 margin-r-5" aria-hidden="true"></span>{model.add_time}
                         <span class="g-bg glyphicon glyphicon-folder-close margin-l-10 margin-r-5" aria-hidden="true"></span><%=get_category_title(model.category_id, "未分类")%>
-                         <span class="g-bg glyphicon glyphicon-eye-open margin-l-10 margin-r-5" aria-hidden="true"></span><script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_article_click&id={model.id}&click=1"></script>次阅读
+                        <span class="g-bg glyphicon glyphicon-eye-open margin-l-10 margin-r-5" aria-hidden="true"></span>
+                        <script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_article_click&id={model.id}&click=1"></script>次阅读
                     </div>
                     <div class="padding-10">
                         <div class="miaoshu">&nbsp;{model.zhaiyao}</div>
                         {model.content}
-                   </div>
+                    </div>
                     <div class="border-dotted-t padding-10 text-right">
                         <span class="g-bg glyphicon glyphicon-tags margin-r-5" aria-hidden="true"></span>
-                        <a class="btn btn-xs btn-default margin-2" href="#">{model.tags}</a></div>
+                        <a class="btn btn-xs btn-default margin-2" href="#">{model.tags}</a>
+                    </div>
                     <ul class="pager border-dotted-b padding-b-10">
                         <li class="previous"><%=get_prevandnext_article("www_blog_content", -1, "<a href='javascript:'>无</a>", 0)%></li>
                         <li class="next"><%=get_prevandnext_article("www_blog_content", 1, "<a href='javascript:'>无</a>", 0)%></li>
                     </ul>
-<%set int totalcount=0%>
-<%set DataTable dtcomment=get_comment_list(model.id, 10, 1, "is_lock=0", out totalcount)%>
-<%loop dr dtcomment%>
-  第{dr__loop__id}楼：{dr[content]}
-<%/loop%>
-                    <div class="bdsharebuttonbox bdshare-button-style0-24">
-                        <a class="bds_more" data-cmd="more"></a>
-                        <a title="分享到QQ空间" class="bds_qzone" data-cmd="qzone"></a>
-                        <a title="分享到新浪微博" class="bds_tsina" data-cmd="tsina"></a>
-                        <a title="分享到腾讯微博" class="bds_tqq" data-cmd="tqq"></a>
-                        <a title="分享到人人网" class="bds_renren" data-cmd="renren"></a>
-                        <a title="分享到微信" class="bds_weixin" data-cmd="weixin"></a>
-                    </div>
+                    <!--分享-->
+                    <%template src=/_share_js.html/%>
+                    <!--/分享-->
+                    <div class="line15"></div>
+                    <!--用户评论-->
+                    <%if(model.is_msg==1)%>
+                    <h2 class="base-tit">
+                        <i>
+                            共有<b>
+                                <script type="text/javascript" src="{config.webpath}tools/submit_ajax.ashx?action=view_comment_count&id={model.id}"></script>
+                            </b>访客发表了评论
+                        </i>
+                        <span>网友评论</span>
+                    </h2>
+                    <%template src="_comment_box.html"%>
+                    <%/if%>
+                    <!--用户评论-->
                 </div>
             </div>
             <div class="col-md-3">
