@@ -3766,3 +3766,26 @@ DTcms5.0/Source/DTcms.Common/obj/Debug/DTcms.Common.csprojResolveAssemblyReferen
 /DTcms5.0/Source/DTcms.Web.MVC/plugins/kfcenter/Areas/Admin/Views/KfCenter_list.cshtml
 Areas
 /HBuilder/Mui移动AppDemo/setting.html
+<<<<<<< HEAD
+=======
+/bs.kinfar.net/Kinfar.Frame.Base/obj
+/bs.kinfar.net/Kinfar.Frame.Web/obj
+/bs.kinfar.net/Kinfar.Frame.Operate.Base/obj
+/bs.kinfar.net/Kinfar.Frame.IDAL/obj
+/DTcms5.0/Source/DTcms.Plugins/obj
+/DTcms5.0/Source/DTcms.Model/obj/Release
+/DTcms5.0/Source/DTcms.Extension/obj/Release
+/DTcms5.0/Source/DTcms.DBUtility/obj/Release
+/DTcms5.0/Source/DTcms.DAL/obj/Release
+/DTcms5.0/Source/DTcms.Common/obj/Release
+/DTcms5.0/Source/DTcms.BLL/obj/Release
+/DTcms5.0/Source/DTcms.API/obj/Release
+/.vs
+/君飞桌面程序项目Dapper
+/君飞桌面程序模板/KfIcoCreate/obj/x86
+/Net微信第三方公众平台源码
+/mongoRepository/MongoRepository/obj
+/Kf.CRM
+/HBuilder/Mui移动AppDemo
+/DTcms5.0/Source
+>>>>>>> c6026a5fda8cbd1651d87a45513d8e1052b99c6e

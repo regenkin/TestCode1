@@ -196,7 +196,7 @@ namespace DTcms.DAL
 			            strSql.Append(" where id=@id ");
 			            SqlParameter[] parameters = {
 					            new SqlParameter("@site_id", SqlDbType.Int,4),
-					            new SqlParameter("@name", SqlDbType.VarChar,50),
+					            new SqlParameter("@name", SqlDbType.NVarChar,50),
 					            new SqlParameter("@title", SqlDbType.VarChar,100),
 					            new SqlParameter("@is_albums", SqlDbType.TinyInt,1),
 					            new SqlParameter("@is_attach", SqlDbType.TinyInt,1),
@@ -211,8 +211,10 @@ namespace DTcms.DAL
 			            parameters[5].Value = model.is_spec;
 			            parameters[6].Value = model.sort_id;
 			            parameters[7].Value = model.id;
+                        LogHelper.loginfo.Info(strSql.ToString() + string.Join<SqlParameter>(",", parameters));
+                        LogHelper.loginfo.Info(strSql.ToString() + string.Join(";", model.is_attach, model.is_spec, model.sort_id, model.id));
                         DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
-
+                        
                         //删除已移除的扩展字段
                         FieldDelete(conn, trans, model.channel_fields, model.id);
                         //添加扩展字段
@@ -250,11 +252,12 @@ namespace DTcms.DAL
                         new DAL.navigation(databaseprefix).Update(conn, trans, "channel_" + oldModel.name + "_list", "channel_" + model.name + "_list"); //内容管理
                         new DAL.navigation(databaseprefix).Update(conn, trans, "channel_" + oldModel.name + "_category", "channel_" + model.name + "_category"); //栏目类别
                         new DAL.navigation(databaseprefix).Update(conn, trans, "channel_" + oldModel.name + "_comment", "channel_" + model.name + "_comment"); //评论管理
-
+                        
                         trans.Commit();
                     }
-                    catch
+                    catch(Exception exp)
                     {
+                        LogHelper.logerror.Error(exp.Message, exp);
                         trans.Rollback();
                         return false;
                     }
