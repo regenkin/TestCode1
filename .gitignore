@@ -3763,3 +3763,6 @@ DTcms5.0/Source/DTcms.Common/obj/Debug/DTcms.Common.csprojResolveAssemblyReferen
 /DTcms5.0/Source/DTcms.Web/bin
 /DTcms5.0/Source/DTcms.Web.MVC/bin
 /DTcms5.0/Source/DTcms.Web.MVC/Areas/Web
+/DTcms5.0/Source/DTcms.Web.MVC/plugins/kfcenter/Areas/Admin/Views/KfCenter_list.cshtml
+Areas
+/HBuilder/Mui移动AppDemo/setting.html
