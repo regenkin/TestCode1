@@ -817,7 +817,7 @@ namespace DTcms.DAL
             strSql.Append("select count(1) from " + databaseprefix + "article");
             strSql.Append(" where title=@title ");
             SqlParameter[] parameters = {
-					new SqlParameter("@title", SqlDbType.VarChar,200)};
+					new SqlParameter("@title", SqlDbType.NVarChar,200)};
             parameters[0].Value = title;
 
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
@@ -832,7 +832,7 @@ namespace DTcms.DAL
             strSql.Append("select count(1) from " + databaseprefix + "article");
             strSql.Append(" where title=@title and category_id=@category_id");
             SqlParameter[] parameters = {
-					new SqlParameter("@title", SqlDbType.VarChar,200),
+					new SqlParameter("@title", SqlDbType.NVarChar,200),
                     new SqlParameter("@category_id", SqlDbType.Int,4)  }
                                         ;
             parameters[0].Value = title;

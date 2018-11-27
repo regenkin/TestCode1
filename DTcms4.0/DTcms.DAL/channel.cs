@@ -44,7 +44,7 @@ namespace DTcms.DAL
             strSql.Append("select count(1) from " + databaseprefix + "channel");
             strSql.Append(" where name=@name ");
             SqlParameter[] parameters = {
-					new SqlParameter("@name", SqlDbType.VarChar,50)};
+					new SqlParameter("@name", SqlDbType.NVarChar,50)};
             parameters[0].Value = name;
 
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
@@ -91,8 +91,8 @@ namespace DTcms.DAL
                         strSql.Append(";select @@IDENTITY");
 			            SqlParameter[] parameters = {
 					            new SqlParameter("@site_id", SqlDbType.Int,4),
-					            new SqlParameter("@name", SqlDbType.VarChar,50),
-					            new SqlParameter("@title", SqlDbType.VarChar,100),
+					            new SqlParameter("@name", SqlDbType.NVarChar,50),
+					            new SqlParameter("@title", SqlDbType.NVarChar,100),
 					            new SqlParameter("@is_albums", SqlDbType.TinyInt,1),
 					            new SqlParameter("@is_attach", SqlDbType.TinyInt,1),
 					            new SqlParameter("@is_spec", SqlDbType.TinyInt,1),
@@ -197,7 +197,7 @@ namespace DTcms.DAL
 			            SqlParameter[] parameters = {
 					            new SqlParameter("@site_id", SqlDbType.Int,4),
 					            new SqlParameter("@name", SqlDbType.NVarChar,50),
-					            new SqlParameter("@title", SqlDbType.VarChar,100),
+					            new SqlParameter("@title", SqlDbType.NVarChar,100),
 					            new SqlParameter("@is_albums", SqlDbType.TinyInt,1),
 					            new SqlParameter("@is_attach", SqlDbType.TinyInt,1),
 					            new SqlParameter("@is_spec", SqlDbType.TinyInt,1),
@@ -211,8 +211,6 @@ namespace DTcms.DAL
 			            parameters[5].Value = model.is_spec;
 			            parameters[6].Value = model.sort_id;
 			            parameters[7].Value = model.id;
-                        LogHelper.loginfo.Info(strSql.ToString() + string.Join<SqlParameter>(",", parameters));
-                        LogHelper.loginfo.Info(strSql.ToString() + string.Join(";", model.is_attach, model.is_spec, model.sort_id, model.id));
                         DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
                         
                         //删除已移除的扩展字段
@@ -362,7 +360,7 @@ namespace DTcms.DAL
             strSql.Append("select top 1 id,site_id,name,title,is_albums,is_attach,is_spec,sort_id from " + databaseprefix + "channel ");
             strSql.Append(" where name=@channel_name ");
             SqlParameter[] parameters = {
-					new SqlParameter("@channel_name", SqlDbType.VarChar,50)};
+					new SqlParameter("@channel_name", SqlDbType.NVarChar,50)};
             parameters[0].Value = channel_name;
 
             Model.channel model = new Model.channel();
@@ -637,7 +635,7 @@ namespace DTcms.DAL
             strSql.Append("select top 1 id from " + databaseprefix + "channel");
             strSql.Append(" where name=@name ");
             SqlParameter[] parameters = {
-					new SqlParameter("@name", SqlDbType.VarChar,50)};
+					new SqlParameter("@name", SqlDbType.NVarChar,50)};
             parameters[0].Value = name;
             object obj = DbHelperSQL.GetSingle(strSql.ToString(), parameters);
             if (obj != null)

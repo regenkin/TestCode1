@@ -96,9 +96,9 @@ namespace DTcms.DAL
             strSql.Append(";select @@IDENTITY");
             SqlParameter[] parameters = {
 					new SqlParameter("@user_id", SqlDbType.Int,4),
-                    new SqlParameter("@user_name", SqlDbType.VarChar,100),
+                    new SqlParameter("@user_name", SqlDbType.NVarChar,100),
 					new SqlParameter("@attach_id", SqlDbType.Int,4),
-					new SqlParameter("@file_name", SqlDbType.VarChar,255),
+					new SqlParameter("@file_name", SqlDbType.NVarChar,255),
 					new SqlParameter("@add_time", SqlDbType.DateTime)};
             parameters[0].Value = model.user_id;
             parameters[1].Value = model.user_name;

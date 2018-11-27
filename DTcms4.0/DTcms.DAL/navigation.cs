@@ -43,7 +43,7 @@ namespace DTcms.DAL
             strSql.Append("select count(1) from " + databaseprefix + "navigation");
             strSql.Append(" where name=@name ");
             SqlParameter[] parameters = {
-					new SqlParameter("@name", SqlDbType.VarChar,50)};
+					new SqlParameter("@name", SqlDbType.NVarChar,50)};
             parameters[0].Value = name;
 
             return DbHelperSQL.Exists(strSql.ToString(), parameters);

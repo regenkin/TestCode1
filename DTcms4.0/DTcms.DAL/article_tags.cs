@@ -44,7 +44,7 @@ namespace DTcms.DAL
             strSql.Append("select count(1) from " + databaseprefix + "article_tags");
             strSql.Append(" where title=@title");
             SqlParameter[] parameters = {
-					new SqlParameter("@title", SqlDbType.VarChar,100)};
+					new SqlParameter("@title", SqlDbType.NVarChar,100)};
             parameters[0].Value = title;
 
             return DbHelperSQL.Exists(strSql.ToString(), parameters);
