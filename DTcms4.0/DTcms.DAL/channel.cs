@@ -253,8 +253,9 @@ namespace DTcms.DAL
 
                         trans.Commit();
                     }
-                    catch
+                    catch(Exception exp)
                     {
+                        LogHelper.logerror.Error(exp.Message, exp);
                         trans.Rollback();
                         return false;
                     }

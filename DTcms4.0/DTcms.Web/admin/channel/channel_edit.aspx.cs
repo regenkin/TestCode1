@@ -357,25 +357,32 @@ namespace DTcms.Web.admin.channel
         //保存
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-            if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
+            try
             {
-                ChkAdminLevel("sys_channel_manage", DTEnums.ActionEnum.Edit.ToString()); //检查权限
-                if (!DoEdit(this.id))
+                if (action == DTEnums.ActionEnum.Edit.ToString()) //修改
                 {
-                    JscriptMsg("保存过程中发生错误！", "");
-                    return;
+                    ChkAdminLevel("sys_channel_manage", DTEnums.ActionEnum.Edit.ToString()); //检查权限
+                    if (!DoEdit(this.id))
+                    {
+                        JscriptMsg("保存过程中发生错误！", "");
+                        return;
+                    }
+                    JscriptMsg("修改频道成功！", "channel_list.aspx", "parent.loadMenuTree");
                 }
-                JscriptMsg("修改频道成功！", "channel_list.aspx", "parent.loadMenuTree");
+                else //添加
+                {
+                    ChkAdminLevel("sys_channel_manage", DTEnums.ActionEnum.Add.ToString()); //检查权限
+                    if (!DoAdd())
+                    {
+                        JscriptMsg("保存过程中发生错误！", "");
+                        return;
+                    }
+                    JscriptMsg("添加频道成功！", "channel_list.aspx", "parent.loadMenuTree");
+                }
             }
-            else //添加
+            catch (Exception exp)
             {
-                ChkAdminLevel("sys_channel_manage", DTEnums.ActionEnum.Add.ToString()); //检查权限
-                if (!DoAdd())
-                {
-                    JscriptMsg("保存过程中发生错误！", "");
-                    return;
-                }
-                JscriptMsg("添加频道成功！", "channel_list.aspx", "parent.loadMenuTree");
+                
             }
         }
 
