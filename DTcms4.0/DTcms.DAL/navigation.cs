@@ -363,7 +363,7 @@ namespace DTcms.DAL
 
         /// <summary>
         /// 修改一条记录，带事务
-        /// </summary>
+        /// </summary> 
         public bool Update(SqlConnection conn, SqlTransaction trans, string old_name, string new_name)
         {
             StringBuilder strSql = new StringBuilder();
